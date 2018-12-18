@@ -8,6 +8,7 @@ export default {
   'menu.restroom.device-manage.camera': '摄像机',
   'menu.restroom.device-manage.board': '公告屏',
   'menu.restroom.device-manage.gas': '气体设备',
+  'menu.user-manage': '账号管理',
 
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',

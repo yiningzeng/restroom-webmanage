@@ -39,7 +39,7 @@ export default [
           {
             path: '/restroom/restroom-manage',
             name: 'restroom-manage',
-            component: './List/TableList',
+            component: './RestRoom/TableList',
           },
           {
             path: '/restroom/device-manage',
@@ -63,6 +63,12 @@ export default [
             ],
           },
         ],
+      },
+      {
+        path: '/user-manage',
+        name: 'user-manage',
+        icon: 'dashboard',
+        component: './Dashboard/Analysis',
       },
       {
         path: '/dashboard',
