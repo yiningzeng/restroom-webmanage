@@ -18,12 +18,12 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis' },
+      { path: '/', redirect: '/video-list' },
       {
         path: '/video-list',
         name: 'video-list',
         icon: 'dashboard',
-        component: './Dashboard/Analysis',
+        component: './Camera/Index',
       },
       {
         path: '/smell-list',
