@@ -356,9 +356,9 @@ class UpdateForm extends PureComponent {
 }
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ rule, loading }) => ({
-  rule,
-  loading: loading.models.rule,
+@connect(({ restroom, loading }) => ({
+  restroom,
+  loading: loading.effects['restroom/fetch'],
 }))
 @Form.create()
 class TableList extends PureComponent {
@@ -433,9 +433,11 @@ class TableList extends PureComponent {
   ];
 
   componentDidMount() {
+    sessionStorage.setItem("token","Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXltaW4iLCJhdWQiOiJiYXltaW4iLCJpc3MiOiJjb20uZ2FsaWxlb19haSIsImV4cCI6MTU0Nzc5OTIyNjQ2MCwiaWF0IjoxNTQ1MjA3MjI2NDYwLCJqdGkiOiIyLjAifQ.AMHt39Gw7BfsQVfATd19xdgnTEtSaj2Cx6IuZUgoHLQ");
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'restroom/fetch',
+      callback:(a)=>{console.log(JSON.stringify(a))},
     });
   }
 
@@ -700,7 +702,7 @@ class TableList extends PureComponent {
 
   render() {
     const {
-      rule: { data },
+      restroom: { res },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -720,7 +722,7 @@ class TableList extends PureComponent {
       handleUpdate: this.handleUpdate,
     };
     return (
-      <PageHeaderWrapper title="查询表格">
+      <PageHeaderWrapper title="公厕管理">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -742,7 +744,7 @@ class TableList extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={res}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

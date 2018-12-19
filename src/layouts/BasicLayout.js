@@ -62,9 +62,17 @@ class BasicLayout extends React.PureComponent {
       dispatch,
       route: { routes, authority },
     } = this.props;
+    const values={username: sessionStorage.getItem("username"),password: sessionStorage.getItem("password"),refresh:true};
+    // alert(JSON.stringify(values));
     dispatch({
-      type: 'user/fetchCurrent',
+      type: 'login/login',
+      payload: {
+        ...values,
+      },
     });
+    // dispatch({
+    //   type: 'user/fetchCurrent',
+    // });
     dispatch({
       type: 'setting/getSetting',
     });
@@ -116,14 +124,14 @@ class BasicLayout extends React.PureComponent {
     const currRouterData = this.matchParamsPath(pathname, breadcrumbNameMap);
 
     if (!currRouterData) {
-      return 'Ant Design Pro';
+      return '智慧公厕';
     }
     const pageName = formatMessage({
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
 
-    return `${pageName} - Ant Design Pro`;
+    return `${pageName} - 智慧公厕`;
   };
 
   getLayoutStyle = () => {
@@ -166,6 +174,7 @@ class BasicLayout extends React.PureComponent {
       fixedHeader,
     } = this.props;
 
+    alert(JSON.stringify(menuData));
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.getRouterAuthority(pathname, routes);
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};

@@ -9,7 +9,26 @@ export default {
   namespace: 'login',
 
   state: {
-    status: undefined,
+    result: {
+      code: 0,
+      status: undefined,
+      msg: '',
+      data: {
+        token: undefined,
+        userId: undefined,
+        userNumber: undefined,
+        relName: undefined,
+        userHeadUrl: undefined,
+        department: undefined,
+        userType: undefined,
+        createTime: undefined,
+        level: {
+          levelName: undefined,
+          remark: undefined,
+          status: undefined,
+        },
+      },
+    },
   },
 
   effects: {
@@ -19,9 +38,16 @@ export default {
         type: 'changeLoginStatus',
         payload: response,
       });
-      // Login successfully
-      if (response.status === 'ok') {
+      if (response.status === 0) {
         reloadAuthorized();
+        console.log('结果',response);// { pathname: `${url}`, state: { nodeType: nodeType }}
+        sessionStorage.setItem("username",payload.username);
+        sessionStorage.setItem("password",payload.password);
+        sessionStorage.setItem("token",response.data.token);
+
+        // const urlParams = new URL(window.location.href);
+        // const params = getPageQuery();
+        // let { redirect } = params;
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -38,7 +64,42 @@ export default {
           }
         }
         yield put(routerRedux.replace(redirect || '/'));
+        yield put(routerRedux.push('/restroom/restroom-manage'));
       }
+      else if(payload.refresh === true){
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            status: false,
+            currentAuthority: 'guest',
+          },
+        });
+        reloadAuthorized();
+
+        yield put(routerRedux.push('/user/login'));
+      }
+
+
+      // // Login successfully
+      // if (response.status === 'ok') {
+      //   reloadAuthorized();
+      //   const urlParams = new URL(window.location.href);
+      //   const params = getPageQuery();
+      //   let { redirect } = params;
+      //   if (redirect) {
+      //     const redirectUrlParams = new URL(redirect);
+      //     if (redirectUrlParams.origin === urlParams.origin) {
+      //       redirect = redirect.substr(urlParams.origin.length);
+      //       if (redirect.match(/^\/.*#/)) {
+      //         redirect = redirect.substr(redirect.indexOf('#') + 1);
+      //       }
+      //     } else {
+      //       window.location.href = redirect;
+      //       return;
+      //     }
+      //   }
+      //   yield put(routerRedux.replace(redirect || '/'));
+      // }
     },
 
     *getCaptcha({ payload }, { call }) {
@@ -67,12 +128,22 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
-      return {
-        ...state,
-        status: payload.status,
-        type: payload.type,
-      };
+      if(payload.data.userStatus === 1){
+        setAuthority("admin");
+        return {
+          ...state,
+          result: payload,
+          type:'account',
+        };
+      }
+      else{
+        setAuthority("guest");
+        return {
+          ...state,
+          result: payload,
+          type: 'account',
+        };
+  }
     },
   },
 };
