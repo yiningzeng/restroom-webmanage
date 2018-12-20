@@ -5,9 +5,8 @@ import { Row, Col, Form, Card, Select, List } from 'antd';
 import Trend from '@/components/Trend';
 import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
-import * as streamedian from 'streamedian/player';
 import Ellipsis from '@/components/Ellipsis';
-import StandardFormRow from '@/components/StandardFormRow';
+import StandardFormRow from '@/components/StandardFormRow'
 
 import styles from './Index.less';
 import numeral from "numeral";

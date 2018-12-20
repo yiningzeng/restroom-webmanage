@@ -32,6 +32,30 @@ export default {
   },
 
   effects: {
+    *currentUser({ payload,callback }, { call, put }) {
+      const response = yield call(fakeAccountLogin, payload);
+      yield put({
+        type: 'changeLoginStatus',
+        payload: response,
+      });
+      if (response.status === 0) {
+        if (callback)callback(response);
+      }
+      else if(payload.refresh === true){
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            status: false,
+            currentAuthority: 'guest',
+          },
+        });
+        reloadAuthorized();
+
+        yield put(routerRedux.push('/user/login'));
+      }
+    },
+
+
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
       yield put({
@@ -44,7 +68,8 @@ export default {
         sessionStorage.setItem("username",payload.username);
         sessionStorage.setItem("password",payload.password);
         sessionStorage.setItem("token",response.data.token);
-
+        sessionStorage.setItem("relName",response.data.token);
+        sessionStorage.setItem("userHeadUrl",response.data.userHeadUrl);
         // const urlParams = new URL(window.location.href);
         // const params = getPageQuery();
         // let { redirect } = params;
@@ -128,6 +153,7 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
+      console.log(JSON.stringify(payload));
       if(payload.data.userStatus === 1){
         setAuthority("admin");
         return {
@@ -136,14 +162,14 @@ export default {
           type:'account',
         };
       }
-      else{
+      else {
         setAuthority("guest");
         return {
           ...state,
           result: payload,
           type: 'account',
         };
-  }
+      }
     },
   },
 };

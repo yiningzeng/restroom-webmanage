@@ -19,7 +19,7 @@ export default {
         type: 'res',
         payload: response,
       });
-      if (callback)callback();
+      if (callback)callback(response);
     },
     *addRestRoom({ payload,callback}, { call, put }) {
       const response = yield call(addRestRoom,payload);
@@ -27,7 +27,7 @@ export default {
         type: 'res',
         payload: response,
       });
-      if (callback)callback();
+      if (callback)callback(response);
     },
   },
 

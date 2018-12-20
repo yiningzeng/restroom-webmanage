@@ -1,4 +1,5 @@
-import { query as queryUsers, queryCurrent } from '@/services/user';
+import { query as queryUsers } from '@/services/user';
+import { fakeAccountLogin } from '@/services/api';
 
 export default {
   namespace: 'user',
@@ -16,8 +17,8 @@ export default {
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    *fetchCurrent({ payload }, { call, put }) {
+      const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'saveCurrentUser',
         payload: response,

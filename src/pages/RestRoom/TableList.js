@@ -20,10 +20,12 @@ import {
   message,
   Badge,
   Divider,
+  Popconfirm,
   Steps,
   Radio,
 } from 'antd';
-import StandardTable from '@/components/StandardTable';
+// import StandardTable from '@/components/StandardTable';
+import MyStandardTable from '@/components/MyStandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './TableList.less';
@@ -38,7 +40,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const status = ['关闭', '开放', '已上线', '异常'];
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -131,7 +133,7 @@ const CreateForm = Form.create()(props => {
         })(<Input placeholder="请输入详细地址" />)}
       </FormItem>
       <FormItem {...formItemLayout} label="开放状态">
-        {form.getFieldDecorator('status')(<Switch checkedChildren="开" unCheckedChildren="关" defaultChecked />)}
+        {form.getFieldDecorator('status',{ valuePropName: 'checked',initialValue:true })(<Switch checkedChildren="开" unCheckedChildren="关" />)}
       </FormItem>
       <FormItem {...formItemLayout} label="责任保洁员">
         {form.getFieldDecorator('cleaner', {
@@ -373,21 +375,8 @@ class TableList extends PureComponent {
 
   columns = [
     {
-      title: '规则名称',
-      dataIndex: 'name',
-    },
-    {
-      title: '描述',
-      dataIndex: 'desc',
-    },
-    {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
-      align: 'right',
-      render: val => `${val} 万`,
-      // mark to display a total number
-      needTotal: true,
+      title: '公厕名称',
+      dataIndex: 'restRoomName',
     },
     {
       title: '状态',
@@ -415,10 +404,16 @@ class TableList extends PureComponent {
       },
     },
     {
-      title: '上次调度时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: '地区',
+      dataIndex: 'region',
+    },
+    {
+      title: '详细地址',
+      dataIndex: 'address',
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
     },
     {
       title: '操作',
@@ -430,6 +425,47 @@ class TableList extends PureComponent {
         </Fragment>
       ),
     },
+    // {
+    //   title: '服务调用次数',
+    //   dataIndex: 'callNo',
+    //   sorter: true,
+    //   align: 'right',
+    //   render: val => `${val} 万`,
+    //   // mark to display a total number
+    //   needTotal: true,
+    // },
+    // {
+    //   title: '状态',
+    //   dataIndex: 'status',
+    //   filters: [
+    //     {
+    //       text: status[0],
+    //       value: 0,
+    //     },
+    //     {
+    //       text: status[1],
+    //       value: 1,
+    //     },
+    //     {
+    //       text: status[2],
+    //       value: 2,
+    //     },
+    //     {
+    //       text: status[3],
+    //       value: 3,
+    //     },
+    //   ],
+    //   render(val) {
+    //     return <Badge status={statusMap[val]} text={status[val]} />;
+    //   },
+    // },
+    // {
+    //   title: '上次调度时间',
+    //   dataIndex: 'updatedAt',
+    //   sorter: true,
+    //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    // },
+
   ];
 
   componentDidMount() {
@@ -553,17 +589,26 @@ class TableList extends PureComponent {
     });
   };
 
+  addCallback=(v)=>{
+    if(v.code===0) {
+      message.success("添加成功");
+      this.handleModalVisible();
+    }
+    else message.error(v.msg);
+  };
+
   handleAdd = fields => {
     const { dispatch } = this.props;
+    console.log(`add${JSON.stringify(fields)}`);
     dispatch({
-      type: 'rule/add',
+      type: 'restroom/addRestRoom',
       payload: {
-        desc: fields.desc,
+        ...fields,
+        status:fields.status===true?1:0
       },
+      callback: this.addCallback,
     });
 
-    message.success('添加成功');
-    this.handleModalVisible();
   };
 
   handleUpdate = fields => {
@@ -700,6 +745,11 @@ class TableList extends PureComponent {
     return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
+   deleteConfirm=(e)=> {
+    console.log(e);
+    message.success('Click on Yes');
+  }
+
   render() {
     const {
       restroom: { res },
@@ -725,26 +775,31 @@ class TableList extends PureComponent {
       <PageHeaderWrapper title="公厕管理">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
+            {/*<div className={styles.tableListForm}>{this.renderForm()}</div>*/}
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button>批量操作</Button>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown>
+                  <Popconfirm title="将会删除该公厕下所有的设备，确定么?" onConfirm={this.deleteConfirm} okText="确定" cancelText="取消">
+                    <Button>删除</Button>
+                  </Popconfirm>
+                  {/*<Dropdown overlay={menu}>*/}
+                    {/*<Button>*/}
+                    {/*更多操作 <Icon type="down" />*/}
+                    {/*</Button>*/}
+                  {/*</Dropdown>*/}
                 </span>
               )}
             </div>
-            <StandardTable
+
+            <MyStandardTable
+              rowKey="restRoomId"
+              scroll={{ x: 1000 }}
               selectedRows={selectedRows}
               loading={loading}
-              data={res}
+              data={res===undefined?[]:res.data}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

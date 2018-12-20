@@ -51,6 +51,8 @@ const query = {
 };
 
 class BasicLayout extends React.PureComponent {
+
+
   constructor(props) {
     super(props);
     this.getPageTitle = memoizeOne(this.getPageTitle);
@@ -62,17 +64,14 @@ class BasicLayout extends React.PureComponent {
       dispatch,
       route: { routes, authority },
     } = this.props;
-    const values={username: sessionStorage.getItem("username"),password: sessionStorage.getItem("password"),refresh:true};
-    // alert(JSON.stringify(values));
+    const values={username: sessionStorage.getItem("username"),password: sessionStorage.getItem("password")};
     dispatch({
-      type: 'login/login',
+      type: 'login/currentUser',
       payload: {
         ...values,
       },
     });
-    // dispatch({
-    //   type: 'user/fetchCurrent',
-    // });
+
     dispatch({
       type: 'setting/getSetting',
     });
@@ -174,7 +173,6 @@ class BasicLayout extends React.PureComponent {
       fixedHeader,
     } = this.props;
 
-    // alert(JSON.stringify(menuData));
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.getRouterAuthority(pathname, routes);
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
