@@ -100,6 +100,7 @@ class LoginPage extends Component {
           this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
           <UserName
             name="username"
+            defaultValue="baymin"
             placeholder={`${formatMessage({ id: 'app.login.userName' })}: admin or user`}
             rules={[
               {
@@ -110,6 +111,7 @@ class LoginPage extends Component {
           />
           <Password
             name="password"
+            defaultValue="123456"
             placeholder={`${formatMessage({ id: 'app.login.password' })}: ant.design`}
             rules={[
               {

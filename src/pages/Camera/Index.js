@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Row, Col, Form, Card, Select, List } from 'antd';
+import {Row, Col, Form, Card, Select, List, Modal,Button,message} from 'antd';
 import Trend from '@/components/Trend';
 import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
@@ -16,77 +16,110 @@ const FormItem = Form.Item;
 
 /* eslint react/no-array-index-key: 0 */
 
-@connect(({ list, loading }) => ({
-  list,
-  loading: loading.models.list,
+@connect(({ restroom, loading }) => ({
+  restroom,
+  loading: loading.effects['restroom/fetch'],
 }))
 @Form.create({
-  onValuesChange({ dispatch }, changedValues, allValues) {
-    // 表单项变化时请求数据
-    // eslint-disable-next-line
-    console.log(changedValues, allValues);
-    // 模拟查询表单生效
-    dispatch({
-      type: 'list/fetch',
-      payload: {
-        count: 8,
-      },
-    });
-  },
+  // onValuesChange({ dispatch }, changedValues, allValues) {
+  //   // 表单项变化时请求数据
+  //   // eslint-disable-next-line
+  //   console.log(changedValues, allValues);
+  //   // 模拟查询表单生效
+  //   dispatch({
+  //     type: 'list/fetch',
+  //     payload: {
+  //       count: 8,
+  //     },
+  //   });
+  // },
 })
 class CoverCardList extends PureComponent {
+
+  state = {
+    modal1Visible: false,
+  }
+
+  setModal1Visible(modal1Visible) {
+    this.setState({ modal1Visible });
+  }
+
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'list/fetch',
-      payload: {
-        count: 8,
-      },
+      type: 'restroom/fetch',
+      callback:(a)=>{console.log(JSON.stringify(a))},
     });
+  }
+
+  playVideo=(item)=>{
+    message.success("sdsdsdsds");
+    this.setModal1Visible(true)
   }
 
   render() {
     const {
-      list: { list = [] },
+      restroom: { list:{ data:{content=[]} }},
       loading,
       form,
     } = this.props;
     const { getFieldDecorator } = form;
+    console.log(`fuck=====${JSON.stringify(content)}`);
 
-    const cardList = list ? (
+    /**
+     * [{"restRoomId":3,"restRoomName":"3","region":"浙江省,宁波市,鄞州区","address":"3","cleaner":"3","remark":"3","status":0,"deviceCameras":[],"deviceBoards":[],"deviceGases":[],"infoPassengerFlows":[],"infoGases":[]},{"restRoomId":2,"restRoomName":"2","region":"浙江省,宁波市,鄞州区","address":"2","cleaner":"2","remark":"2","status":1,"deviceCameras":[],"deviceBoards":[],"deviceGases":[],"infoPassengerFlows":[],"infoGases":[]},{"restRoomId":1,"restRoomName":"1","region":"浙江省,宁波市,鄞州区","address":"1","cleaner":"1","remark":"1","status":1,"deviceCameras":[],"deviceBoards":[],"deviceGases":[],"infoPassengerFlows":[],"infoGases":[]}]
+     * @type {null}
+     */
+    const cardList = content ? (
       <List
-        rowKey="id"
+        rowKey="restRoomId"
         loading={loading}
-        grid={{ gutter: 24, xl: 6, lg: 3, md: 3, sm: 2, xs: 1 }}
-        dataSource={list}
+        grid={{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }}
+        dataSource={content}
         renderItem={item => (
           <List.Item>
             <Card
+              onClick={this.playVideo.bind(this,"sd")}
               className={styles.card}
+              // extra={<Button>asds</Button>}
               hoverable
-              cover={<img alt={item.title} src={item.cover} />}
+              cover={<img alt={item.restRoomName} src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
+              // cover={
+              //   <video src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">
+              //     your browser does not support the video tag
+              //   </video>
+              // }
             >
-              <Trend flag="up" style={{ marginRight: 16 }}>
-                客流量:
-                <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
-              </Trend>
-              <Trend flag="down">
-                气体指数
-                <span className={styles.trendText}>11%</span>
-              </Trend>
+              <Card.Meta
+                title={item.restRoomName}
+                description={
+                  <div>
+                    <Trend flag="up" style={{ marginRight: 16 }}>
+                      客流量:
+                      <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
+                    </Trend>
+                    <Trend flag="down">
+                      气体指数
+                      <span className={styles.trendText}>11%</span>
+                    </Trend>
+                  </div>
+                }
+              />
+
 
               <div className={styles.cardItemContent}>
-                <span>{`更新时间:${moment(item.updatedAt).fromNow()}`}</span>
+                <span>{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}</span>
                 <div className={styles.avatarList}>
                   <span>责任人:</span>
                   <AvatarList size="mini">
-                    {item.members.map((member, i) => (
+                    {/*{item.members.map((member, i) => (
                       <AvatarList.Item
                         key={`${item.id}-avatar-${i}`}
                         src={member.avatar}
                         tips={member.name}
                       />
-                    ))}
+                    ))}*/}
                   </AvatarList>
                 </div>
               </div>
@@ -105,24 +138,30 @@ class CoverCardList extends PureComponent {
 
     return (
       <div className={styles.coverCardList}>
+        <Modal
+          title="20px to Top"
+          width="70%"
+          style={{ top: 20,bottom:20 }}
+          visible={this.state.modal1Visible}
+          onOk={() => this.setModal1Visible(false)}
+          onCancel={() => this.setModal1Visible(false)}
+        >
+          <video height="500" width="100%" src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">
+            your browser does not support the video tag
+          </video>
+        </Modal>
         <Card bordered={false}>
           <Form layout="inline">
-            <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
+            <StandardFormRow title="所属区域" block style={{ paddingBottom: 11 }}>
               <FormItem>
                 {getFieldDecorator('category')(
-                  <TagSelect expandable>
-                    <TagSelect.Option value="cat1">类目一</TagSelect.Option>
-                    <TagSelect.Option value="cat2">类目二</TagSelect.Option>
-                    <TagSelect.Option value="cat3">类目三</TagSelect.Option>
-                    <TagSelect.Option value="cat4">类目四</TagSelect.Option>
-                    <TagSelect.Option value="cat5">类目五</TagSelect.Option>
-                    <TagSelect.Option value="cat6">类目六</TagSelect.Option>
-                    <TagSelect.Option value="cat7">类目七</TagSelect.Option>
-                    <TagSelect.Option value="cat8">类目八</TagSelect.Option>
-                    <TagSelect.Option value="cat9">类目九</TagSelect.Option>
-                    <TagSelect.Option value="cat10">类目十</TagSelect.Option>
-                    <TagSelect.Option value="cat11">类目十一</TagSelect.Option>
-                    <TagSelect.Option value="cat12">类目十二</TagSelect.Option>
+                  <TagSelect expandable value={['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6']}>
+                    <TagSelect.Option value="cat1">海曙区</TagSelect.Option>
+                    <TagSelect.Option value="cat2">鄞州区</TagSelect.Option>
+                    <TagSelect.Option value="cat3">江北区</TagSelect.Option>
+                    <TagSelect.Option value="cat4">镇海区</TagSelect.Option>
+                    <TagSelect.Option value="cat5">北仑区</TagSelect.Option>
+                    <TagSelect.Option value="cat6">奉化区</TagSelect.Option>
                   </TagSelect>
                 )}
               </FormItem>
@@ -130,20 +169,12 @@ class CoverCardList extends PureComponent {
             <StandardFormRow title="其它选项" grid last>
               <Row gutter={16}>
                 <Col lg={8} md={10} sm={10} xs={24}>
-                  <FormItem {...formItemLayout} label="作者">
+                  <FormItem {...formItemLayout} label="状态">
                     {getFieldDecorator('author', {})(
                       <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
-                        <Option value="lisa">王昭君</Option>
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col lg={8} md={10} sm={10} xs={24}>
-                  <FormItem {...formItemLayout} label="好评度">
-                    {getFieldDecorator('rate', {})(
-                      <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
-                        <Option value="good">优秀</Option>
-                        <Option value="normal">普通</Option>
+                        <Option value="2">不限</Option>
+                        <Option value="1">开放</Option>
+                        <Option value="0">关闭</Option>
                       </Select>
                     )}
                   </FormItem>
