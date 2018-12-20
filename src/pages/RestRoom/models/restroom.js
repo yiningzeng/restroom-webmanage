@@ -10,13 +10,19 @@ export default {
       msg: '',
       data: [],
     },
+    list: {
+      code: undefined,
+      status: undefined,
+      msg: '',
+      data: [],
+    },
   },
 
   effects: {
     *fetch({ payload,callback}, { call, put }) {
       const response = yield call(query,payload);
       yield put({
-        type: 'res',
+        type: 'list',
         payload: response,
       });
       if (callback)callback(response);
@@ -36,6 +42,12 @@ export default {
       return {
         ...state,
         res: action.payload,
+      };
+    },
+    list(state, action) {
+      return {
+        ...state,
+        list: action.payload,
       };
     },
   },

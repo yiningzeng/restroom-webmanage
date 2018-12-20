@@ -469,7 +469,6 @@ class TableList extends PureComponent {
   ];
 
   componentDidMount() {
-    sessionStorage.setItem("token","Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXltaW4iLCJhdWQiOiJiYXltaW4iLCJpc3MiOiJjb20uZ2FsaWxlb19haSIsImV4cCI6MTU0Nzc5OTIyNjQ2MCwiaWF0IjoxNTQ1MjA3MjI2NDYwLCJqdGkiOiIyLjAifQ.AMHt39Gw7BfsQVfATd19xdgnTEtSaj2Cx6IuZUgoHLQ");
     const { dispatch } = this.props;
     dispatch({
       type: 'restroom/fetch',
@@ -592,6 +591,11 @@ class TableList extends PureComponent {
   addCallback=(v)=>{
     if(v.code===0) {
       message.success("添加成功");
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'restroom/fetch',
+        callback:(a)=>{console.log(JSON.stringify(a))},
+      });
       this.handleModalVisible();
     }
     else message.error(v.msg);
@@ -752,9 +756,10 @@ class TableList extends PureComponent {
 
   render() {
     const {
-      restroom: { res },
+      restroom: { list },
       loading,
     } = this.props;
+    console.log(`老子来了～～～～～～${JSON.stringify(list)}`);
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -799,7 +804,7 @@ class TableList extends PureComponent {
               scroll={{ x: 1000 }}
               selectedRows={selectedRows}
               loading={loading}
-              data={res===undefined?[]:res.data}
+              data={list===undefined?undefined:list.data}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
