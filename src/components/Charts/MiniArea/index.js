@@ -74,7 +74,8 @@ class MiniArea extends React.PureComponent {
                 grid={false}
                 {...yAxis}
               />
-              <Tooltip showTitle={false} crosshairs={false} />
+              <Tooltip
+                       itemTpl='<tr class="g2-tooltip-list-item"><td>气体指标</td><td>{value}</td></tr>' crosshairs={{type: "y"}} />
               <Geom
                 type="area"
                 position="x*y"

@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import {Row, Col, Form, Card, Select, List, Modal,Button,message} from 'antd';
+import {Row, Col, Form, Card, Select, List, Modal,Divider,message} from 'antd';
 import Trend from '@/components/Trend';
 import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
+import { MiniArea } from '@/components/Charts';
 import Ellipsis from '@/components/Ellipsis';
 import StandardFormRow from '@/components/StandardFormRow'
 
@@ -38,6 +39,7 @@ class CoverCardList extends PureComponent {
 
   state = {
     modal1Visible: false,
+    gasData:[{"x":"2018-12-20","y":50},{"x":"2018-12-21","y":5},{"x":"2018-12-22","y":4},{"x":"2018-12-23","y":2},{"x":"2018-12-24","y":4},{"x":"2018-12-25","y":7},{"x":"2018-12-26","y":5},{"x":"2018-12-27","y":6},{"x":"2018-12-28","y":5},{"x":"2018-12-29","y":9},{"x":"2018-12-30","y":6},{"x":"2018-12-31","y":3},{"x":"2019-01-01","y":1},{"x":"2019-01-02","y":5},{"x":"2019-01-03","y":3},{"x":"2019-01-04","y":6},{"x":"2019-01-05","y":5}]
   }
 
   setModal1Visible(modal1Visible) {
@@ -91,37 +93,34 @@ class CoverCardList extends PureComponent {
               //   </video>
               // }
             >
-              <Card.Meta
-                title={item.restRoomName}
-                description={
-                  <div>
-                    <Trend flag="up" style={{ marginRight: 16 }}>
-                      客流量:
-                      <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
-                    </Trend>
-                    <Trend flag="down">
-                      气体指数
-                      <span className={styles.trendText}>11%</span>
-                    </Trend>
-                  </div>
-                }
-              />
+              <div>
+                <Trend flag="down">
+                  气体指数
+                  <span className={styles.trendText}>11%</span>
+                </Trend>
+                <Trend flag="up" style={{ marginRight: 16,marginTop:-10 }}>
+                  客流量:
+                  <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
+                </Trend>
+              </div>
 
+              <MiniArea line height={55} data={this.state.gasData} />
+              <Divider style={{marginTop: "4px"}} />
 
               <div className={styles.cardItemContent}>
-                <span>{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}</span>
-                <div className={styles.avatarList}>
-                  <span>责任人:</span>
-                  <AvatarList size="mini">
-                    {/*{item.members.map((member, i) => (
-                      <AvatarList.Item
-                        key={`${item.id}-avatar-${i}`}
-                        src={member.avatar}
-                        tips={member.name}
-                      />
-                    ))}*/}
-                  </AvatarList>
-                </div>
+                <span>{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}  责任人: 张红艳</span>
+                {/*<div className={styles.avatarList}>*/}
+                  {/*<span>责任人:</span>*/}
+                  {/*<AvatarList size="mini">*/}
+                    {/*/!*{item.members.map((member, i) => (*/}
+                      {/*<AvatarList.Item*/}
+                        {/*key={`${item.id}-avatar-${i}`}*/}
+                        {/*src={member.avatar}*/}
+                        {/*tips={member.name}*/}
+                      {/*/>*/}
+                    {/*))}*!/*/}
+                  {/*</AvatarList>*/}
+                {/*</div>*/}
               </div>
             </Card>
           </List.Item>
@@ -141,11 +140,14 @@ class CoverCardList extends PureComponent {
         <Modal
           title="20px to Top"
           width="70%"
+          footer={null}
           style={{ top: 20,bottom:20 }}
           visible={this.state.modal1Visible}
           onOk={() => this.setModal1Visible(false)}
           onCancel={() => this.setModal1Visible(false)}
         >
+          {/*可以用iframe引用海康摄像头的sdk*/}
+          {/*<iframe style={{border:0,width:"100%",height:630,}} src="http://www.baidu.com"/>*/}
           <video height="500" width="100%" src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">
             your browser does not support the video tag
           </video>

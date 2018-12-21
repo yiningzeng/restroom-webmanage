@@ -52,6 +52,7 @@ const formItemLayout = {
     md: { span: 10 },
   },
 };
+
 const CreateForm = Form.create()(props => {
   const options = [{
     value: '浙江省',
@@ -149,6 +150,62 @@ const CreateForm = Form.create()(props => {
   );
 });
 
+const CreateCameraForm = Form.create()(props => {
+
+  const { restRoomId,modalVisible, form, handleAdd, handleModalVisible } = props;
+
+  const okHandle = () => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      form.resetFields();
+      handleAdd(fieldsValue);
+    });
+  };
+
+  return (
+    <Modal
+      destroyOnClose
+      title="新增摄像头"
+      visible={modalVisible}
+      onOk={okHandle}
+      onCancel={() => handleModalVisible()}
+    >
+      <FormItem {...formItemLayout} label="摄像头IP">
+        {form.getFieldDecorator('ip', {
+          rules: [{ required: true, message: '请输入摄像头IP带端口'}],
+        })(<Input placeholder="请输入摄像头IP带端口" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="相机登录名">
+        {form.getFieldDecorator('username', {
+          rules: [{ required: true, message: '请输入相机登录名'}],
+        })(<Input placeholder="请输入相机登录名" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="相机登录密码">
+        {form.getFieldDecorator('password', {
+          rules: [{ required: true, message: '请输入相机登录密码'}],
+        })(<Input placeholder="请输入相机登录密码" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="相机状态">
+        {form.getFieldDecorator('status',{ valuePropName: 'checked',initialValue:true })(<Switch checkedChildren="开" unCheckedChildren="关" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="备注">
+        {form.getFieldDecorator('remark', {
+          rules: [{ required: false, message: '备注' }],
+        })(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 4 }} />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="">
+        {form.getFieldDecorator('restRoomId', {
+          initialValue: restRoomId,
+        })(<Input type="hidden" />)}
+      </FormItem>
+      {/*<FormItem {...formItemLayout} label="">*/}
+        {/*{form.getFieldDecorator('restRoomId', {*/}
+          {/*initialValue: restRoomId,*/}
+        {/*})(<Input />)}*/}
+      {/*</FormItem>*/}
+    </Modal>
+  );
+});
 @Form.create()
 class UpdateForm extends PureComponent {
   static defaultProps = {
@@ -371,102 +428,10 @@ class TableList extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
+
+    addCameraModalVisible:false,
+    nowRestRoomId:undefined,
   };
-
-  columns = [
-    {
-      title: '公厕名称',
-      dataIndex: 'restRoomName',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        },
-        {
-          text: status[2],
-          value: 2,
-        },
-        {
-          text: status[3],
-          value: 3,
-        },
-      ],
-      render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
-    },
-    {
-      title: '地区',
-      dataIndex: 'region',
-    },
-    {
-      title: '详细地址',
-      dataIndex: 'address',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remark',
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
-        </Fragment>
-      ),
-    },
-    // {
-    //   title: '服务调用次数',
-    //   dataIndex: 'callNo',
-    //   sorter: true,
-    //   align: 'right',
-    //   render: val => `${val} 万`,
-    //   // mark to display a total number
-    //   needTotal: true,
-    // },
-    // {
-    //   title: '状态',
-    //   dataIndex: 'status',
-    //   filters: [
-    //     {
-    //       text: status[0],
-    //       value: 0,
-    //     },
-    //     {
-    //       text: status[1],
-    //       value: 1,
-    //     },
-    //     {
-    //       text: status[2],
-    //       value: 2,
-    //     },
-    //     {
-    //       text: status[3],
-    //       value: 3,
-    //     },
-    //   ],
-    //   render(val) {
-    //     return <Badge status={statusMap[val]} text={status[val]} />;
-    //   },
-    // },
-    // {
-    //   title: '上次调度时间',
-    //   dataIndex: 'updatedAt',
-    //   sorter: true,
-    //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    // },
-
-  ];
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -581,6 +546,12 @@ class TableList extends PureComponent {
     });
   };
 
+  handleCameraModalVisible = flag => {
+    this.setState({
+      addCameraModalVisible: !!flag,
+    });
+  };
+
   handleUpdateModalVisible = (flag, record) => {
     this.setState({
       updateModalVisible: !!flag,
@@ -612,7 +583,19 @@ class TableList extends PureComponent {
       },
       callback: this.addCallback,
     });
+  };
 
+  handleAddCamera = fields => {
+    const { dispatch } = this.props;
+    console.log(`add${JSON.stringify(fields)}`);
+    dispatch({
+      type: 'restroom/addRestRoom',
+      payload: {
+        ...fields,
+        status:fields.status===true?1:0
+      },
+      callback: this.addCallback,
+    });
   };
 
   handleUpdate = fields => {
@@ -760,17 +743,150 @@ class TableList extends PureComponent {
       loading,
     } = this.props;
     console.log(`老子来了～～～～～～${JSON.stringify(list)}`);
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="approval">批量审批</Menu.Item>
-      </Menu>
+    const { selectedRows, modalVisible,addCameraModalVisible,nowRestRoomId, updateModalVisible, stepFormValues } = this.state;
+
+    const editAndDelete = (key, currentItem) => {
+      if (key === 'camera'){
+        this.setState({addCameraModalVisible:true,nowRestRoomId:currentItem.restRoomId});
+
+      }
+      else if (key === 'board') {
+
+      }
+      else if (key === 'gas') {
+
+      }
+    };
+
+    const MoreBtn = props => (
+      <Dropdown
+        overlay={
+          <Menu onClick={({ key }) => {editAndDelete(key, props.current)}}>
+            <Menu.Item key="camera">新增摄像头</Menu.Item>
+            <Menu.Item key="board">新增公告屏</Menu.Item>
+            <Menu.Item key="gas">新增气体设备</Menu.Item>
+          </Menu>
+        }
+      >
+        <a>
+          更多 <Icon type="down" />
+        </a>
+      </Dropdown>
     );
 
-    const parentMethods = {
+
+
+    const columns = [
+      {
+        title: '公厕名称',
+        dataIndex: 'restRoomName',
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        filters: [
+          {
+            text: status[0],
+            value: 0,
+          },
+          {
+            text: status[1],
+            value: 1,
+          },
+          {
+            text: status[2],
+            value: 2,
+          },
+          {
+            text: status[3],
+            value: 3,
+          },
+        ],
+        render(val) {
+          return <Badge status={statusMap[val]} text={status[val]} />;
+        },
+      },
+      {
+        title: '地区',
+        dataIndex: 'region',
+      },
+      {
+        title: '详细地址',
+        dataIndex: 'address',
+      },
+      {
+        title: '备注',
+        dataIndex: 'remark',
+      },
+      {
+        title: '操作',
+        width: 200,
+        fixed: 'right',
+        render: (text, record) => (
+          <Fragment>
+            {/*<a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>*/}
+            {/*<Divider type="vertical" />*/}
+            {/*<a href="">订阅警报</a>*/}
+
+            <a onClick={()=>{this.handleCameraModalVisible(true)}}>编辑</a>
+            <Divider type="vertical" />
+            <MoreBtn current={record} />
+
+          </Fragment>
+        ),
+      },
+      // {
+      //   title: '服务调用次数',
+      //   dataIndex: 'callNo',
+      //   sorter: true,
+      //   align: 'right',
+      //   render: val => `${val} 万`,
+      //   // mark to display a total number
+      //   needTotal: true,
+      // },
+      // {
+      //   title: '状态',
+      //   dataIndex: 'status',
+      //   filters: [
+      //     {
+      //       text: status[0],
+      //       value: 0,
+      //     },
+      //     {
+      //       text: status[1],
+      //       value: 1,
+      //     },
+      //     {
+      //       text: status[2],
+      //       value: 2,
+      //     },
+      //     {
+      //       text: status[3],
+      //       value: 3,
+      //     },
+      //   ],
+      //   render(val) {
+      //     return <Badge status={statusMap[val]} text={status[val]} />;
+      //   },
+      // },
+      // {
+      //   title: '上次调度时间',
+      //   dataIndex: 'updatedAt',
+      //   sorter: true,
+      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
+
+    ];
+
+
+    const addRestroomParentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+    };
+    const addCameraParentMethods = {
+      restRoomId: nowRestRoomId,
+      handleAdd: this.handleAddCamera,
+      handleModalVisible: this.handleCameraModalVisible,
     };
     const updateMethods = {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
@@ -805,13 +921,14 @@ class TableList extends PureComponent {
               selectedRows={selectedRows}
               loading={loading}
               data={list===undefined?undefined:list.data}
-              columns={this.columns}
+              columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>
-        <CreateForm {...parentMethods} modalVisible={modalVisible} />
+        <CreateForm {...addRestroomParentMethods} modalVisible={modalVisible} />
+        <CreateCameraForm {...addCameraParentMethods} modalVisible={addCameraModalVisible} />
         {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm
             {...updateMethods}
