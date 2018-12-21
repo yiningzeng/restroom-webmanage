@@ -1,9 +1,15 @@
-import { query,addRestRoom  } from '@/services/restroom';
+import { query,addRestRoom,updateRestRoom,deleteRestRoom } from '@/services/restroom';
 
 export default {
   namespace: 'restroom',
 
   state: {
+    del: {
+      code: undefined,
+      status: undefined,
+      msg: '',
+      data: [],
+    },
     res: {
       code: undefined,
       status: undefined,
@@ -35,9 +41,31 @@ export default {
       });
       if (callback)callback(response);
     },
+    *updateRestRoom({ payload,callback}, { call, put }) {
+      const response = yield call(updateRestRoom,payload);
+      yield put({
+        type: 'res',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
+    *deleteRestRoom({ payload,callback}, { call, put }) {
+      const response = yield call(deleteRestRoom,payload);
+      yield put({
+        type: 'del',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
   },
 
   reducers: {
+    del(state, action) {
+      return {
+        ...state,
+        del: action.payload,
+      };
+    },
     res(state, action) {
       return {
         ...state,

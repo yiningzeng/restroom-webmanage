@@ -10,6 +10,7 @@ import {
   Form,
   Input,
   Select,
+  Table,
   Icon,
   Button,
   Dropdown,
@@ -20,6 +21,7 @@ import {
   message,
   Badge,
   Divider,
+  Drawer,
   Popconfirm,
   Steps,
   Radio,
@@ -89,13 +91,13 @@ const CreateForm = Form.create()(props => {
     }],
   }];
 
-  const { modalVisible, form, handleAdd, handleModalVisible } = props;
+  const { row,isEdit,modalVisible, form, handleAdd,handleEdit, handleModalVisible } = props;
 
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       form.resetFields();
-      handleAdd(fieldsValue);
+      isEdit?handleEdit(fieldsValue):handleAdd(fieldsValue);
     });
   };
   function onChange(value) {
@@ -105,7 +107,7 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title="新增公厕"
+      title={isEdit?"编辑公厕":"新增公厕"}
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
@@ -113,6 +115,7 @@ const CreateForm = Form.create()(props => {
       <FormItem {...formItemLayout} label="公厕名称">
         {form.getFieldDecorator('name', {
           rules: [{ required: true, message: '请输入公厕名称'}],
+          initialValue:isEdit?row.restRoomName:undefined
         })(<Input placeholder="请输入公厕名称" />)}
       </FormItem>
       <FormItem {...formItemLayout} label="所在地区">
@@ -123,7 +126,8 @@ const CreateForm = Form.create()(props => {
               message: "请选择区域",
             },
           ],
-          initialValue: ['浙江省', '宁波市', '鄞州区'],
+          // initialValue: ['浙江省', '宁波市', '鄞州区'],
+          initialValue:isEdit?row.region.split(","):['浙江省', '宁波市', '鄞州区'],
         })(
           <Cascader options={options} onChange={onChange} />,
         )}
@@ -131,20 +135,29 @@ const CreateForm = Form.create()(props => {
       <FormItem {...formItemLayout} label="详细地址">
         {form.getFieldDecorator('address', {
           rules: [{ required: true, message: '请输入详细地址' }],
+          initialValue:isEdit?row.address:undefined
         })(<Input placeholder="请输入详细地址" />)}
       </FormItem>
       <FormItem {...formItemLayout} label="开放状态">
-        {form.getFieldDecorator('status',{ valuePropName: 'checked',initialValue:true })(<Switch checkedChildren="开" unCheckedChildren="关" />)}
+        {form.getFieldDecorator('status',{ valuePropName: 'checked', initialValue:row===undefined?true:row.status===0?false:true })(<Switch checkedChildren="开" unCheckedChildren="关" />)}
       </FormItem>
       <FormItem {...formItemLayout} label="责任保洁员">
         {form.getFieldDecorator('cleaner', {
           rules: [{ required: false, message: '请输入责任保洁员姓名' }],
+          initialValue:isEdit?row.cleaner:undefined
         })(<Input placeholder="请输入责任保洁员姓名" />)}
       </FormItem>
       <FormItem {...formItemLayout} label="备注">
         {form.getFieldDecorator('remark', {
           rules: [{ required: false, message: '备注' }],
+          initialValue:isEdit?row.remark:undefined
         })(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 4 }} />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="">
+        {form.getFieldDecorator('restRoomId', {
+          rules: [{ required: false, message: '' }],
+          initialValue:isEdit?row.restRoomId:undefined
+        })(<Input type="hidden" />)}
       </FormItem>
     </Modal>
   );
@@ -236,6 +249,7 @@ class UpdateForm extends PureComponent {
       wrapperCol: { span: 13 },
     };
   }
+
 
   handleNext = currentStep => {
     const { form, handleUpdate } = this.props;
@@ -430,7 +444,13 @@ class TableList extends PureComponent {
     stepFormValues: {},
 
     addCameraModalVisible:false,
+
     nowRestRoomId:undefined,
+    nowRow:undefined,
+    isEdit:false,
+
+    drawerVisible: false,
+    drawerName:"",
   };
 
   componentDidMount() {
@@ -440,6 +460,29 @@ class TableList extends PureComponent {
       callback:(a)=>{console.log(JSON.stringify(a))},
     });
   }
+
+  //region 抽屉
+  hideDrawerVisible = () => {
+    this.setState({
+      drawerVisible: false,
+    });
+  };
+
+  showDrawerVisible=(record)=>{
+    const { dispatch } = this.props;
+    sessionStorage.setItem("restRoomId",record.restRoomId);
+    // dispatch({
+    //   type: 'workPost/fetchWorkPostTaskList',
+    //   payload: {
+    //     workPostId: record.postId,
+    //   },
+    // });
+    this.setState({
+      drawerVisible: true,
+      nowRow:record,
+    });
+  };
+  //endregion
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -540,9 +583,10 @@ class TableList extends PureComponent {
     });
   };
 
-  handleModalVisible = flag => {
+  handleModalVisible = (flag,isedit) => {
     this.setState({
       modalVisible: !!flag,
+      isEdit:isedit
     });
   };
 
@@ -559,20 +603,9 @@ class TableList extends PureComponent {
     });
   };
 
-  addCallback=(v)=>{
-    if(v.code===0) {
-      message.success("添加成功");
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'restroom/fetch',
-        callback:(a)=>{console.log(JSON.stringify(a))},
-      });
-      this.handleModalVisible();
-    }
-    else message.error(v.msg);
-  };
 
-  handleAdd = fields => {
+
+  handleRestRoomAdd = fields => {
     const { dispatch } = this.props;
     console.log(`add${JSON.stringify(fields)}`);
     dispatch({
@@ -581,7 +614,40 @@ class TableList extends PureComponent {
         ...fields,
         status:fields.status===true?1:0
       },
-      callback: this.addCallback,
+      callback: (v)=>{
+        if(v.code===0) {
+          message.success("添加成功");
+          dispatch({
+            type: 'restroom/fetch',
+            callback:(a)=>{console.log(JSON.stringify(a))},
+          });
+          this.handleModalVisible();
+        }
+        else message.error(v.msg);
+      },
+    });
+  };
+
+  handleRestRoomEdit = fields => {
+    const { dispatch } = this.props;
+    console.log(`编辑妈的${JSON.stringify(fields)}`);
+    dispatch({
+      type: 'restroom/updateRestRoom',
+      payload: {
+        ...fields,
+        status:fields.status===true?1:0
+      },
+      callback: (v)=>{
+        if(v.code===0) {
+          message.success("编辑成功");
+          dispatch({
+            type: 'restroom/fetch',
+            callback:(a)=>{console.log(JSON.stringify(a))},
+          });
+          this.handleModalVisible();
+        }
+        else message.error(v.msg);
+      },
     });
   };
 
@@ -613,124 +679,6 @@ class TableList extends PureComponent {
     this.handleUpdateModalVisible();
   };
 
-  renderSimpleForm() {
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="规则名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                查询
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
-              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                展开 <Icon type="down" />
-              </a>
-            </span>
-          </Col>
-        </Row>
-      </Form>
-    );
-  }
-
-  renderAdvancedForm() {
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="规则名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="调用次数">
-              {getFieldDecorator('number')(<InputNumber style={{ width: '100%' }} />)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="更新日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status3')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status4')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <div style={{ overflow: 'hidden' }}>
-          <div style={{ float: 'right', marginBottom: 24 }}>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-              重置
-            </Button>
-            <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-              收起 <Icon type="up" />
-            </a>
-          </div>
-        </div>
-      </Form>
-    );
-  }
-
-  renderForm() {
-    const { expandForm } = this.state;
-    return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
-  }
 
    deleteConfirm=(e)=> {
     console.log(e);
@@ -743,9 +691,9 @@ class TableList extends PureComponent {
       loading,
     } = this.props;
     console.log(`老子来了～～～～～～${JSON.stringify(list)}`);
-    const { selectedRows, modalVisible,addCameraModalVisible,nowRestRoomId, updateModalVisible, stepFormValues } = this.state;
+    const { isEdit,drawerVisible,drawerName,nowRow,selectedRows, modalVisible,addCameraModalVisible,nowRestRoomId, updateModalVisible, stepFormValues } = this.state;
 
-    const editAndDelete = (key, currentItem) => {
+    const add = (key, currentItem) => {
       if (key === 'camera'){
         this.setState({addCameraModalVisible:true,nowRestRoomId:currentItem.restRoomId});
 
@@ -757,11 +705,27 @@ class TableList extends PureComponent {
 
       }
     };
+    const deviceManage = (key, currentItem) => {
+      let info="";
+      if (key === 'camera'){
+        //this.setState({addCameraModalVisible:true,nowRestRoomId:currentItem.restRoomId});
+        info="摄像头";
+      }
+      else if (key === 'board') {
+        info="公告屏";
+      }
+      else if (key === 'gas') {
+        info="气体设备";
 
-    const MoreBtn = props => (
+      }
+      this.setState({drawerName:info});
+      this.showDrawerVisible(currentItem);
+    };
+
+    const AddMoreBtn = props => (
       <Dropdown
         overlay={
-          <Menu onClick={({ key }) => {editAndDelete(key, props.current)}}>
+          <Menu onClick={({ key }) => {add(key, props.current)}}>
             <Menu.Item key="camera">新增摄像头</Menu.Item>
             <Menu.Item key="board">新增公告屏</Menu.Item>
             <Menu.Item key="gas">新增气体设备</Menu.Item>
@@ -770,6 +734,29 @@ class TableList extends PureComponent {
       >
         <a>
           更多 <Icon type="down" />
+        </a>
+      </Dropdown>
+    );
+
+    /**
+     *    <a onClick={this.showDrawerVisible.bind(this,record)}>摄像头</a>
+     <Divider type="vertical" />
+     <a onClick={this.showDrawerVisible.bind(this,record)}>公告屏</a>
+     <Divider type="vertical" />
+     <a onClick={this.showDrawerVisible.bind(this,record)}>气体设备</a>
+     * */
+    const DeviceMoreBtn = props => (
+      <Dropdown
+        overlay={
+          <Menu onClick={({ key }) => {deviceManage(key, props.current)}}>
+            <Menu.Item key="camera">摄像头</Menu.Item>
+            <Menu.Item key="board">公告屏</Menu.Item>
+            <Menu.Item key="gas">气体设备</Menu.Item>
+          </Menu>
+        }
+      >
+        <a>
+          设备管理 <Icon type="down" />
         </a>
       </Dropdown>
     );
@@ -807,6 +794,10 @@ class TableList extends PureComponent {
         },
       },
       {
+        title: '责任保洁',
+        dataIndex: 'cleaner',
+      },
+      {
         title: '地区',
         dataIndex: 'region',
       },
@@ -820,7 +811,7 @@ class TableList extends PureComponent {
       },
       {
         title: '操作',
-        width: 200,
+        width: 300,
         fixed: 'right',
         render: (text, record) => (
           <Fragment>
@@ -828,59 +819,21 @@ class TableList extends PureComponent {
             {/*<Divider type="vertical" />*/}
             {/*<a href="">订阅警报</a>*/}
 
-            <a onClick={()=>{this.handleCameraModalVisible(true)}}>编辑</a>
+            <a onClick={()=>{this.setState({nowRow:record});this.handleModalVisible(true,true)}}>编辑</a>
             <Divider type="vertical" />
-            <MoreBtn current={record} />
+            <DeviceMoreBtn current={record} />
+            <Divider type="vertical" />
+            <AddMoreBtn current={record} />
 
           </Fragment>
         ),
       },
-      // {
-      //   title: '服务调用次数',
-      //   dataIndex: 'callNo',
-      //   sorter: true,
-      //   align: 'right',
-      //   render: val => `${val} 万`,
-      //   // mark to display a total number
-      //   needTotal: true,
-      // },
-      // {
-      //   title: '状态',
-      //   dataIndex: 'status',
-      //   filters: [
-      //     {
-      //       text: status[0],
-      //       value: 0,
-      //     },
-      //     {
-      //       text: status[1],
-      //       value: 1,
-      //     },
-      //     {
-      //       text: status[2],
-      //       value: 2,
-      //     },
-      //     {
-      //       text: status[3],
-      //       value: 3,
-      //     },
-      //   ],
-      //   render(val) {
-      //     return <Badge status={statusMap[val]} text={status[val]} />;
-      //   },
-      // },
-      // {
-      //   title: '上次调度时间',
-      //   dataIndex: 'updatedAt',
-      //   sorter: true,
-      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      // },
-
     ];
 
 
     const addRestroomParentMethods = {
-      handleAdd: this.handleAdd,
+      handleAdd: this.handleRestRoomAdd,
+      handleEdit: this.handleRestRoomEdit,
       handleModalVisible: this.handleModalVisible,
     };
     const addCameraParentMethods = {
@@ -894,16 +847,65 @@ class TableList extends PureComponent {
     };
     return (
       <PageHeaderWrapper title="公厕管理">
+        <Drawer
+          title={nowRow===undefined?'设备列表':`${nowRow.restRoomName} > ${drawerName}-设备列表`}
+          width="55%"
+          placement="right"
+          closable={false}
+          onClose={this.hideDrawerVisible}
+          visible={drawerVisible}
+        >
+          <Table
+            rowKey="taskId"
+            scroll={{ x: 600 }}
+            loading={loading}
+            dataSource={[]}
+            columns={undefined}
+            pagination={false}
+            // onSelectRow={this.handleSelectRows}
+            // onChange={this.handleStandardTableChange}
+            // expandedRowRender={expandedRowRender}
+          />
+          <Button type="dashed" onClick={this.newWorkPostTask} style={{ width: '100%',top: 10 }}>
+            <Icon type="plus" /> 新增
+          </Button>
+        </Drawer>
         <Card bordered={false}>
           <div className={styles.tableList}>
             {/*<div className={styles.tableListForm}>{this.renderForm()}</div>*/}
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true,false)}>
                 新建
               </Button>
               {selectedRows.length > 0 && (
                 <span>
-                  <Popconfirm title="将会删除该公厕下所有的设备，确定么?" onConfirm={this.deleteConfirm} okText="确定" cancelText="取消">
+                  <Popconfirm
+                    title="将会删除该公厕下所有的设备，确定么?"
+                    okText="确定"
+                    cancelText="取消"
+                    onConfirm={()=> {
+                      const {dispatch} = this.props;
+                      for (let i=0;i<selectedRows.length;i++) {
+                        const item=selectedRows[i];
+                        dispatch({
+                          type: 'restroom/deleteRestRoom',
+                          payload: {
+                            restRoomId: item.restRoomId,
+                          },
+                          callback: (v) => {
+                            message.success("删除成功");
+                            dispatch({
+                              type: 'restroom/fetch',
+                              callback: (a) => {
+                                console.log(JSON.stringify(a))
+                              },
+                            });
+                          },
+                        });
+                      }
+                      this.setState({selectedRows:[]});
+                    }}
+                  >
                     <Button>删除</Button>
                   </Popconfirm>
                   {/*<Dropdown overlay={menu}>*/}
@@ -927,7 +929,7 @@ class TableList extends PureComponent {
             />
           </div>
         </Card>
-        <CreateForm {...addRestroomParentMethods} modalVisible={modalVisible} />
+        <CreateForm isEdit={isEdit} row={nowRow===undefined?undefined:nowRow} {...addRestroomParentMethods} modalVisible={modalVisible} />
         <CreateCameraForm {...addCameraParentMethods} modalVisible={addCameraModalVisible} />
         {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm

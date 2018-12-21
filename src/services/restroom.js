@@ -18,6 +18,26 @@ export async function addRestRoom(params) {
   });
 }
 
+export async function deleteRestRoom(params) {
+  return request(`/api/v1/restroom/${params.restRoomId}`,{
+    method: 'DELETE',
+    headers:{
+      authorization: sessionStorage.getItem("token"),
+    },
+  });
+}
+
+export async function updateRestRoom(params) {
+  return request(`/api/v1/restroom/${params.restRoomId}`,{
+    method: 'PATCH',
+    body:stringify(params),
+    headers:{
+      authorization: sessionStorage.getItem("token"),
+      'Content-Type':'application/x-www-form-urlencoded',
+    },
+  });
+}
+
 export async function query(params) {
   return request(`/api/v1/restroom?${stringify(params)}`,{
     method: 'GET',

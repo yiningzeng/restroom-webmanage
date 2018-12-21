@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import {Row, Col, Form, Card, Select, List, Modal,Divider,message} from 'antd';
+import {Row, Col, Form, Card, Select, List, Modal,Divider,message,  Drawer} from 'antd';
 import Trend from '@/components/Trend';
 import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
@@ -86,13 +86,14 @@ class CoverCardList extends PureComponent {
               className={styles.card}
               // extra={<Button>asds</Button>}
               hoverable
-              cover={<img alt={item.restRoomName} src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
+              cover={<img alt={item.restRoomName} src="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg" />}
               // cover={
               //   <video src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">
               //     your browser does not support the video tag
               //   </video>
               // }
             >
+              <Card.Meta title={item.restRoomName}/>
               <div>
                 <Trend flag="down">
                   气体指数
