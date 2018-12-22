@@ -10,16 +10,24 @@ import request from '@/utils/request';
  @RequestParam(value = "status",defaultValue = "1") Integer status
  */
 
-export async function addCamera(params) {
+export async function del(params) {
+  return request(`/api/v1/device/camera/${params.cameraId}`,{
+    method: 'DELETE',
+    headers:{
+      authorization: sessionStorage.getItem("token"),
+    },
+  });
+}
+
+export async function add(params) {
   const formData = new FormData();
   formData.append('restRoomId', params.restRoomId);
   formData.append('username', params.username);
   formData.append('password', params.password);
-  formData.append('remark', params.remark);
   formData.append('status', params.status);
-  if(params.cleaner!==undefined) formData.append('cleaner', params.cleaner);
+  if(params.ip!==undefined) formData.append('ip', params.ip);
   if(params.remark!==undefined) formData.append('remark', params.remark);
-  return request(`/api/v1/restroom`,{
+  return request(`/api/v1/device/camera`,{
     method: 'POST',
     body:formData,
     headers:{
@@ -29,7 +37,7 @@ export async function addCamera(params) {
 }
 
 export async function query(params) {
-  return request(`/api/v1/restroom?${stringify(params)}`,{
+  return request(`/api/v1/device/camera/${params.restRoomId}?${stringify(params)}`,{
     method: 'GET',
     headers:{
       authorization: sessionStorage.getItem("token"),

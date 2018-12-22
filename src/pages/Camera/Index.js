@@ -62,17 +62,16 @@ class CoverCardList extends PureComponent {
 
   render() {
     const {
-      restroom: { list:{ data:{content=[]} }},
+      restroom: { list:{ data }},
       loading,
       form,
     } = this.props;
     const { getFieldDecorator } = form;
+
+
+    const content=data===undefined?[]:data.content;
     console.log(`fuck=====${JSON.stringify(content)}`);
 
-    /**
-     * [{"restRoomId":3,"restRoomName":"3","region":"浙江省,宁波市,鄞州区","address":"3","cleaner":"3","remark":"3","status":0,"deviceCameras":[],"deviceBoards":[],"deviceGases":[],"infoPassengerFlows":[],"infoGases":[]},{"restRoomId":2,"restRoomName":"2","region":"浙江省,宁波市,鄞州区","address":"2","cleaner":"2","remark":"2","status":1,"deviceCameras":[],"deviceBoards":[],"deviceGases":[],"infoPassengerFlows":[],"infoGases":[]},{"restRoomId":1,"restRoomName":"1","region":"浙江省,宁波市,鄞州区","address":"1","cleaner":"1","remark":"1","status":1,"deviceCameras":[],"deviceBoards":[],"deviceGases":[],"infoPassengerFlows":[],"infoGases":[]}]
-     * @type {null}
-     */
     const cardList = content ? (
       <List
         rowKey="restRoomId"

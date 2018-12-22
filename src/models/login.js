@@ -89,7 +89,7 @@ export default {
           }
         }
         yield put(routerRedux.replace(redirect || '/'));
-        yield put(routerRedux.push('/restroom/restroom-manage'));
+        yield put(routerRedux.push('/restroom'));
       }
       else if(payload.refresh === true){
         yield put({

@@ -25,45 +25,11 @@ export default [
         icon: 'dashboard',
         component: './Camera/Index',
       },
-      // {
-      //   path: '/smell-list',
-      //   name: 'smell-list',
-      //   icon: 'dashboard',
-      //   component: './Dashboard/Analysis',
-      // },
       {
         path: '/restroom',
         name: 'restroom',
         icon: 'dashboard',
         component: './RestRoom/TableList',
-        // routes: [
-        //   {
-        //     path: '/restroom/restroom-manage',
-        //     name: 'restroom-manage',
-        //     component: './RestRoom/TableList',
-        //   },
-        //   {
-        //     path: '/restroom/device-manage',
-        //     name: 'device-manage',
-        //     routes: [
-        //       {
-        //         path: '/restroom/device-manage/camera',
-        //         name: 'camera',
-        //         component: './List/TableList',
-        //       },
-        //       {
-        //         path: '/restroom/device-manage/board',
-        //         name: 'board',
-        //         component: './List/TableList',
-        //       },
-        //       {
-        //         path: '/restroom/device-manage/gas',
-        //         name: 'gas',
-        //         component: './List/TableList',
-        //       },
-        //     ],
-        //   },
-        // ],
       },
       {
         path: '/user-manage',

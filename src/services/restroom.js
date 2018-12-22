@@ -4,6 +4,7 @@ import request from '@/utils/request';
 export async function addRestRoom(params) {
   const formData = new FormData();
   formData.append('name', params.name);
+  formData.append('ip', params.ip);
   formData.append('region', params.region);
   formData.append('address', params.address);
   formData.append('status', params.status);
