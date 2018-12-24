@@ -1,4 +1,5 @@
 import { query as queryCamera,add as addCamera,del as deleteCamera } from '@/services/camera';
+import { query as queryGas,add as addGas,del as deleteGas } from '@/services/gas';
 
 export default {
   namespace: 'device',
@@ -29,7 +30,7 @@ export default {
           response= yield call(queryCamera,payload);
           break;
         case "gas":
-          response= yield call(queryCamera,payload);
+          response= yield call(queryGas,payload);
           break;
       }
       yield put({
@@ -48,6 +49,23 @@ export default {
     },
     *deleteCamera({ payload,callback}, { call, put }) {
       const response = yield call(deleteCamera,payload);
+      yield put({
+        type: 'res',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
+
+    *addGas({ payload,callback}, { call, put }) {
+      const response = yield call(addGas,payload);
+      yield put({
+        type: 'res',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
+    *deleteGas({ payload,callback}, { call, put }) {
+      const response = yield call(deleteGas,payload);
       yield put({
         type: 'res',
         payload: response,

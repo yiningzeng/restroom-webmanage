@@ -25,6 +25,7 @@ import {
   Popconfirm,
   Steps,
   Radio,
+  Tooltip,
 } from 'antd';
 // import StandardTable from '@/components/StandardTable';
 import MyStandardTable from '@/components/MyStandardTable';
@@ -284,6 +285,65 @@ const CreateBoardForm = Form.create()(props => {
   );
 });
 
+const CreateGasForm = Form.create()(props => {
+  const { restRoomId,modalVisible, form, handleAdd, handleModalVisible } = props;
+  const okHandle = () => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      form.resetFields();
+      handleAdd(fieldsValue);
+    });
+  };
+  return (
+    <Modal
+      destroyOnClose
+      title="新增气体监控设备"
+      visible={modalVisible}
+      onOk={okHandle}
+      onCancel={() => handleModalVisible()}
+    >
+      <FormItem {...formItemLayout} label="设备编号">
+        {form.getFieldDecorator('gasDeviceParentId', {
+          rules: [{ required: true, message: '请输入设备编号'}],
+        })(<Input placeholder="请输入设备编号" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="终端编号">
+        {form.getFieldDecorator('gasDeviceId', {
+          rules: [{ required: true, message: '请输入终端编号'}],
+        })(<Input placeholder="请输入终端编号" />)}
+      </FormItem>
+      <FormItem
+        {...formItemLayout}
+        label={
+          <span>
+            类型
+            <em className={styles.optional}>
+              <Tooltip title="选择南厕女厕">
+                <Icon type="info-circle-o" style={{ marginRight: 4 ,marginLeft:4}} />
+              </Tooltip>
+            </em>
+          </span>
+        }
+      >
+        {form.getFieldDecorator('type',{initialValue:1})(
+          <Radio.Group>
+            <Radio value={1}>女厕</Radio>
+            <Radio value={0}>男厕</Radio>
+          </Radio.Group>
+        )}
+      </FormItem>
+      <FormItem {...formItemLayout} label="状态">
+        {form.getFieldDecorator('status',{ valuePropName: 'checked',initialValue:true })(<Switch checkedChildren="开" unCheckedChildren="关" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="">
+        {form.getFieldDecorator('restRoomId', {
+          initialValue: restRoomId,
+        })(<Input type="hidden" />)}
+      </FormItem>
+    </Modal>
+  );
+});
+
 /* eslint react/no-multi-comp:0 */
 @connect(({ restroom,device, loading }) => ({
   restroom,
@@ -302,6 +362,7 @@ class TableList extends PureComponent {
     stepFormValues: {},
 
     addCameraModalVisible:false,
+    gasModalVisible:false,
 
     nowRestRoomId:undefined,
     nowRow:undefined,
@@ -330,10 +391,12 @@ class TableList extends PureComponent {
         });
         break;
       case "公告屏":
-        message.success("456");
+
         break;
       case "气体设备":
-        message.success("789");
+        this.setState({
+          gasModalVisible: true,
+        });
         break;
     }
 
@@ -469,7 +532,7 @@ class TableList extends PureComponent {
       loadingDevice,
     } = this.props;
     console.log(`老子来了～～～～～～${JSON.stringify(list)}`);
-    const { isEdit,drawerVisible,drawerName,nowRow,selectedRows, modalVisible,addCameraModalVisible,nowRestRoomId, updateModalVisible, stepFormValues } = this.state;
+    const { isEdit,drawerVisible,drawerName,nowRow,selectedRows, modalVisible,addCameraModalVisible,gasModalVisible,nowRestRoomId, updateModalVisible, stepFormValues } = this.state;
 
 
     //region item 操作菜单
@@ -594,6 +657,7 @@ class TableList extends PureComponent {
       },
     ];
 
+    //region 抽屉的列
     const cameraColums=[
       {
         title: '编号',
@@ -683,6 +747,183 @@ class TableList extends PureComponent {
       },
     ];
 
+    const gasColums=[
+
+      {
+        title: '设备号',
+        dataIndex: 'gasDeviceParentId',
+      },
+      {
+        title: '终端号',
+        dataIndex: 'gasDeviceId',
+      },
+      {
+        title: '类型',
+        dataIndex: 'type',
+        render(val) {
+          return val==="0"?"男厕":"女厕";
+        },
+      },
+      {
+        title: '密码',
+        dataIndex: 'password',
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        filters: [
+          {
+            text: status[0],
+            value: 0,
+          },
+          {
+            text: status[1],
+            value: 1,
+          },
+          {
+            text: status[2],
+            value: 2,
+          },
+          {
+            text: status[3],
+            value: 3,
+          },
+        ],
+        render(val) {
+          return <Badge status={statusMap[val]} text={status[val]} />;
+        },
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createTime',
+      },
+      {
+        title: '操作',
+        width: 100,
+        fixed: 'right',
+        render: (text, record) => (
+          <Fragment>
+            <Popconfirm
+              title="确定删除?"
+              okText="确定"
+              cancelText="取消"
+              onConfirm={()=> {
+                const { dispatch } = this.props;
+                dispatch({
+                  type: 'device/deleteGas',
+                  payload: {
+                    gasDeviceId: record.gasDeviceId,
+                  },
+                  callback: (v) => {
+                    message.success("删除成功");
+                    dispatch({
+                      type: 'device/fetch',
+                      deviceType: 'gas',
+                      payload: {
+                        restRoomId:this.state.nowRestRoomId,
+                        page:0,
+                        size:100,
+                      },
+                    });
+                  },
+                });
+              }}
+            >
+              <a>删除</a>
+            </Popconfirm>
+          </Fragment>
+        ),
+      },
+    ];
+    const boardColums=[
+      {
+        title: '编号',
+        dataIndex: 'cameraId',
+      },
+      {
+        title: 'IP',
+        dataIndex: 'ip',
+      },
+      {
+        title: '登录名',
+        dataIndex: 'username',
+      },
+      {
+        title: '密码',
+        dataIndex: 'password',
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        filters: [
+          {
+            text: status[0],
+            value: 0,
+          },
+          {
+            text: status[1],
+            value: 1,
+          },
+          {
+            text: status[2],
+            value: 2,
+          },
+          {
+            text: status[3],
+            value: 3,
+          },
+        ],
+        render(val) {
+          return <Badge status={statusMap[val]} text={status[val]} />;
+        },
+      },
+      {
+        title: '备注',
+        dataIndex: 'remark',
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createTime',
+      },
+      {
+        title: '操作',
+        width: 100,
+        fixed: 'right',
+        render: (text, record) => (
+          <Fragment>
+            <Popconfirm
+              title="确定删除?"
+              okText="确定"
+              cancelText="取消"
+              onConfirm={()=> {
+                const { dispatch } = this.props;
+                dispatch({
+                  type: 'device/deleteCamera',
+                  payload: {
+                    cameraId: record.cameraId,
+                  },
+                  callback: (v) => {
+                    message.success("删除成功");
+                    dispatch({
+                      type: 'device/fetch',
+                      deviceType: 'camera',
+                      payload: {
+                        restRoomId:this.state.nowRestRoomId,
+                        page:0,
+                        size:100,
+                      },
+                    });
+                  },
+                });
+              }}
+            >
+              <a>删除</a>
+            </Popconfirm>
+          </Fragment>
+        ),
+      },
+    ];
+    //endregion
 
     const addRestroomParentMethods = {
       handleAdd: this.handleRestRoomAdd,
@@ -725,9 +966,45 @@ class TableList extends PureComponent {
       handleModalVisible: this.handleCameraModalVisible,
     };
 
-
-
-
+    const addGasMethods = {
+      restRoomId: nowRestRoomId,
+      handleAdd: fields => {
+        const { dispatch } = this.props;
+        console.log(`add-gas--${JSON.stringify(fields)}`);
+        dispatch({
+          type: 'device/addGas',
+          payload: {
+            ...fields,
+            status:fields.status===true?1:0
+          },
+          callback: (v)=>{
+            if(v.code===0) {
+              message.success("新增成功");
+              dispatch({
+                type: 'device/fetch',
+                deviceType: 'gas',
+                payload: {
+                  restRoomId:this.state.nowRestRoomId,
+                  page:0,
+                  size:100,
+                },
+              });
+              // dispatch({
+              //   type: 'restroom/fetch',
+              //   callback:(a)=>{console.log(JSON.stringify(a))},
+              // });
+              this.setState({gasModalVisible:false});
+            }
+            else message.error(v.msg);
+          },
+        });
+      },
+      handleModalVisible: ()=>{
+        this.setState({
+          gasModalVisible: false,
+        });
+      },
+    };
 
     return (
       <PageHeaderWrapper title="公厕管理">
@@ -744,11 +1021,11 @@ class TableList extends PureComponent {
             scroll={{ x: 800 }}
             loading={loadingDevice}
             dataSource={deviceList===undefined?[]:deviceList.data===undefined?[]:deviceList.data.content}
-            columns={cameraColums}
+            columns={drawerName==="摄像头"?cameraColums:drawerName==="气体设备"?gasColums:boardColums}
             pagination={false}
           />
           <Button type="dashed" onClick={()=>this.drawerDeviceAdd(drawerName)} style={{ width: '100%',top: 10 }}>
-            <Icon type="plus" /> 新增
+            <Icon type="plus" /> {`新增${drawerName}`}
           </Button>
         </Drawer>
         <Card bordered={false}>
@@ -812,6 +1089,7 @@ class TableList extends PureComponent {
         </Card>
         <CreateForm isEdit={isEdit} row={nowRow===undefined?undefined:nowRow} {...addRestroomParentMethods} modalVisible={modalVisible} />
         <CreateCameraForm {...addCameraParentMethods} modalVisible={addCameraModalVisible} />
+        <CreateGasForm {...addGasMethods} modalVisible={gasModalVisible} />
       </PageHeaderWrapper>
     );
   }

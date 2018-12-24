@@ -96,16 +96,16 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
-        <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
-          <a
-            target="_blank"
-            href="https://pro.ant.design/docs/getting-started"
-            rel="noopener noreferrer"
-            className={styles.action}
-          >
-            <Icon type="question-circle-o" />
-          </a>
-        </Tooltip>
+        {/*<Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>*/}
+          {/*<a*/}
+            {/*target="_blank"*/}
+            {/*href="https://pro.ant.design/docs/getting-started"*/}
+            {/*rel="noopener noreferrer"*/}
+            {/*className={styles.action}*/}
+          {/*>*/}
+            {/*<Icon type="question-circle-o" />*/}
+          {/*</a>*/}
+        {/*</Tooltip>*/}
 
         {currentUser.relName ? (
           <HeaderDropdown overlay={menu}>

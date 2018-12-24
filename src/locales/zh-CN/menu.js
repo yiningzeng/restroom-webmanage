@@ -3,6 +3,7 @@ export default {
   'menu.video-list': '公厕监控',
   'menu.smell-list': '气味监控',
   'menu.restroom': '公厕管理',
+  'menu.message': '公告管理',
   'menu.restroom.restroom-manage': '公厕管理',
   'menu.restroom.device-manage': '设备管理',
   'menu.restroom.device-manage.camera': '摄像机',
