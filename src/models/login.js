@@ -65,8 +65,11 @@ export default {
       if (response.status === 0) {
         reloadAuthorized();
         console.log('结果',response);// { pathname: `${url}`, state: { nodeType: nodeType }}
+
         sessionStorage.setItem("username",payload.username);
         sessionStorage.setItem("password",payload.password);
+        sessionStorage.setItem("userId",response.data.userId);
+        sessionStorage.setItem("level",response.data.level.levelName);
         sessionStorage.setItem("token",response.data.token);
         sessionStorage.setItem("relName",response.data.token);
         sessionStorage.setItem("userHeadUrl",response.data.userHeadUrl);
