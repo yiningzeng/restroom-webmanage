@@ -25,7 +25,7 @@ export async function add(params) {
   formData.append('username', params.username);
   formData.append('password', params.password);
   formData.append('status', params.status);
-  if(params.ip!==undefined) formData.append('ip', params.ip);
+  if(params.ip!==undefined) formData.append('ip', params.ip.replace("：",":"));
   if(params.remark!==undefined) formData.append('remark', params.remark);
   return request(`/api/v1/device/camera`,{
     method: 'POST',

@@ -11,6 +11,7 @@ import StandardFormRow from '@/components/StandardFormRow'
 
 import styles from './Index.less';
 import numeral from "numeral";
+import ReactHLS from 'react-hls';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -39,6 +40,7 @@ class CoverCardList extends PureComponent {
 
   state = {
     modal1Visible: false,
+    restroomName: undefined,
     gasData:[{"x":"2018-12-20","y":50},{"x":"2018-12-21","y":5},{"x":"2018-12-22","y":4},{"x":"2018-12-23","y":2},{"x":"2018-12-24","y":4},{"x":"2018-12-25","y":7},{"x":"2018-12-26","y":5},{"x":"2018-12-27","y":6},{"x":"2018-12-28","y":5},{"x":"2018-12-29","y":9},{"x":"2018-12-30","y":6},{"x":"2018-12-31","y":3},{"x":"2019-01-01","y":1},{"x":"2019-01-02","y":5},{"x":"2019-01-03","y":3},{"x":"2019-01-04","y":6},{"x":"2019-01-05","y":5}]
   }
 
@@ -55,9 +57,9 @@ class CoverCardList extends PureComponent {
     });
   }
 
-  playVideo=(item)=>{
-    message.success("sdsdsdsds");
-    this.setModal1Visible(true)
+  playVideo=(name)=>{
+    this.setState({restroomName:name});
+    this.setModal1Visible(true);
   }
 
   render() {
@@ -81,7 +83,7 @@ class CoverCardList extends PureComponent {
         renderItem={item => (
           <List.Item>
             <Card
-              onClick={this.playVideo.bind(this,"sd")}
+              onClick={this.playVideo.bind(this,item.restRoomName)}
               className={styles.card}
               // extra={<Button>asds</Button>}
               hoverable
@@ -138,7 +140,7 @@ class CoverCardList extends PureComponent {
     return (
       <div className={styles.coverCardList}>
         <Modal
-          title="20px to Top"
+          title={this.state.restroomName+"-(公厕摄像头未安装完成，现在暂时转播湖南台节目，以表示改功能已完成)"}
           width="70%"
           footer={null}
           style={{ top: 20,bottom:20 }}
@@ -146,11 +148,12 @@ class CoverCardList extends PureComponent {
           onOk={() => this.setModal1Visible(false)}
           onCancel={() => this.setModal1Visible(false)}
         >
+          <ReactHLS width={"100%"} height={"70%"} autoplay={true} url={"http://baymin.tech:88/stream/hls/film.m3u8"} />
           {/*可以用iframe引用海康摄像头的sdk*/}
           {/*<iframe style={{border:0,width:"100%",height:630,}} src="http://www.baidu.com"/>*/}
-          <video height="500" width="100%" src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">
-            your browser does not support the video tag
-          </video>
+          {/*<video height="500" width="100%" src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">*/}
+            {/*your browser does not support the video tag*/}
+          {/*</video>*/}
         </Modal>
         <Card bordered={false}>
           <Form layout="inline">

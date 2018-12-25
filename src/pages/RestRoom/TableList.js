@@ -51,8 +51,8 @@ const formItemLayout = {
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12 },
-    md: { span: 10 },
+    sm: { span: 16 },
+    md: { span: 16 },
   },
 };
 
@@ -173,6 +173,9 @@ const CreateForm = Form.create()(props => {
 
 const CreateCameraForm = Form.create()(props => {
 
+
+
+
   const { restRoomId,modalVisible, form, handleAdd, handleModalVisible } = props;
 
   const okHandle = () => {
@@ -182,6 +185,7 @@ const CreateCameraForm = Form.create()(props => {
       handleAdd(fieldsValue);
     });
   };
+
 
   return (
     <Modal
@@ -370,6 +374,8 @@ class TableList extends PureComponent {
 
     drawerVisible: false,
     drawerName:"",
+
+    cameraRtsp: "rtsp://{username}:{password}@{ip}/h264/ch1/main/av_stream",
   };
 
   componentDidMount() {
@@ -532,7 +538,7 @@ class TableList extends PureComponent {
       loadingDevice,
     } = this.props;
     console.log(`老子来了～～～～～～${JSON.stringify(list)}`);
-    const { isEdit,drawerVisible,drawerName,nowRow,selectedRows, modalVisible,addCameraModalVisible,gasModalVisible,nowRestRoomId, updateModalVisible, stepFormValues } = this.state;
+    const { isEdit,drawerVisible,drawerName,nowRow,selectedRows, modalVisible,addCameraModalVisible,gasModalVisible,nowRestRoomId} = this.state;
 
 
     //region item 操作菜单
@@ -710,10 +716,18 @@ class TableList extends PureComponent {
       },
       {
         title: '操作',
-        width: 100,
+        width: 150,
         fixed: 'right',
         render: (text, record) => (
           <Fragment>
+            <Popconfirm
+              title={record.rtsp}
+              okText="确定"
+              cancelText="取消"
+            >
+              <a>RTSP</a>
+            </Popconfirm>
+            <Divider type="vertical" />
             <Popconfirm
               title="确定删除?"
               okText="确定"
@@ -948,7 +962,7 @@ class TableList extends PureComponent {
                 type: 'device/fetch',
                 deviceType: 'camera',
                 payload: {
-                  restRoomId:this.state.nowRestRoomId,
+                  restRoomId:nowRestRoomId,
                   page:0,
                   size:100,
                 },
@@ -1010,7 +1024,7 @@ class TableList extends PureComponent {
       <PageHeaderWrapper title="公厕管理">
         <Drawer
           title={nowRow===undefined?'设备列表':`${nowRow.restRoomName} > ${drawerName}-设备列表`}
-          width="45%"
+          width="55%"
           placement="right"
           closable={false}
           onClose={this.hideDrawerVisible}
