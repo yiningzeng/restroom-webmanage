@@ -26,7 +26,7 @@ import {
 // import StandardTable from '@/components/StandardTable';
 import MyStandardTable from '@/components/MyStandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import forge from 'node-forge';
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
@@ -50,43 +50,7 @@ const formItemLayout = {
 };
 
 const CreateForm = Form.create()(props => {
-  const options = [{
-    value: '浙江省',
-    label: '浙江省',
-    children: [{
-      value: '宁波市',
-      label: '宁波市',
-      children: [
-        {
-        value: '鄞州区',
-        label: '鄞州区',
-        },
-        {
-          value: '海曙区',
-          label: '海曙区',
-        },
-        {
-          value: '江北区',
-          label: '江北区',
-        },
-        {
-          value: '北仑区',
-          label: '北仑区',
-        },
-        {
-          value: '镇海区',
-          label: '镇海区',
-        },
-        {
-          value: '奉化区',
-          label: '奉化区',
-        }
-      ],
-    }],
-  }];
-
   const { row,isEdit,modalVisible, form, handleAdd,handleEdit, handleModalVisible } = props;
-
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -101,64 +65,57 @@ const CreateForm = Form.create()(props => {
   return (
     <Modal
       destroyOnClose
-      title={isEdit?"编辑公厕":"新增公厕"}
+      title={isEdit?"编辑用户":"新增用户"}
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem {...formItemLayout} label="公厕名称">
-        {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '请输入公厕名称'}],
-          initialValue:isEdit?row.restRoomName:undefined
-        })(<Input placeholder="请输入公厕名称" />)}
+      <FormItem {...formItemLayout} label="姓名">
+        {form.getFieldDecorator('relName', {
+          rules: [{ required: true, message: '请输入姓名'}],
+          initialValue:isEdit?row.relName:undefined
+        })(<Input placeholder="请输入姓名" />)}
       </FormItem>
-
-      <FormItem {...formItemLayout} label="所在地区">
-        {form.getFieldDecorator('region', {
-          rules: [
-            {
-              required: true,
-              message: "请选择区域",
-            },
-          ],
-          // initialValue: ['浙江省', '宁波市', '鄞州区'],
-          initialValue:isEdit?row.region.split(","):['浙江省', '宁波市', '鄞州区'],
-        })(
-          <Cascader options={options} onChange={onChange} />,
+      <FormItem {...formItemLayout} label="账号">
+        {form.getFieldDecorator('username', {
+          rules: [{ required: true, message: '请输入账号'}],
+          initialValue:isEdit?row.username:undefined
+        })(<Input placeholder="请输入账号" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="密码">
+        {form.getFieldDecorator('password', {
+          rules: [{ required: true, message: '请输入密码'}],
+          initialValue:isEdit?"**********":undefined
+        })(<Input disabled={isEdit?true:false} placeholder="请输入密码" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="部门">
+        {form.getFieldDecorator('department', {
+          rules: [{ required: true, message: '请输入部门' }],
+          initialValue:isEdit?row.department:undefined
+        })(<Input placeholder="请输入部门" />)}
+      </FormItem>
+      <FormItem
+        {...formItemLayout}
+        label={
+          <span>
+            账号类型
+            <em className={styles.optional}>
+              <Tooltip title="选择账号类型">
+                <Icon type="info-circle-o" style={{marginRight: 4, marginLeft: 4}} />
+              </Tooltip>
+            </em>
+          </span>
+        }
+      >
+        {form.getFieldDecorator('level',{initialValue:1})(
+          <Radio.Group>
+            <Radio value={1}>普通账号</Radio>
+            <Radio value={2}>管理员</Radio>
+          </Radio.Group>
         )}
       </FormItem>
-      <FormItem {...formItemLayout} label="详细地址">
-        {form.getFieldDecorator('address', {
-          rules: [{ required: true, message: '请输入详细地址' }],
-          initialValue:isEdit?row.address:undefined
-        })(<Input placeholder="请输入详细地址" />)}
-      </FormItem>
-      <FormItem {...formItemLayout} label="公厕IP">
-        {form.getFieldDecorator('ip', {
-          rules: [{ required: false, message: '请输入公厕的ip地址'}],
-          initialValue:isEdit?row.ip:undefined
-        })(<Input placeholder="请输入公厕的ip地址" />)}
-      </FormItem>
-      <FormItem {...formItemLayout} label="开放状态">
-        {form.getFieldDecorator('status',{ valuePropName: 'checked', initialValue:row===undefined?true:row.status===0?false:true })(<Switch checkedChildren="开" unCheckedChildren="关" />)}
-      </FormItem>
-      <FormItem {...formItemLayout} label="责任保洁员">
-        {form.getFieldDecorator('cleaner', {
-          rules: [{ required: false, message: '请输入责任保洁员姓名' }],
-          initialValue:isEdit?row.cleaner:undefined
-        })(<Input placeholder="请输入责任保洁员姓名" />)}
-      </FormItem>
-      <FormItem {...formItemLayout} label="备注">
-        {form.getFieldDecorator('remark', {
-          rules: [{ required: false, message: '备注' }],
-          initialValue:isEdit?row.remark:undefined
-        })(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 4 }} />)}
-      </FormItem>
-      <FormItem {...formItemLayout} label="">
-        {form.getFieldDecorator('restRoomId', {
-          rules: [{ required: false, message: '' }],
-          initialValue:isEdit?row.restRoomId:undefined
-        })(<Input type="hidden" />)}
+      <FormItem {...formItemLayout} label="状态">
+        {form.getFieldDecorator('userStatus',{ valuePropName: 'checked',initialValue:true })(<Switch checkedChildren="正常" unCheckedChildren="禁用" />)}
       </FormItem>
     </Modal>
   );
@@ -240,20 +197,29 @@ class Index extends PureComponent {
     });
   };
 
-  handleRestRoomAdd = fields => {
+  handleAdd = fields => {
     const { dispatch } = this.props;
     console.log(`add${JSON.stringify(fields)}`);
+
+    const md = forge.md.md5.create();
+    md.update(fields.password);
+    // values.password="1232312323";
+    const password=md.digest().toHex();
+    console.log(md.digest().toHex());
+
+
     dispatch({
-      type: 'restroom/addRestRoom',
+      type: 'member/addUser',
       payload: {
         ...fields,
-        status:fields.status===true?1:0
+        password:password,
+        userStatus:fields.userStatus===true?1:0
       },
       callback: (v)=>{
         if(v.code===0) {
           message.success("添加成功");
           dispatch({
-            type: 'restroom/fetch',
+            type: 'member/fetch',
             callback:(a)=>{console.log(JSON.stringify(a))},
           });
           this.handleModalVisible();
@@ -263,7 +229,7 @@ class Index extends PureComponent {
     });
   };
 
-  handleRestRoomEdit = fields => {
+  handleEdit = fields => {
     const { dispatch } = this.props;
     console.log(`编辑妈的${JSON.stringify(fields)}`);
     dispatch({
@@ -376,6 +342,8 @@ class Index extends PureComponent {
               okText="确定"
               cancelText="取消"
               onConfirm={()=>{
+                if(record.userId.toString()===sessionStorage.getItem("userId")){message.error("不可以删除自己");return;}
+                if(sessionStorage.getItem("level")==="普通用户"){message.error("没有删除的权限");return;}
                 const {dispatch} = this.props;
                 dispatch({
                   type: 'member/deleteUser',
@@ -402,9 +370,9 @@ class Index extends PureComponent {
     ];
 
 
-    const addRestroomParentMethods = {
-      handleAdd: this.handleRestRoomAdd,
-      handleEdit: this.handleRestRoomEdit,
+    const addModelMethods = {
+      handleAdd: this.handleAdd,
+      handleEdit: this.handleEdit,
       handleModalVisible: this.handleModalVisible,
     };
 
@@ -469,7 +437,7 @@ class Index extends PureComponent {
             />
           </div>
         </Card>
-        <CreateForm isEdit={isEdit} row={nowRow===undefined?undefined:nowRow} {...addRestroomParentMethods} modalVisible={modalVisible} />
+        <CreateForm isEdit={isEdit} row={nowRow===undefined?undefined:nowRow} {...addModelMethods} modalVisible={modalVisible} />
       </PageHeaderWrapper>
     );
   }

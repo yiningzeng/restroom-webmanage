@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import {Row, Col, Form, Card, Select, List, Modal,Divider,message,  Drawer} from 'antd';
+import {Row, Col, Form, Card, Select, List, Modal,Divider,message,  Drawer,Tooltip,Icon} from 'antd';
 import Trend from '@/components/Trend';
 import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
@@ -94,7 +94,7 @@ class CoverCardList extends PureComponent {
               //   </video>
               // }
             >
-              <Card.Meta title={item.restRoomName}/>
+              <Card.Meta title={item.restRoomName} />
               <div>
                 <Trend flag="down">
                   气体指数
