@@ -45,4 +45,21 @@ export async function query(params) {
   });
 }
 
+export async function push(params) {
+  return request(`/api/v1/stream/push/${params.cameraId}`,{
+    method: 'GET',
+    headers:{
+      authorization: sessionStorage.getItem("token"),
+    },
+  });
+}
+export async function stop(params) {
+  return request(`/api/v1/stream/stop/${params.cameraId}`,{
+    method: 'GET',
+    headers:{
+      authorization: sessionStorage.getItem("token"),
+    },
+  });
+}
+
 

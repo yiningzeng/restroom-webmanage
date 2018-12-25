@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import {Row, Col, Form, Card, Select, List, Modal,Divider,message,  Drawer,Tooltip,Icon} from 'antd';
+import {Row, Col, Form, Card, Select, List, Modal,Divider,Spin,message,  Drawer,Tooltip,Icon} from 'antd';
 import Trend from '@/components/Trend';
 import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
@@ -18,9 +18,10 @@ const FormItem = Form.Item;
 
 /* eslint react/no-array-index-key: 0 */
 
-@connect(({ restroom, loading }) => ({
+@connect(({ restroom,device, loading }) => ({
   restroom,
   loading: loading.effects['restroom/fetch'],
+  fuckloading: loading.effects['device/pushStream'],
 }))
 @Form.create({
   // onValuesChange({ dispatch }, changedValues, allValues) {
@@ -41,6 +42,10 @@ class CoverCardList extends PureComponent {
   state = {
     modal1Visible: false,
     restroomName: undefined,
+
+    fuckingPushLoading: false,
+    fuckingLiveUrl:undefined,
+    fuckingNowPlayCameraId:undefined,
     gasData:[{"x":"2018-12-20","y":50},{"x":"2018-12-21","y":5},{"x":"2018-12-22","y":4},{"x":"2018-12-23","y":2},{"x":"2018-12-24","y":4},{"x":"2018-12-25","y":7},{"x":"2018-12-26","y":5},{"x":"2018-12-27","y":6},{"x":"2018-12-28","y":5},{"x":"2018-12-29","y":9},{"x":"2018-12-30","y":6},{"x":"2018-12-31","y":3},{"x":"2019-01-01","y":1},{"x":"2019-01-02","y":5},{"x":"2019-01-03","y":3},{"x":"2019-01-04","y":6},{"x":"2019-01-05","y":5}]
   }
 
@@ -57,8 +62,28 @@ class CoverCardList extends PureComponent {
     });
   }
 
-  playVideo=(name)=>{
-    this.setState({restroomName:name});
+  playVideo=(record)=>{
+    const { dispatch } = this.props;
+    this.setState({fuckingNowPlayCameraId:record.deviceCameras[0].cameraId,restroomName:record.restRoomName,fuckingPushLoading:true});
+    if(record.deviceCameras.length>0){
+      //不能现在获取。。。因为数据没更新现在都是空的只有在pushStream之后才有数据
+      //this.setState({fuckingLiveUrl:record.deviceCameras[0].liveUrl});
+      dispatch({
+        type: 'device/pushStream',
+        payload: {
+          cameraId:record.deviceCameras[0].cameraId,
+        },
+        callback:(v)=>{
+          if(v.code===0){
+            this.setState({
+              fuckingLiveUrl:v.data,
+              fuckingPushLoading:false,
+            })
+          }
+          else message.error(v.msg);
+        },
+      });
+    }
     this.setModal1Visible(true);
   }
 
@@ -66,8 +91,10 @@ class CoverCardList extends PureComponent {
     const {
       restroom: { list:{ data }},
       loading,
+      fuckloading,
       form,
     } = this.props;
+    const {restroomName,fuckingPushLoading,fuckingLiveUrl}=this.state;
     const { getFieldDecorator } = form;
 
 
@@ -82,49 +109,31 @@ class CoverCardList extends PureComponent {
         dataSource={content}
         renderItem={item => (
           <List.Item>
-            <Card
-              onClick={this.playVideo.bind(this,item.restRoomName)}
-              className={styles.card}
-              // extra={<Button>asds</Button>}
-              hoverable
-              cover={<img alt={item.restRoomName} src="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg" />}
-              // cover={
-              //   <video src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">
-              //     your browser does not support the video tag
-              //   </video>
-              // }
-            >
-              <Card.Meta title={item.restRoomName} />
-              <div>
-                <Trend flag="down">
-                  气体指数
-                  <span className={styles.trendText}>11%</span>
-                </Trend>
-                <Trend flag="up" style={{ marginRight: 16,marginTop:-10 }}>
-                  客流量:
-                  <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
-                </Trend>
-              </div>
-
-              <MiniArea line height={55} data={this.state.gasData} />
-              <Divider style={{marginTop: "4px"}} />
-
-              <div className={styles.cardItemContent}>
-                <span>{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}  责任人: 张红艳</span>
-                {/*<div className={styles.avatarList}>*/}
-                  {/*<span>责任人:</span>*/}
-                  {/*<AvatarList size="mini">*/}
-                    {/*/!*{item.members.map((member, i) => (*/}
-                      {/*<AvatarList.Item*/}
-                        {/*key={`${item.id}-avatar-${i}`}*/}
-                        {/*src={member.avatar}*/}
-                        {/*tips={member.name}*/}
-                      {/*/>*/}
-                    {/*))}*!/*/}
-                  {/*</AvatarList>*/}
-                {/*</div>*/}
-              </div>
-            </Card>
+            <Spin spinning={fuckingPushLoading} tip="Loading...">
+                <Card
+                  onClick={this.playVideo.bind(this,item)}
+                  className={styles.card}
+                  hoverable
+                  cover={<img alt={item.restRoomName} src="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg" />}
+                >
+                  <Card.Meta title={item.restRoomName} />
+                  <div>
+                    <Trend flag="down">
+                      气体指数
+                      <span className={styles.trendText}>11%</span>
+                    </Trend>
+                    <Trend flag="up" style={{ marginRight: 16,marginTop:-10 }}>
+                      客流量:
+                      <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
+                    </Trend>
+                  </div>
+                  <MiniArea line height={55} data={this.state.gasData} />
+                  <Divider style={{marginTop: "4px"}} />
+                  <div className={styles.cardItemContent}>
+                    <span>{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}  责任人: 张红艳</span>
+                  </div>
+                </Card>
+            </Spin>
           </List.Item>
         )}
       />
@@ -140,15 +149,33 @@ class CoverCardList extends PureComponent {
     return (
       <div className={styles.coverCardList}>
         <Modal
-          title={this.state.restroomName+"-(公厕摄像头未安装完成，现在暂时转播湖南台节目，以表示改功能已完成)"}
+          title={`${restroomName}-直播 外面的请求需要延长时间`}
           width="70%"
           footer={null}
+          loading={fuckloading}
           style={{ top: 20,bottom:20 }}
           visible={this.state.modal1Visible}
-          onOk={() => this.setModal1Visible(false)}
-          onCancel={() => this.setModal1Visible(false)}
+          onCancel={() => {
+            const { dispatch } = this.props;
+            dispatch({
+              type: 'device/stopStream',
+              payload: {
+                cameraId:this.state.fuckingNowPlayCameraId,
+              },
+              callback:(v)=>{
+                if(v.code===0){
+                  this.setState({
+                    fuckingLiveUrl:undefined,
+                    fuckingPushLoading:false,
+                  })
+                }
+                else message.error(v.msg);
+              },
+            });
+            this.setModal1Visible(false)
+          }}
         >
-          <ReactHLS width={"100%"} height={"70%"} autoplay={true} url={"http://baymin.tech:88/stream/hls/film.m3u8"} />
+          <ReactHLS width={"100%"} height={"70%"} autoplay={true} url={fuckingLiveUrl} />
           {/*可以用iframe引用海康摄像头的sdk*/}
           {/*<iframe style={{border:0,width:"100%",height:630,}} src="http://www.baidu.com"/>*/}
           {/*<video height="500" width="100%" src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">*/}

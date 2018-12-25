@@ -1,4 +1,4 @@
-import { query as queryCamera,add as addCamera,del as deleteCamera } from '@/services/camera';
+import { query as queryCamera,add as addCamera,del as deleteCamera,push as pushStream,stop as stopStream} from '@/services/camera';
 import { query as queryGas,add as addGas,del as deleteGas } from '@/services/gas';
 
 export default {
@@ -35,6 +35,22 @@ export default {
       }
       yield put({
         type: 'deviceList',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
+    *pushStream({ payload,callback}, { call, put }) {
+      const response = yield call(pushStream,payload);
+      yield put({
+        type: 'res',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
+    *stopStream({ payload,callback}, { call, put }) {
+      const response = yield call(stopStream,payload);
+      yield put({
+        type: 'res',
         payload: response,
       });
       if (callback)callback(response);
