@@ -7,7 +7,7 @@ import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
 import { MiniArea } from '@/components/Charts';
 import Ellipsis from '@/components/Ellipsis';
-import StandardFormRow from '@/components/StandardFormRow'
+import StandardFormRow from '@/components/StandardFormRow';
 
 import styles from './Index.less';
 import numeral from "numeral";
@@ -23,20 +23,7 @@ const FormItem = Form.Item;
   loading: loading.effects['restroom/fetch'],
   fuckloading: loading.effects['device/pushStream'],
 }))
-@Form.create({
-  // onValuesChange({ dispatch }, changedValues, allValues) {
-  //   // 表单项变化时请求数据
-  //   // eslint-disable-next-line
-  //   console.log(changedValues, allValues);
-  //   // 模拟查询表单生效
-  //   dispatch({
-  //     type: 'list/fetch',
-  //     payload: {
-  //       count: 8,
-  //     },
-  //   });
-  // },
-})
+@Form.create({})
 class CoverCardList extends PureComponent {
 
   state = {
@@ -44,12 +31,32 @@ class CoverCardList extends PureComponent {
     restroomName: undefined,
 
     fuckingPushLoading: false,
-    fuckingLiveUrl:undefined,
-    fuckingNowPlayCameraId:undefined,
-    gasData:[{"x":"2018-12-20","y":50},{"x":"2018-12-21","y":5},{"x":"2018-12-22","y":4},{"x":"2018-12-23","y":2},{"x":"2018-12-24","y":4},{"x":"2018-12-25","y":7},{"x":"2018-12-26","y":5},{"x":"2018-12-27","y":6},{"x":"2018-12-28","y":5},{"x":"2018-12-29","y":9},{"x":"2018-12-30","y":6},{"x":"2018-12-31","y":3},{"x":"2019-01-01","y":1},{"x":"2019-01-02","y":5},{"x":"2019-01-03","y":3},{"x":"2019-01-04","y":6},{"x":"2019-01-05","y":5}]
+    fuckingLiveUrl: undefined,
+    fuckingNowPlayCameraId: undefined,
+    autoplay: true,
+    paused:false,
+    gasData: [{"x": "2018-12-20", "y": 50}, {"x": "2018-12-21", "y": 5}, {
+      "x": "2018-12-22",
+      "y": 4
+    }, {"x": "2018-12-23", "y": 2}, {"x": "2018-12-24", "y": 4}, {"x": "2018-12-25", "y": 7}, {
+      "x": "2018-12-26",
+      "y": 5
+    }, {"x": "2018-12-27", "y": 6}, {"x": "2018-12-28", "y": 5}, {"x": "2018-12-29", "y": 9}, {
+      "x": "2018-12-30",
+      "y": 6
+    }, {"x": "2018-12-31", "y": 3}, {"x": "2019-01-01", "y": 1}, {"x": "2019-01-02", "y": 5}, {
+      "x": "2019-01-03",
+      "y": 3
+    }, {"x": "2019-01-04", "y": 6}, {"x": "2019-01-05", "y": 5}]
   }
 
   setModal1Visible(modal1Visible) {
+    this.setState({
+      fuckingPushLoading: false,
+      fuckingLiveUrl: undefined,
+      autoplay: true,
+      paused:false,
+    });
     this.setState({ modal1Visible });
   }
 
@@ -84,6 +91,12 @@ class CoverCardList extends PureComponent {
         },
       });
     }
+    this.setState({
+      fuckingPushLoading: false,
+      fuckingLiveUrl: undefined,
+      autoplay: true,
+      paused:false,
+    });
     this.setModal1Visible(true);
   }
 
@@ -94,7 +107,7 @@ class CoverCardList extends PureComponent {
       fuckloading,
       form,
     } = this.props;
-    const {restroomName,fuckingPushLoading,fuckingLiveUrl}=this.state;
+    const {restroomName,autoplay,paused,fuckingPushLoading,fuckingLiveUrl}=this.state;
     const { getFieldDecorator } = form;
 
 
@@ -149,10 +162,10 @@ class CoverCardList extends PureComponent {
     return (
       <div className={styles.coverCardList}>
         <Modal
-          title={`${restroomName}-直播 外面的请求需要延长时间`}
+          title={`${restroomName}-直播`}
           width="70%"
           footer={null}
-          loading={fuckloading}
+          maskClosable={false}
           style={{ top: 20,bottom:20 }}
           visible={this.state.modal1Visible}
           onCancel={() => {
@@ -167,7 +180,9 @@ class CoverCardList extends PureComponent {
                   this.setState({
                     fuckingLiveUrl:undefined,
                     fuckingPushLoading:false,
-                  })
+                    autoplay:false,
+                    paused:true,
+                  });
                 }
                 else message.error(v.msg);
               },
@@ -175,7 +190,9 @@ class CoverCardList extends PureComponent {
             this.setModal1Visible(false)
           }}
         >
-          <ReactHLS width={"100%"} height={"70%"} autoplay={true} url={fuckingLiveUrl} />
+          <Spin spinning={fuckloading} size="large" tip="视频载入中...请耐心等待">
+            <ReactHLS width="100%" height="70%" controls={false} paused={this.state.paused} preload="none" poster="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg" autoplay={this.state.autoplay} url={this.state.paused?undefined:this.state.fuckingLiveUrl} />
+          </Spin>
           {/*可以用iframe引用海康摄像头的sdk*/}
           {/*<iframe style={{border:0,width:"100%",height:630,}} src="http://www.baidu.com"/>*/}
           {/*<video height="500" width="100%" src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">*/}
