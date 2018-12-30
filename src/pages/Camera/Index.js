@@ -8,7 +8,6 @@ import AvatarList from '@/components/AvatarList';
 import { MiniArea } from '@/components/Charts';
 import Ellipsis from '@/components/Ellipsis';
 import StandardFormRow from '@/components/StandardFormRow';
-
 import styles from './Index.less';
 import numeral from "numeral";
 import ReactHLS from 'react-hls';
@@ -102,7 +101,7 @@ class CoverCardList extends PureComponent {
 
   render() {
     const {
-      restroom: { list:{ data }},
+      restroom: { list},
       loading,
       fuckloading,
       form,
@@ -110,8 +109,8 @@ class CoverCardList extends PureComponent {
     const {restroomName,autoplay,paused,fuckingPushLoading,fuckingLiveUrl}=this.state;
     const { getFieldDecorator } = form;
 
-
-    const content=data===undefined?[]:data.content;
+    console.log(`fuck=====${JSON.stringify(list)}`);
+    const content=list.data===undefined?[]:list.data.content;
     console.log(`fuck=====${JSON.stringify(content)}`);
 
     const cardList = content ? (

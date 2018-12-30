@@ -356,7 +356,7 @@ const CreateGasForm = Form.create()(props => {
   loadingDevice: loading.effects['device/fetch']
 }))
 @Form.create()
-class TableList extends PureComponent {
+class Index extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -1109,4 +1109,4 @@ class TableList extends PureComponent {
   }
 }
 
-export default TableList;
+export default Index;

@@ -40,6 +40,7 @@ export async function updateRestRoom(params) {
 }
 
 export async function query(params) {
+  console.log("老子是token:"+sessionStorage.getItem("token"));
   return request(`/api/v1/restroom?${stringify(params)}`,{
     method: 'GET',
     headers:{

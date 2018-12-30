@@ -20,7 +20,7 @@ export default {
       code: undefined,
       status: undefined,
       msg: '',
-      data: [],
+      data: undefined,
     },
   },
 

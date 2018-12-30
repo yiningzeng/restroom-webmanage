@@ -20,6 +20,12 @@ export default [
       // dashboard
       { path: '/', redirect: '/video-list' },
       {
+        path: '/home',
+        name: 'home',
+        icon: 'video-camera',
+        component: './Home/Index',
+      },
+      {
         path: '/video-list',
         name: 'video-list',
         icon: 'video-camera',
@@ -29,13 +35,13 @@ export default [
         path: '/restroom',
         name: 'restroom',
         icon: 'home',
-        component: './RestRoom/TableList',
+        component: './RestRoom/Index',
       },
       {
         path: '/message',
         name: 'message',
         icon: 'notification',
-        component: './RestRoom/TableList',
+        component: './RestRoom/Index',
       },
       {
         path: '/user-manage',

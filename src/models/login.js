@@ -39,6 +39,16 @@ export default {
         payload: response,
       });
       if (response.status === 0) {
+        reloadAuthorized();
+        console.log('结果',response);
+        sessionStorage.setItem("username",payload.username);
+        sessionStorage.setItem("password",payload.password);
+        sessionStorage.setItem("userId",response.data.userId);
+        sessionStorage.setItem("level",response.data.level.levelName);
+        sessionStorage.setItem("token",response.data.token);
+        sessionStorage.setItem("relName",response.data.token);
+        sessionStorage.setItem("userHeadUrl",response.data.userHeadUrl);
+
         if (callback)callback(response);
       }
       else if(payload.refresh === true){
@@ -92,7 +102,7 @@ export default {
           }
         }
         yield put(routerRedux.replace(redirect || '/'));
-        yield put(routerRedux.push('/restroom'));
+        // yield put(routerRedux.push('/restroom'));
       }
       else if(payload.refresh === true){
         yield put({
