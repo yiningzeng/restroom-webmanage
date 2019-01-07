@@ -1,4 +1,4 @@
-import { query,addRestRoom,updateRestRoom,deleteRestRoom } from '@/services/restroom';
+import { query,addRestRoom,updateRestRoom,deleteRestRoom,getWeather } from '@/services/restroom';
 
 export default {
   namespace: 'restroom',
@@ -25,6 +25,14 @@ export default {
   },
 
   effects: {
+    *weather({ callback}, { call, put }) {
+      const response = yield call(getWeather);
+      yield put({
+        type: 'res',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
     *fetch({ payload,callback}, { call, put }) {
       const response = yield call(query,payload);
       yield put({

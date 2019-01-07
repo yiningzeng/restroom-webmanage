@@ -65,7 +65,8 @@ const cachedSave = (response, hashcode) => {
  */
 export default function request(tt, option) {
 
-  const url=`http://47.99.207.5:8080${tt}`;
+  // const url=`http://47.99.207.5:8080${tt}`;
+  const url=`http://localhost:8080${tt}`;
   // const url=tt;
   const options = {
     expirys: isAntdPro(),

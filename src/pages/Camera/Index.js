@@ -198,39 +198,39 @@ class CoverCardList extends PureComponent {
             {/*your browser does not support the video tag*/}
           {/*</video>*/}
         </Modal>
-        <Card bordered={false}>
-          <Form layout="inline">
-            <StandardFormRow title="所属区域" block style={{ paddingBottom: 11 }}>
-              <FormItem>
-                {getFieldDecorator('category')(
-                  <TagSelect expandable value={['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6']}>
-                    <TagSelect.Option value="cat1">海曙区</TagSelect.Option>
-                    <TagSelect.Option value="cat2">鄞州区</TagSelect.Option>
-                    <TagSelect.Option value="cat3">江北区</TagSelect.Option>
-                    <TagSelect.Option value="cat4">镇海区</TagSelect.Option>
-                    <TagSelect.Option value="cat5">北仑区</TagSelect.Option>
-                    <TagSelect.Option value="cat6">奉化区</TagSelect.Option>
-                  </TagSelect>
-                )}
-              </FormItem>
-            </StandardFormRow>
-            <StandardFormRow title="其它选项" grid last>
-              <Row gutter={16}>
-                <Col lg={8} md={10} sm={10} xs={24}>
-                  <FormItem {...formItemLayout} label="状态">
-                    {getFieldDecorator('author', {})(
-                      <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
-                        <Option value="2">不限</Option>
-                        <Option value="1">开放</Option>
-                        <Option value="0">关闭</Option>
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
-            </StandardFormRow>
-          </Form>
-        </Card>
+        {/*<Card bordered={false}>*/}
+          {/*<Form layout="inline">*/}
+            {/*<StandardFormRow title="所属区域" block style={{ paddingBottom: 11 }}>*/}
+              {/*<FormItem>*/}
+                {/*{getFieldDecorator('category')(*/}
+                  {/*<TagSelect expandable value={['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6']}>*/}
+                    {/*<TagSelect.Option value="cat1">海曙区</TagSelect.Option>*/}
+                    {/*<TagSelect.Option value="cat2">鄞州区</TagSelect.Option>*/}
+                    {/*<TagSelect.Option value="cat3">江北区</TagSelect.Option>*/}
+                    {/*<TagSelect.Option value="cat4">镇海区</TagSelect.Option>*/}
+                    {/*<TagSelect.Option value="cat5">北仑区</TagSelect.Option>*/}
+                    {/*<TagSelect.Option value="cat6">奉化区</TagSelect.Option>*/}
+                  {/*</TagSelect>*/}
+                {/*)}*/}
+              {/*</FormItem>*/}
+            {/*</StandardFormRow>*/}
+            {/*<StandardFormRow title="其它选项" grid last>*/}
+              {/*<Row gutter={16}>*/}
+                {/*<Col lg={8} md={10} sm={10} xs={24}>*/}
+                  {/*<FormItem {...formItemLayout} label="状态">*/}
+                    {/*{getFieldDecorator('author', {})(*/}
+                      {/*<Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>*/}
+                        {/*<Option value="2">不限</Option>*/}
+                        {/*<Option value="1">开放</Option>*/}
+                        {/*<Option value="0">关闭</Option>*/}
+                      {/*</Select>*/}
+                    {/*)}*/}
+                  {/*</FormItem>*/}
+                {/*</Col>*/}
+              {/*</Row>*/}
+            {/*</StandardFormRow>*/}
+          {/*</Form>*/}
+        {/*</Card>*/}
         <div className={styles.cardList}>{cardList}</div>
       </div>
     );

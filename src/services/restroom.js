@@ -8,6 +8,8 @@ export async function addRestRoom(params) {
   formData.append('region', params.region);
   formData.append('address', params.address);
   formData.append('status', params.status);
+  formData.append('longitude', params.longitude);
+  formData.append('latitude', params.latitude);
   if(params.cleaner!==undefined) formData.append('cleaner', params.cleaner);
   if(params.remark!==undefined) formData.append('remark', params.remark);
   return request(`/api/v1/restroom`,{
@@ -49,4 +51,13 @@ export async function query(params) {
   });
 }
 
+export async function getWeather(params) {
+  console.log("天气妈妈妈妈们的:"+sessionStorage.getItem("token"));
+  return request(`/api/v1/weather`,{
+    method: 'GET',
+    headers:{
+      authorization: sessionStorage.getItem("token"),
+    },
+  });
+}
 

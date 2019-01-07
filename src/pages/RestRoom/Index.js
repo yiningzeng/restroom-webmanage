@@ -140,12 +140,25 @@ const CreateForm = Form.create()(props => {
           initialValue:isEdit?row.address:undefined
         })(<Input placeholder="请输入详细地址" />)}
       </FormItem>
+      <FormItem {...formItemLayout} label="经度">
+        {form.getFieldDecorator('longitude', {
+          rules: [{ required: true, message: '请输入公厕的经度'}],
+          initialValue:isEdit?row.longitude:undefined
+        })(<Input placeholder="请输入公厕的经度" />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="纬度">
+        {form.getFieldDecorator('latitude', {
+          rules: [{ required: true, message: '请输入公厕的纬度'}],
+          initialValue:isEdit?row.latitude:undefined
+        })(<Input placeholder="请输入公厕的纬度" />)}
+      </FormItem>
       <FormItem {...formItemLayout} label="公厕IP">
         {form.getFieldDecorator('ip', {
           rules: [{ required: false, message: '请输入公厕的ip地址'}],
           initialValue:isEdit?row.ip:undefined
         })(<Input placeholder="请输入公厕的ip地址" />)}
       </FormItem>
+
       <FormItem {...formItemLayout} label="开放状态">
         {form.getFieldDecorator('status',{ valuePropName: 'checked', initialValue:row===undefined?true:row.status===0?false:true })(<Switch checkedChildren="开" unCheckedChildren="关" />)}
       </FormItem>
