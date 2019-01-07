@@ -36,7 +36,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './TableList.less';
 import { Map,Marker,InfoWindow } from "react-amap";
 import InfiniteScroll from 'react-infinite-scroller';
-
+import { TimelineChart } from '@/components/Charts';
 //高德地图组件使用方法 https://elemefe.github.io/react-amap/components/infowindow
 /* eslint react/no-multi-comp:0 */
 @connect(({ restroom,device, loading }) => ({
@@ -180,7 +180,10 @@ class Index extends PureComponent {
                   {
                     list!==undefined&&list.data!==undefined&&list.data.content!==undefined&&
                     list.data.content.map((item, i) => (
-                      <Marker position={[item.longitude,item.latitude]} clickable events={{
+                      <Marker
+                        position={[item.longitude,item.latitude]}
+                        clickable
+                        events={{
                         created: (instance) => {
                           console.log('Marker 实例创建成功；如果你需要对原生实例进行操作，可以从这里开始；');
                           console.log(instance);
@@ -195,12 +198,12 @@ class Index extends PureComponent {
                               videoStatusTest: item.deviceCameras.length>0?"视频正常":"未安装摄像头",
                               // gasStatus:
                           }});
-                          console.log("你点击了这个图标；调用参数为："+item.restRoomName);
+                          console.log(`你点击了这个图标；调用参数为：${item.restRoomName}`);
                           console.log(e);
                         },
                         dblclick: (e) => {
                           // this.setState({infoWindowVisible:true});
-                          console.log("你刚刚双击了这个图标；调用参数为："+item.restRoomName);
+                          console.log(`你刚刚双击了这个图标；调用参数为：${item.restRoomName}`);
                           console.log(e);
                         },
                         // ... 支持绑定所有原生的高德 Marker 事件
@@ -238,6 +241,17 @@ class Index extends PureComponent {
                     {/*<Button onClick={()=>{alert('You Clicked!')}}>An Ant Design Button</Button>*/}
                   {/*</div>*/}
                 </Map>
+              </div>
+              <div style={{ padding: '0 24px' }}>
+                <TimelineChart
+                  height={200}
+                  data={undefined}
+                  titleMap={{
+                    y1: "客流",
+                    y2: "男厕气体质量",
+                    y3: "女厕气体质量",
+                  }}
+                />
               </div>
             </Col>
           </Row>

@@ -70,8 +70,9 @@ class CoverCardList extends PureComponent {
 
   playVideo=(record)=>{
     const { dispatch } = this.props;
-    this.setState({fuckingNowPlayCameraId:record.deviceCameras[0].cameraId,restroomName:record.restRoomName,fuckingPushLoading:true});
+
     if(record.deviceCameras.length>0){
+      this.setState({fuckingNowPlayCameraId:record.deviceCameras[0].cameraId,restroomName:record.restRoomName,fuckingPushLoading:true});
       //不能现在获取。。。因为数据没更新现在都是空的只有在pushStream之后才有数据
       //this.setState({fuckingLiveUrl:record.deviceCameras[0].liveUrl});
       dispatch({
@@ -89,14 +90,18 @@ class CoverCardList extends PureComponent {
           else message.error(v.msg);
         },
       });
+      this.setState({
+        fuckingPushLoading: false,
+        fuckingLiveUrl: undefined,
+        autoplay: true,
+        paused:false,
+      });
+      this.setModal1Visible(true);
     }
-    this.setState({
-      fuckingPushLoading: false,
-      fuckingLiveUrl: undefined,
-      autoplay: true,
-      paused:false,
-    });
-    this.setModal1Visible(true);
+    else{
+      message.error("该公厕还未安装摄像头");
+    }
+
   }
 
   render() {

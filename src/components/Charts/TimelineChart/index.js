@@ -10,11 +10,12 @@ class TimelineChart extends React.Component {
   render() {
     const {
       title,
-      height = 400,
+      height = 200,
       padding = [60, 20, 40, 40],
       titleMap = {
         y1: 'y1',
         y2: 'y2',
+        y3: 'y3',
       },
       borderWidth = 2,
       data = [
@@ -29,10 +30,10 @@ class TimelineChart extends React.Component {
     data.sort((a, b) => a.x - b.x);
 
     let max;
-    if (data[0] && data[0].y1 && data[0].y2) {
+    if (data[0] && data[0].y1 && data[0].y2&& data[0].y3) {
       max = Math.max(
         [...data].sort((a, b) => b.y1 - a.y1)[0].y1,
-        [...data].sort((a, b) => b.y2 - a.y2)[0].y2
+        [...data].sort((a, b) => b.y2 - a.y2)[0].y2,
       );
     }
 
@@ -58,12 +59,13 @@ class TimelineChart extends React.Component {
           const newRow = { ...row };
           newRow[titleMap.y1] = row.y1;
           newRow[titleMap.y2] = row.y2;
+          newRow[titleMap.y3] = row.y3;
           return newRow;
         },
       })
       .transform({
         type: 'fold',
-        fields: [titleMap.y1, titleMap.y2], // 展开字段集
+        fields: [titleMap.y1, titleMap.y2,titleMap.y3], // 展开字段集
         key: 'key', // key字段
         value: 'value', // value字段
       });
