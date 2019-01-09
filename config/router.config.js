@@ -18,7 +18,7 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/video-list' },
+      { path: '/', redirect: '/home' },
       {
         path: '/home',
         name: 'home',

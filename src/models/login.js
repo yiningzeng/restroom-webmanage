@@ -101,8 +101,8 @@ export default {
             return;
           }
         }
-        yield put(routerRedux.replace(redirect || '/'));
-        // yield put(routerRedux.push('/restroom'));
+        // yield put(routerRedux.replace(redirect || '/'));
+        yield put(routerRedux.push('/home'));
       }
       else if(payload.refresh === true){
         yield put({
