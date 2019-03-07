@@ -342,10 +342,12 @@ const CreateGasForm = Form.create()(props => {
           </span>
         }
       >
-        {form.getFieldDecorator('type',{initialValue:1})(
+        {form.getFieldDecorator('type',{initialValue:0})(
           <Radio.Group>
+            <Radio value={0}>大厅</Radio>
             <Radio value={1}>女厕</Radio>
-            <Radio value={0}>男厕</Radio>
+            <Radio value={2}>男厕</Radio>
+            <Radio value={3}>无障碍</Radio>
           </Radio.Group>
         )}
       </FormItem>
@@ -787,13 +789,18 @@ class Index extends PureComponent {
       {
         title: '类型',
         dataIndex: 'type',
-        render(val) {
-          return val==="0"?"男厕":"女厕";
+        render(val) {//{0：大厅|1：女厕|2：男厕|3：无障碍}
+          switch(val){
+            case 1:
+              return "女厕";
+            case 2:
+              return "男厕";
+            case 3:
+              return "无障碍";
+            default:
+              return "大厅";
+          }
         },
-      },
-      {
-        title: '密码',
-        dataIndex: 'password',
       },
       {
         title: '状态',
