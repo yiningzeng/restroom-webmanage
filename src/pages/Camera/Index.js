@@ -135,16 +135,29 @@ class CoverCardList extends PureComponent {
                 >
                   <Card.Meta title={item.restRoomName} />
                   <div>
-                    <Trend flag="down">
-                      气体指数
-                      <span className={styles.trendText}>11%</span>
-                    </Trend>
                     <Trend flag="up" style={{ marginRight: 16,marginTop:-10 }}>
                       客流量:
                       <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
                     </Trend>
+                    <br/>
+                    <Trend flag="down">
+                      男厕
+                      <span className={styles.trendText}>11%</span>
+                    </Trend>
+                    <Trend flag="down">
+                      女厕
+                      <span className={styles.trendText}>11%</span>
+                    </Trend>
+                    <Trend flag="down">
+                      大厅
+                      <span className={styles.trendText}>11%</span>
+                    </Trend>
+                    <Trend flag="down">
+                      无障碍
+                      <span className={styles.trendText}>11%</span>
+                    </Trend>
                   </div>
-                  <MiniArea line height={55} data={this.state.gasData} />
+                  {/*<MiniArea line height={55} data={this.state.gasData} />*/}
                   <Divider style={{marginTop: "4px"}} />
                   <div className={styles.cardItemContent}>
                     <span>{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}  责任人: 张红艳</span>
