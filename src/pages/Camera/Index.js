@@ -34,19 +34,8 @@ class CoverCardList extends PureComponent {
     fuckingNowPlayCameraId: undefined,
     autoplay: true,
     paused:false,
-    gasData: [{"x": "2018-12-20", "y": 50}, {"x": "2018-12-21", "y": 5}, {
-      "x": "2018-12-22",
-      "y": 4
-    }, {"x": "2018-12-23", "y": 2}, {"x": "2018-12-24", "y": 4}, {"x": "2018-12-25", "y": 7}, {
-      "x": "2018-12-26",
-      "y": 5
-    }, {"x": "2018-12-27", "y": 6}, {"x": "2018-12-28", "y": 5}, {"x": "2018-12-29", "y": 9}, {
-      "x": "2018-12-30",
-      "y": 6
-    }, {"x": "2018-12-31", "y": 3}, {"x": "2019-01-01", "y": 1}, {"x": "2019-01-02", "y": 5}, {
-      "x": "2019-01-03",
-      "y": 3
-    }, {"x": "2019-01-04", "y": 6}, {"x": "2019-01-05", "y": 5}]
+
+    cardListContent: [],
   }
 
   setModal1Visible(modal1Visible) {
@@ -64,7 +53,45 @@ class CoverCardList extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'restroom/fetch',
-      callback:(a)=>{console.log(JSON.stringify(a))},
+      callback:(a)=> {
+        if (a.code === -1) return;
+        const content = a.data === undefined ? [] : a.data.content;
+        console.log("所有公厕数据 " + JSON.stringify(content));
+        let newContent = {};
+        try
+        {
+          content.map(one => {
+            const { dispatch } = this.props;
+            dispatch({
+              type: 'gasinfo/fetch',
+              payload: {
+                restRoomId: one.restRoomId,
+                startTm:"1545351359",
+                endTm:"1545354479",
+              },callback: (v) => {
+
+                if(v.code!==-1){
+                  newContent={...one,infoGases:v.data.data.items};
+                }
+                else {
+                  newContent={...one};
+                }
+                console.log(`newcon${JSON.stringify(newContent)}`);
+                this.setState({
+                  cardListContent:[...this.state.cardListContent,newContent],
+                });
+              }
+            });
+            return 0;
+          })
+        }
+        catch (e) {
+          console.log("马克思大家撒开多久 " + JSON.stringify(newContent));
+        }
+
+
+        console.log("嘛嘛嘛吗吗吗木木木木木木木木木木木木 " + JSON.stringify(newContent));
+      }
     });
   }
 
@@ -114,16 +141,16 @@ class CoverCardList extends PureComponent {
     const {restroomName,autoplay,paused,fuckingPushLoading,fuckingLiveUrl}=this.state;
     const { getFieldDecorator } = form;
 
-    console.log(`fuck=====${JSON.stringify(list)}`);
-    const content=list.data===undefined?[]:list.data.content;
-    console.log(`fuck=====${JSON.stringify(content)}`);
 
-    const cardList = content ? (
+
+    console.log(`fuck=====${JSON.stringify(this.state.cardListContent)}`);
+
+    const cardList = this.state.cardListContent ? (
       <List
         rowKey="restRoomId"
         loading={loading}
         grid={{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }}
-        dataSource={content}
+        dataSource={this.state.cardListContent}
         renderItem={item => (
           <List.Item>
             <Spin spinning={fuckingPushLoading} tip="Loading...">
@@ -142,25 +169,33 @@ class CoverCardList extends PureComponent {
                     <br/>
                     <Trend flag="down">
                       男厕
-                      <span className={styles.trendText}>11%</span>
+                      <span className={styles.trendText}>
+                        {
+                          item.infoGases.filter(aa=>aa.type===2).map(bb=>bb.zq)
+                          // item.infoGases.filter(aa=>aa.type===3).map(bb=>{
+                          //   console.log("厕所数据"+JSON.stringify(bb));
+                          //   return bb.zq;
+                          // })
+                        }
+                      </span>
                     </Trend>
                     <Trend flag="down">
                       女厕
-                      <span className={styles.trendText}>11%</span>
+                      <span className={styles.trendText}>{item.infoGases.filter(aa=>aa.type===1).map(bb=>bb.zq)}</span>
                     </Trend>
                     <Trend flag="down">
                       大厅
-                      <span className={styles.trendText}>11%</span>
+                      <span className={styles.trendText}>{item.infoGases.filter(aa=>aa.type===0).map(bb=>bb.zq)}</span>
                     </Trend>
                     <Trend flag="down">
                       无障碍
-                      <span className={styles.trendText}>11%</span>
+                      <span className={styles.trendText}>{item.infoGases.filter(aa=>aa.type===3).map(bb=>bb.zq)}</span>
                     </Trend>
                   </div>
                   {/*<MiniArea line height={55} data={this.state.gasData} />*/}
                   <Divider style={{marginTop: "4px"}} />
                   <div className={styles.cardItemContent}>
-                    <span>{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}  责任人: 张红艳</span>
+                    <span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}</span>
                   </div>
                 </Card>
             </Spin>
