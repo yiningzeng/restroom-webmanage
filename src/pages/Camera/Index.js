@@ -171,7 +171,7 @@ class CoverCardList extends PureComponent {
                       男厕
                       <span className={styles.trendText}>
                         {
-                          item.infoGases.filter(aa=>aa.type===2).map(bb=>bb.zq)
+                          item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===2).map(bb=>bb.zq)
                           // item.infoGases.filter(aa=>aa.type===3).map(bb=>{
                           //   console.log("厕所数据"+JSON.stringify(bb));
                           //   return bb.zq;
@@ -181,15 +181,15 @@ class CoverCardList extends PureComponent {
                     </Trend>
                     <Trend flag="down">
                       女厕
-                      <span className={styles.trendText}>{item.infoGases.filter(aa=>aa.type===1).map(bb=>bb.zq)}</span>
+                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===1).map(bb=>bb.zq)}</span>
                     </Trend>
                     <Trend flag="down">
                       大厅
-                      <span className={styles.trendText}>{item.infoGases.filter(aa=>aa.type===0).map(bb=>bb.zq)}</span>
+                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===0).map(bb=>bb.zq)}</span>
                     </Trend>
-                    <Trend flag="down">
+                    <Trend flag="up">
                       无障碍
-                      <span className={styles.trendText}>{item.infoGases.filter(aa=>aa.type===3).map(bb=>bb.zq)}</span>
+                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===3).map(bb=>bb.zq)}</span>
                     </Trend>
                   </div>
                   {/*<MiniArea line height={55} data={this.state.gasData} />*/}

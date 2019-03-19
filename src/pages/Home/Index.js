@@ -248,8 +248,10 @@ class Index extends PureComponent {
                   data={undefined}
                   titleMap={{
                     y1: "客流",
-                    y2: "男厕气体质量",
-                    y3: "女厕气体质量",
+                    y2: "大厅气体质量",
+                    y3: "男厕气体质量",
+                    y4: "女厕气体质量",
+                    y5: "无障碍厕气体质量",
                   }}
                 />
               </div>
