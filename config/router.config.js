@@ -26,7 +26,7 @@ export default [
         component: './Home/Index',
       },
       {
-        path: '/video-list',
+        path: '/camera-list',
         name: 'video-list',
         icon: 'video-camera',
         component: './Camera/Index',

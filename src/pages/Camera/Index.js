@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import {Row, Col, Form, Card, Select, List, Modal,Divider,Spin,message,  Drawer,Tooltip,Icon} from 'antd';
+import {Row, Col, Form, Card, Select, List, Modal,Divider,Spin,message,  Drawer,Tooltip,Icon, Tag} from 'antd';
 import Trend from '@/components/Trend';
 import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
@@ -167,11 +167,18 @@ class CoverCardList extends PureComponent {
                       <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
                     </Trend>
                     <br/>
-                    <Trend flag="down">
+                    <Trend>
                       男厕
                       <span className={styles.trendText}>
                         {
-                          item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===2).map(bb=>bb.zq)
+                          item.infoGases.length === 0 ? "-" : item.infoGases.filter(aa => aa.type === 2).map(bb => {
+                              if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
+                              else if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+                              else if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+                              else if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+                              return <Tag color="#f50">极差</Tag>;
+                            }
+                          )
                           // item.infoGases.filter(aa=>aa.type===3).map(bb=>{
                           //   console.log("厕所数据"+JSON.stringify(bb));
                           //   return bb.zq;
@@ -179,17 +186,39 @@ class CoverCardList extends PureComponent {
                         }
                       </span>
                     </Trend>
-                    <Trend flag="down">
+                    <Trend>
                       女厕
-                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===1).map(bb=>bb.zq)}</span>
+                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===1).map(bb=>{
+                        if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
+                        else if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+                        else if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+                        else if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+                        return <Tag color="#f50">极差</Tag>;
+                        }
+                      )}
+                      </span>
                     </Trend>
-                    <Trend flag="down">
+                    <Trend>
                       大厅
-                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===0).map(bb=>bb.zq)}</span>
+                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===0).map(bb=>{
+                        if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
+                        else if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+                        else if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+                        else if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+                        return <Tag color="#f50">极差</Tag>;
+                      })}
+                      </span>
                     </Trend>
-                    <Trend flag="up">
+                    <Trend>
                       无障碍
-                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===3).map(bb=>bb.zq)}</span>
+                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===3).map(bb=>{
+                        if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
+                        else if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+                        else if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+                        else if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+                        return <Tag color="#f50">极差</Tag>;
+                      })}
+                      </span>
                     </Trend>
                   </div>
                   {/*<MiniArea line height={55} data={this.state.gasData} />*/}
