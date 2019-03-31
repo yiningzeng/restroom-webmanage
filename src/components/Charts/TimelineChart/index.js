@@ -4,6 +4,7 @@ import DataSet from '@antv/data-set';
 import Slider from 'bizcharts-plugin-slider';
 import autoHeight from '../autoHeight';
 import styles from './index.less';
+import moment from 'moment';
 
 @autoHeight()
 class TimelineChart extends React.Component {
@@ -44,8 +45,8 @@ class TimelineChart extends React.Component {
 
     const ds = new DataSet({
       state: {
-        start: data[0].x,
-        end: data[data.length - 1].x,
+        start: moment().startOf('day').valueOf(),
+        end: moment().format('YYYY-MM-DD HH:mm:ss').valueOf(),
       },
     });
 
@@ -105,6 +106,7 @@ class TimelineChart extends React.Component {
         end={ds.state.end}
         backgroundChart={{ type: 'line' }}
         onChange={({ startValue, endValue }) => {
+          console.log("时间卡拉+"+startValue+" "+endValue);
           ds.setState('start', startValue);
           ds.setState('end', endValue);
         }}

@@ -66,8 +66,8 @@ class CoverCardList extends PureComponent {
               type: 'gasinfo/fetch',
               payload: {
                 restRoomId: one.restRoomId,
-                startTm:"1545351359",
-                endTm:"1545354479",
+                startTm:Math.round(moment().subtract(10, "minutes").valueOf()/1000),
+                endTm:Math.round(new Date().getTime()/1000),
               },callback: (v) => {
 
                 if(v.code!==-1){
@@ -168,6 +168,7 @@ class CoverCardList extends PureComponent {
                     </Trend>
                     <br/>
                     <Trend>
+                      气味:
                       男厕
                       <span className={styles.trendText}>
                         {
@@ -224,7 +225,7 @@ class CoverCardList extends PureComponent {
                   {/*<MiniArea line height={55} data={this.state.gasData} />*/}
                   <Divider style={{marginTop: "4px"}} />
                   <div className={styles.cardItemContent}>
-                    <span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{`更新时间:${moment("2018-12-20 23:10:34").fromNow()}`}</span>
+                    <span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{`更新时间:${item.updateTime===null?"-":moment(item.updateTime).fromNow()}`}</span>
                   </div>
                 </Card>
             </Spin>
