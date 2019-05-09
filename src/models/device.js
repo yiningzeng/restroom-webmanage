@@ -1,5 +1,5 @@
 import { query as queryCamera,add as addCamera,del as deleteCamera,push as pushStream,stop as stopStream} from '@/services/camera';
-import { query as queryGas,add as addGas,del as deleteGas } from '@/services/gas';
+import { query as queryGas,add as addGas,del as deleteGas,queryHomeGasList } from '@/services/gas';
 
 export default {
   namespace: 'device',
@@ -16,6 +16,12 @@ export default {
       status: undefined,
       msg: '',
       data: [],
+    },
+    gasFlow: {
+      code: undefined,
+      status: undefined,
+      msg: '',
+      data: {},
     },
   },
 
@@ -80,6 +86,14 @@ export default {
       });
       if (callback)callback(response);
     },
+    *queryHomeGasList({ payload,callback}, { call, put }) {
+      const response = yield call(queryHomeGasList,payload);
+      yield put({
+        type: 'gasFlow',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
     *deleteGas({ payload,callback}, { call, put }) {
       const response = yield call(deleteGas,payload);
       yield put({
@@ -101,6 +115,12 @@ export default {
       return {
         ...state,
         deviceList: action.payload,
+      };
+    },
+    gasFlow(state, action) {
+      return {
+        ...state,
+        gasFlow: action.payload,
       };
     },
   },

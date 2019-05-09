@@ -6,11 +6,10 @@ import Trend from '@/components/Trend';
 import TagSelect from '@/components/TagSelect';
 import AvatarList from '@/components/AvatarList';
 import { MiniArea } from '@/components/Charts';
-import Ellipsis from '@/components/Ellipsis';
-import StandardFormRow from '@/components/StandardFormRow';
-import styles from './Index.less';
 import numeral from "numeral";
 import ReactHLS from 'react-hls';
+import Iframe from 'react-iframe';
+import styles from './Index.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -56,7 +55,7 @@ class CoverCardList extends PureComponent {
       callback:(a)=> {
         if (a.code === -1) return;
         const content = a.data === undefined ? [] : a.data.content;
-        console.log("所有公厕数据 " + JSON.stringify(content));
+        console.log(`所有公厕数据 ${  JSON.stringify(content)}`);
         let newContent = {};
         try
         {
@@ -86,11 +85,11 @@ class CoverCardList extends PureComponent {
           })
         }
         catch (e) {
-          console.log("马克思大家撒开多久 " + JSON.stringify(newContent));
+          console.log(`马克思大家撒开多久 ${  JSON.stringify(newContent)}`);
         }
 
 
-        console.log("嘛嘛嘛吗吗吗木木木木木木木木木木木木 " + JSON.stringify(newContent));
+        console.log(`嘛嘛嘛吗吗吗木木木木木木木木木木木木 ${  JSON.stringify(newContent)}`);
       }
     });
   }
@@ -154,29 +153,29 @@ class CoverCardList extends PureComponent {
         renderItem={item => (
           <List.Item>
             <Spin spinning={fuckingPushLoading} tip="Loading...">
-                <Card
-                  onClick={this.playVideo.bind(this,item)}
-                  className={styles.card}
-                  hoverable
-                  cover={<img alt={item.restRoomName} src="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg" />}
-                >
-                  <Card.Meta title={item.restRoomName} />
-                  <div>
-                    <Trend flag="up" style={{ marginRight: 16,marginTop:-10 }}>
+              <Card
+                onClick={this.playVideo.bind(this,item)}
+                className={styles.card}
+                hoverable
+                cover={<img alt={item.restRoomName} src="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg" />}
+              >
+                <Card.Meta title={item.restRoomName} />
+                <div>
+                  <Trend flag="up" style={{ marginRight: 16,marginTop:-10 }}>
                       客流量:
-                      <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
-                    </Trend>
-                    <br/>
-                    <Trend>
+                    <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
+                  </Trend>
+                  <br />
+                  <Trend>
                       气味:
                       男厕
-                      <span className={styles.trendText}>
-                        {
+                    <span className={styles.trendText}>
+                      {
                           item.infoGases.length === 0 ? "-" : item.infoGases.filter(aa => aa.type === 2).map(bb => {
                               if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
-                              else if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
-                              else if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
-                              else if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+                              if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+                              if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+                              if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
                               return <Tag color="#f50">极差</Tag>;
                             }
                           )
@@ -185,49 +184,49 @@ class CoverCardList extends PureComponent {
                           //   return bb.zq;
                           // })
                         }
-                      </span>
-                    </Trend>
-                    <Trend>
+                    </span>
+                  </Trend>
+                  <Trend>
                       女厕
-                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===1).map(bb=>{
+                    <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===1).map(bb=>{
                         if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
-                        else if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
-                        else if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
-                        else if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+                        if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+                        if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+                        if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
                         return <Tag color="#f50">极差</Tag>;
                         }
                       )}
-                      </span>
-                    </Trend>
-                    <Trend>
+                    </span>
+                  </Trend>
+                  <Trend>
                       大厅
-                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===0).map(bb=>{
+                    <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===0).map(bb=>{
                         if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
-                        else if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
-                        else if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
-                        else if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+                        if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+                        if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+                        if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
                         return <Tag color="#f50">极差</Tag>;
                       })}
-                      </span>
-                    </Trend>
-                    <Trend>
+                    </span>
+                  </Trend>
+                  <Trend>
                       无障碍
-                      <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===3).map(bb=>{
+                    <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===3).map(bb=>{
                         if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
-                        else if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
-                        else if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
-                        else if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+                        if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+                        if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+                        if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
                         return <Tag color="#f50">极差</Tag>;
                       })}
-                      </span>
-                    </Trend>
-                  </div>
-                  {/*<MiniArea line height={55} data={this.state.gasData} />*/}
-                  <Divider style={{marginTop: "4px"}} />
-                  <div className={styles.cardItemContent}>
-                    <span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{`更新时间:${item.updateTime===null?"-":moment(item.updateTime).fromNow()}`}</span>
-                  </div>
-                </Card>
+                    </span>
+                  </Trend>
+                </div>
+                {/*<MiniArea line height={55} data={this.state.gasData} />*/}
+                <Divider style={{marginTop: "4px"}} />
+                <div className={styles.cardItemContent}>
+                  <span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{`更新时间:${item.updateTime===null?"-":moment(item.updateTime).fromNow()}`}</span>
+                </div>
+              </Card>
             </Spin>
           </List.Item>
         )}
@@ -251,6 +250,7 @@ class CoverCardList extends PureComponent {
           style={{ top: 20,bottom:20 }}
           visible={this.state.modal1Visible}
           onCancel={() => {
+            alert(window.frames["myId"].document);
             const { dispatch } = this.props;
             dispatch({
               type: 'device/stopStream',
@@ -278,41 +278,58 @@ class CoverCardList extends PureComponent {
           {/*可以用iframe引用海康摄像头的sdk*/}
           {/*<iframe style={{border:0,width:"100%",height:630,}} src="http://www.baidu.com"/>*/}
           {/*<video height="500" width="100%" src="http://www.w3school.com.cn/i/movie.ogg" controls="controls">*/}
-            {/*your browser does not support the video tag*/}
+          {/*your browser does not support the video tag*/}
           {/*</video>*/}
+          {/*<Iframe url="http://192.168.10.10"*/}
+          {/*width="100%"*/}
+          {/*height="100%"*/}
+          {/*id="myId"*/}
+          {/*className="myClassname"*/}
+          {/*display="initial"*/}
+          {/*position="relative"/>*/}
+
+          <Iframe url="http://192.168.10.10"
+                  width="100%"
+                  height="450px"
+                  id="myId"
+                  className="myClassname"
+                  display="initial"
+                  position="relative"/>
+
         </Modal>
+
         {/*<Card bordered={false}>*/}
-          {/*<Form layout="inline">*/}
-            {/*<StandardFormRow title="所属区域" block style={{ paddingBottom: 11 }}>*/}
-              {/*<FormItem>*/}
-                {/*{getFieldDecorator('category')(*/}
-                  {/*<TagSelect expandable value={['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6']}>*/}
-                    {/*<TagSelect.Option value="cat1">海曙区</TagSelect.Option>*/}
-                    {/*<TagSelect.Option value="cat2">鄞州区</TagSelect.Option>*/}
-                    {/*<TagSelect.Option value="cat3">江北区</TagSelect.Option>*/}
-                    {/*<TagSelect.Option value="cat4">镇海区</TagSelect.Option>*/}
-                    {/*<TagSelect.Option value="cat5">北仑区</TagSelect.Option>*/}
-                    {/*<TagSelect.Option value="cat6">奉化区</TagSelect.Option>*/}
-                  {/*</TagSelect>*/}
-                {/*)}*/}
-              {/*</FormItem>*/}
-            {/*</StandardFormRow>*/}
-            {/*<StandardFormRow title="其它选项" grid last>*/}
-              {/*<Row gutter={16}>*/}
-                {/*<Col lg={8} md={10} sm={10} xs={24}>*/}
-                  {/*<FormItem {...formItemLayout} label="状态">*/}
-                    {/*{getFieldDecorator('author', {})(*/}
-                      {/*<Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>*/}
-                        {/*<Option value="2">不限</Option>*/}
-                        {/*<Option value="1">开放</Option>*/}
-                        {/*<Option value="0">关闭</Option>*/}
-                      {/*</Select>*/}
-                    {/*)}*/}
-                  {/*</FormItem>*/}
-                {/*</Col>*/}
-              {/*</Row>*/}
-            {/*</StandardFormRow>*/}
-          {/*</Form>*/}
+        {/*<Form layout="inline">*/}
+        {/*<StandardFormRow title="所属区域" block style={{ paddingBottom: 11 }}>*/}
+        {/*<FormItem>*/}
+        {/*{getFieldDecorator('category')(*/}
+        {/*<TagSelect expandable value={['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6']}>*/}
+        {/*<TagSelect.Option value="cat1">海曙区</TagSelect.Option>*/}
+        {/*<TagSelect.Option value="cat2">鄞州区</TagSelect.Option>*/}
+        {/*<TagSelect.Option value="cat3">江北区</TagSelect.Option>*/}
+        {/*<TagSelect.Option value="cat4">镇海区</TagSelect.Option>*/}
+        {/*<TagSelect.Option value="cat5">北仑区</TagSelect.Option>*/}
+        {/*<TagSelect.Option value="cat6">奉化区</TagSelect.Option>*/}
+        {/*</TagSelect>*/}
+        {/*)}*/}
+        {/*</FormItem>*/}
+        {/*</StandardFormRow>*/}
+        {/*<StandardFormRow title="其它选项" grid last>*/}
+        {/*<Row gutter={16}>*/}
+        {/*<Col lg={8} md={10} sm={10} xs={24}>*/}
+        {/*<FormItem {...formItemLayout} label="状态">*/}
+        {/*{getFieldDecorator('author', {})(*/}
+        {/*<Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>*/}
+        {/*<Option value="2">不限</Option>*/}
+        {/*<Option value="1">开放</Option>*/}
+        {/*<Option value="0">关闭</Option>*/}
+        {/*</Select>*/}
+        {/*)}*/}
+        {/*</FormItem>*/}
+        {/*</Col>*/}
+        {/*</Row>*/}
+        {/*</StandardFormRow>*/}
+        {/*</Form>*/}
         {/*</Card>*/}
         <div className={styles.cardList}>{cardList}</div>
       </div>

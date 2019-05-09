@@ -26,9 +26,24 @@ import {
   Steps,
   Radio,
   List,
-  Avatar,
-  Tooltip,
+  Avatar
 } from 'antd';
+import {
+  G2,
+  Chart,
+  Geom,
+  Axis,
+  Tooltip,
+  Coord,
+  Label,
+  Legend,
+  View,
+  Guide,
+  Shape,
+  Facet,
+  Util
+} from "bizcharts";
+import DataSet from "@antv/data-set";
 // import StandardTable from '@/components/StandardTable';
 import MyStandardTable from '@/components/MyStandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -48,6 +63,7 @@ import { TimelineChart } from '@/components/Charts';
 @Form.create()
 class Index extends PureComponent {
   state = {
+    gasFlow:undefined,
     weatherInfo:{
       time:undefined,
       data:undefined
@@ -89,6 +105,19 @@ class Index extends PureComponent {
       },
       callback:(a)=>{
         console.log(JSON.stringify(a));
+        dispatch({
+          type: 'device/queryHomeGasList',
+          payload: {//1?endTm=1557368198&startTm=1557281798
+            restRoomId: 1,
+            startTm:Math.round(moment().subtract(1, "days").valueOf()/1000),
+            endTm:Math.round(new Date().getTime()/1000),
+          },
+          callback:(a)=>{
+            console.log("气体数据啦啦啦:"+JSON.stringify(a));
+            // this.setState(gasFlow: a.)
+            // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+          },
+        });
       },
     });
 
@@ -99,10 +128,26 @@ class Index extends PureComponent {
   render() {
     const {
       restroom: { list },
+      device: {gasFlow},
       loading,
       loadingDevice,
       dispatch
     } = this.props;
+
+    let histroy=[];
+    try
+    {
+  
+      if( gasFlow.code === 0 ){
+        histroy = gasFlow.data.data.items[0].histroyList
+      }
+    }
+    catch (e) {
+      
+    }
+   
+
+
     // message.success(JSON.stringify(list));
     const styleA = {
       position: 'absolute',
@@ -123,6 +168,37 @@ class Index extends PureComponent {
     console.log(JSON.stringify(this.state.weatherInfo));
     // message.success(JSON.stringify(this.state.weatherInfo));
     // const markerEvents =
+    let dv=undefined;
+    try
+    {
+      if (histroy !== undefined){
+        const ds = new DataSet();
+        console.log("gasFlowgasFlowgasFlowgasFlow:"+JSON.stringify(histroy));
+        dv = ds.createView().source(histroy);
+        dv.transform({
+          type: "fold",
+          fields: ["大厅", "女厕", "男厕", "无障碍"],
+          // 展开字段集
+          key: "city",
+          // key字段
+          value: "temperature" // value字段
+        });
+        console.log("gasFlowgasFlowgasFlowgasFlow:"+dv);
+      }
+    }
+    catch (e) {
+      
+    }
+
+
+
+
+
+    const cols = {
+      month: {
+        range: [0, 1]
+      }
+    };
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
@@ -143,25 +219,48 @@ class Index extends PureComponent {
                     dataSource={list===undefined?[]:list.data===undefined?[]:list.data.content}
                     renderItem={item => (
                       <List.Item onClick={()=>{
-                        this.setState({
-                          infoWindow:{
-                            ...this.state.infoWindow,
-                            visible:true,
-                            name:item.restRoomName,
-                            position:[item.longitude, item.latitude],
-                            videoStatus: item.deviceCameras.length>0?"success":"error",
-                            videoStatusTest: item.deviceCameras.length>0?"视频正常":"未安装摄像头",
-                            // gasStatus:
-                          }});
-                      }}>
+                        try
+                        {
+                          dispatch({
+                            type: 'device/queryHomeGasList',
+                            payload: {//1?endTm=1557368198&startTm=1557281798
+                              restRoomId: item.restRoomId,
+                              startTm:Math.round(moment().subtract(1, "days").valueOf()/1000),
+                              endTm:Math.round(new Date().getTime()/1000),
+                            },
+                            callback:(a)=>{
+                              console.log("气体数据啦啦啦:"+JSON.stringify(a));
+                              // this.setState(gasFlow: a.)
+                              // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+                            },
+                          });
+                          this.setState({
+                            infoWindow:{
+                              ...this.state.infoWindow,
+                              visible:true,
+                              name:item.restRoomName,
+                              position:[item.longitude, item.latitude],
+                              videoStatus: item.deviceCameras.length>0?"success":"error",
+                              videoStatusTest: item.deviceCameras.length>0?"视频正常":"未安装摄像头",
+                              // gasStatus:
+                            }});
+                        }
+                        catch (e) {
+                          console.log("获取气体数据出错:"+e.toString());
+                        }
+                        console.log("点点:"+JSON.stringify(item));
+                        console.log("点点:"+JSON.stringify(this.state.infoWindow));
+
+                      }}
+                      >
                         <List.Item.Meta
                           avatar={<Avatar src={item.img} shape="square" size="large" />}
                           title={item.restRoomName}
                           description={<div>
                             <Badge status={item.deviceCameras.length>0?"success":"error"} text={item.deviceCameras.length>0?"视频正常":"未安装摄像头"} />
-                            <br/>
+                            <br />
                             <Badge status={this.state.infoWindow.gasStatus} text={this.state.infoWindow.gasStatusText} />
-                            <br/>
+                            <br />
                             <Badge status={this.state.infoWindow.boardStatus} text={this.state.infoWindow.boardStatusText} />
                           </div>}
                         />
@@ -200,6 +299,10 @@ class Index extends PureComponent {
                           }});
                           console.log(`你点击了这个图标；调用参数为：${item.restRoomName}`);
                           console.log(e);
+
+
+
+
                         },
                         dblclick: (e) => {
                           // this.setState({infoWindowVisible:true});
@@ -207,7 +310,8 @@ class Index extends PureComponent {
                           console.log(e);
                         },
                         // ... 支持绑定所有原生的高德 Marker 事件
-                      }} />
+                      }}
+                      />
                     ))
                   }
                   <InfoWindow
@@ -217,43 +321,65 @@ class Index extends PureComponent {
                   >
                     <h3>{this.state.infoWindow.name}</h3>
                     <Badge status={this.state.infoWindow.status} text={this.state.infoWindow.statusText} />
-                    <br/>
+                    <br />
                     <Badge status={this.state.infoWindow.videoStatus} text={this.state.infoWindow.videoStatusTest} />
-                    <br/>
+                    <br />
                     <Badge status={this.state.infoWindow.gasStatus} text={this.state.infoWindow.gasStatusText} />
-                    <br/>
+                    <br />
                     <Badge status={this.state.infoWindow.boardStatus} text={this.state.infoWindow.boardStatusText} />
-                    <br/>
+                    <br />
                     <button onClick={() => {this.setState({infoWindow:{...this.state.infoWindow,visible:false}})}}>关闭</button>
                   </InfoWindow>
                   <Card className="customLayer" style={styleA}>
                     <Card.Meta
-                      title={"宁波"+this.state.weatherInfo===undefined?undefined: this.state.weatherInfo.data===undefined?undefined:"宁波 "+this.state.weatherInfo.data.forecast[0].type+" "+this.state.weatherInfo.data.wendu+"℃"}
+                      title={`宁波${this.state.weatherInfo}`===undefined?undefined: this.state.weatherInfo.data===undefined?undefined:`宁波 ${this.state.weatherInfo.data.forecast[0].type} ${this.state.weatherInfo.data.wendu}℃`}
                       description={this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.time).fromNow()}
                     />
                   </Card>
                   {/*<div className="customLayer" style={styleA}>*/}
-                    {/*<h4>宁波</h4>*/}
-                    {/*<p>{this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.time).fromNow()}</p>*/}
+                  {/*<h4>宁波</h4>*/}
+                  {/*<p>{this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.time).fromNow()}</p>*/}
                   {/*</div>*/}
                   {/*<div className="customLayer" style={styleB}>*/}
-                    {/*<p> Another Custom Layer</p>*/}
-                    {/*<Button onClick={()=>{alert('You Clicked!')}}>An Ant Design Button</Button>*/}
+                  {/*<p> Another Custom Layer</p>*/}
+                  {/*<Button onClick={()=>{alert('You Clicked!')}}>An Ant Design Button</Button>*/}
                   {/*</div>*/}
                 </Map>
               </div>
               <div style={{ padding: '0 24px' }}>
-                <TimelineChart
-                  height={200}
-                  data={undefined}
-                  titleMap={{
-                    y1: "客流",
-                    y2: "大厅气体质量",
-                    y3: "男厕气体质量",
-                    y4: "女厕气体质量",
-                    y5: "无障碍厕气体质量",
-                  }}
-                />
+                {(dv !==undefined) && (<Chart height={300} data={dv} scale={cols} forceFit>
+                  <Legend/>
+                  <Axis name="x"/>
+                  <Axis
+                    name="temperature"
+                    label={{
+                      formatter: val => `${val}`
+                    }}
+                  />
+                  <Tooltip
+                    crosshairs={{
+                      type: "y"
+                    }}
+                  />
+                  <Geom
+                    type="line"
+                    position="x*temperature"
+                    size={2}
+                    color="city"
+                  />
+                  <Geom
+                    type="point"
+                    position="x*temperature"
+                    size={4}
+                    shape="circle"
+                    color="city"
+                    style={{
+                      stroke: "#fff",
+                      lineWidth: 1
+                    }}
+                  />
+                </Chart>)
+                }
               </div>
             </Col>
           </Row>
