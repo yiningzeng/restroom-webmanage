@@ -126,6 +126,7 @@ export default class BaseMenu extends PureComponent {
       location: { pathname },
       className,
       collapsed,
+      onClick,
     } = this.props;
     // if pathname can't match, use the nearest parent's key
     let selectedKeys = this.getSelectedMenuKeys(pathname);
@@ -152,6 +153,7 @@ export default class BaseMenu extends PureComponent {
         selectedKeys={selectedKeys}
         style={style}
         className={cls}
+        onClick={onClick}
         {...props}
       >
         {this.getNavMenuItems(menuData)}

@@ -171,6 +171,7 @@ class Index extends PureComponent {
     let dv=undefined;
     try
     {
+      if(histroy===null || histroy ===undefined)   histroy=[{"df":0,"大厅":0,"男厕":0,"女厕":0,"无障碍":0,"x":"0"}];
       if (histroy !== undefined){
         const ds = new DataSet();
         console.log("gasFlowgasFlowgasFlowgasFlow:"+JSON.stringify(histroy));

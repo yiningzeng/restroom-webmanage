@@ -114,7 +114,7 @@ class HeaderView extends PureComponent {
   };
 
   render() {
-    const { isMobile, handleMenuCollapse, setting } = this.props;
+    const { isMobile, handleMenuCollapse, setting, onClick } = this.props;
     const { navTheme, layout, fixedHeader } = setting;
     const { visible } = this.state;
     const isTop = layout === 'topmenu';
@@ -129,10 +129,12 @@ class HeaderView extends PureComponent {
             onNoticeClear={this.handleNoticeClear}
             onMenuClick={this.handleMenuClick}
             onNoticeVisibleChange={this.handleNoticeVisibleChange}
+            onClick={onClick}
             {...this.props}
           />
         ) : (
           <GlobalHeader
+            onClick={onClick}
             onCollapse={handleMenuCollapse}
             onNoticeClear={this.handleNoticeClear}
             onMenuClick={this.handleMenuClick}

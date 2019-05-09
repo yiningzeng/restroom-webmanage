@@ -17,7 +17,8 @@ import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
-
+import { Select, message, Drawer,Card,Dropdown, List,Menu, Switch,Modal, Divider, Icon, Button,Avatar,Comment, Alert,Popconfirm, Tooltip,notification } from 'antd';
+import Iframe from 'react-iframe'
 import styles from './BasicLayout.less';
 
 // lazy load SettingDrawer
@@ -51,7 +52,9 @@ const query = {
 };
 
 class BasicLayout extends React.PureComponent {
-
+  state = {
+    visible:false
+  };
 
   constructor(props) {
     super(props);
@@ -199,6 +202,12 @@ class BasicLayout extends React.PureComponent {
             handleMenuCollapse={this.handleMenuCollapse}
             logo={logo}
             isMobile={isMobile}
+            onClick={(v) => {
+              if (v.keyPath.toString().includes('workspace')) {
+                this.setState({visible: true});
+                history.go(-1);
+              }
+            }}
             {...this.props}
           />
           <Content className={styles.content} style={contentStyle}>
@@ -222,6 +231,45 @@ class BasicLayout extends React.PureComponent {
           </ContainerQuery>
         </DocumentTitle>
         <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense>
+        <Drawer
+          // style={{position: "relative", zIndex: 998,}}
+          placement="left"
+          height='100%'
+          width='100%'
+          mask={false}
+          closable={false}
+          onClose={() => {
+          }}
+          visible={this.state.visible}
+        >
+          <Card
+            bordered={false}
+            title="监控总揽"
+            extra={
+              <Dropdown.Button type="danger" size="large"
+                               onClick={() => {
+                                 this.setState({visible: false});
+                                 // routerRedux.push(sessionStorage.getItem("oldPath"));
+                               }}
+                               overlay={
+                                 <Menu onClick={() => {
+                                   this.setState({visible: false});
+                                 }}>
+                                   <Menu.Item key="1"><Icon type="export"/></Menu.Item>
+                                 </Menu>
+                               }>退出</Dropdown.Button>
+            }
+          >
+            <Iframe url="http://47.99.207.5"
+                    width="100%"
+                    height="800px"
+                    id="myId"
+                    className="myClassname"
+                    style={{overflow:"hidden",frameborder: "no",border: "0",marginwidth: "0",marginheight: "0",scrolling:"no"}}
+                    display="initial"
+                    position="relative"/>
+          </Card>
+        </Drawer>
       </React.Fragment>
     );
   }

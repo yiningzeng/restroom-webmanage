@@ -61,11 +61,13 @@ class CoverCardList extends PureComponent {
         {
           content.map(one => {
             const { dispatch } = this.props;
+            // message.success("one "+JSON.stringify(one));
+            // message.success("开始:"+moment().subtract(7,'minutes').toDate()+"          "+Math.round( moment().subtract(7,'minutes').valueOf()/1000));
             dispatch({
               type: 'gasinfo/fetch',
               payload: {
                 restRoomId: one.restRoomId,
-                startTm:Math.round(moment().subtract(10, "minutes").valueOf()/1000),
+                startTm:Math.round( moment().subtract(7,'minutes').valueOf()/1000),
                 endTm:Math.round(new Date().getTime()/1000),
               },callback: (v) => {
 
@@ -130,6 +132,14 @@ class CoverCardList extends PureComponent {
 
   }
 
+  fuck =(bb)=>{
+    if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
+    if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
+    if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
+    if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
+    return <Tag color="#f50">极差</Tag>;
+  }
+
   render() {
     const {
       restroom: { list},
@@ -163,7 +173,7 @@ class CoverCardList extends PureComponent {
                 <div>
                   <Trend flag="up" style={{ marginRight: 16,marginTop:-10 }}>
                       客流量:
-                    <span className={styles.trendText}>{numeral(12423).format('0,0')}</span>
+                    <span className={styles.trendText}>{numeral(item.peopleNum).format('0,0')}</span>
                   </Trend>
                   <br />
                   <Trend>
@@ -171,14 +181,8 @@ class CoverCardList extends PureComponent {
                       男厕
                     <span className={styles.trendText}>
                       {
-                          item.infoGases.length === 0 ? "-" : item.infoGases.filter(aa => aa.type === 2).map(bb => {
-                              if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
-                              if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
-                              if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
-                              if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
-                              return <Tag color="#f50">极差</Tag>;
-                            }
-                          )
+                        item.infoGases.length===0?"-":this.fuck(item.infoGases[0])
+
                           // item.infoGases.filter(aa=>aa.type===3).map(bb=>{
                           //   console.log("厕所数据"+JSON.stringify(bb));
                           //   return bb.zq;
@@ -188,36 +192,17 @@ class CoverCardList extends PureComponent {
                   </Trend>
                   <Trend>
                       女厕
-                    <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===1).map(bb=>{
-                        if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
-                        if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
-                        if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
-                        if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
-                        return <Tag color="#f50">极差</Tag>;
-                        }
-                      )}
+                    <span className={styles.trendText}>{item.infoGases.length===0?"-":this.fuck(item.infoGases[1])}
                     </span>
                   </Trend>
                   <Trend>
                       大厅
-                    <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===0).map(bb=>{
-                        if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
-                        if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
-                        if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
-                        if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
-                        return <Tag color="#f50">极差</Tag>;
-                      })}
+                    <span className={styles.trendText}>{  item.infoGases.length===0?"-":this.fuck(item.infoGases[2])}
                     </span>
                   </Trend>
                   <Trend>
                       无障碍
-                    <span className={styles.trendText}>{item.infoGases.length===0?"-":item.infoGases.filter(aa=>aa.type===3).map(bb=>{
-                        if (bb.zq >= 0 && bb.zq <= 1.5) return  <Tag color="green">优秀</Tag>;
-                        if (bb.zq > 1.5 && bb.zq <= 3) return <Tag color="green">良好</Tag>;
-                        if (bb.zq > 3 && bb.zq <= 5) return <Tag color="green">正常</Tag>;
-                        if (bb.zq > 5 && bb.zq <= 7) return  <Tag color="orange">较差</Tag>;
-                        return <Tag color="#f50">极差</Tag>;
-                      })}
+                    <span className={styles.trendText}>{  item.infoGases.length===0?"-":this.fuck(item.infoGases[3])}
                     </span>
                   </Trend>
                 </div>
@@ -250,7 +235,6 @@ class CoverCardList extends PureComponent {
           style={{ top: 20,bottom:20 }}
           visible={this.state.modal1Visible}
           onCancel={() => {
-            alert(window.frames["myId"].document);
             const { dispatch } = this.props;
             dispatch({
               type: 'device/stopStream',
@@ -287,15 +271,6 @@ class CoverCardList extends PureComponent {
           {/*className="myClassname"*/}
           {/*display="initial"*/}
           {/*position="relative"/>*/}
-
-          <Iframe url="http://192.168.10.10"
-                  width="100%"
-                  height="450px"
-                  id="myId"
-                  className="myClassname"
-                  display="initial"
-                  position="relative"/>
-
         </Modal>
 
         {/*<Card bordered={false}>*/}

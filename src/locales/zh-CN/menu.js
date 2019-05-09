@@ -1,4 +1,5 @@
 export default {
+  'menu.workspace': '监控总览',
   'menu.home': '首页',
   'menu.video-list': '公厕监控',
   'menu.smell-list': '气味监控',

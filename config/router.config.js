@@ -26,6 +26,12 @@ export default [
         component: './Home/Index',
       },
       {
+        path: '/workspace',
+        name: 'workspace',
+        icon: 'video-camera',
+        component: './Workspace/Index',
+      },
+      {
         path: '/camera-list',
         name: 'video-list',
         icon: 'video-camera',
@@ -37,12 +43,12 @@ export default [
         icon: 'home',
         component: './RestRoom/Index',
       },
-      {
-        path: '/message',
-        name: 'message',
-        icon: 'notification',
-        component: './RestRoom/Index',
-      },
+      // {
+      //   path: '/message',
+      //   name: 'message',
+      //   icon: 'notification',
+      //   component: './RestRoom/Index',
+      // },
       {
         path: '/user-manage',
         name: 'user-manage',
