@@ -1,8 +1,13 @@
 export default {
-  'app.analysis.nan': '男厕气体指数',
-  'app.analysis.nv': '女厕气体指数',
-  'app.analysis.dating': '大厅气体指数',
-  'app.analysis.wuzhangai': '无障碍气体指数',
+  'app.analysis.1': '和邦大厦公厕',
+  'app.analysis.2': '下应南路公厕',
+  'app.analysis.3': '慧和大厦公厕',
+  'app.analysis.4': '钟公庙公厕',
+  'app.analysis.5': '宁南南路公厕',
+  'app.analysis.6': '陈婆渡公厕',
+  'app.analysis.7': '潘火派出所公厕',
+  'app.analysis.8': '紫城南公厕',
+  'app.analysis.9': '紫城北公厕',
 
   'app.analysis.test': '工专路 {no} 号店',
   'app.analysis.introduce': '指标说明',
