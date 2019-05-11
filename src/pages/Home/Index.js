@@ -2,7 +2,7 @@ import React, { PureComponent, Suspense } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { getTimeDistance } from '@/utils/utils';
-import { Row, Col, Card, Form, Badge, List, Avatar } from 'antd';
+import { Row, Col, Card, Form, Badge, List, Avatar,message } from 'antd';
 import DataSet from "@antv/data-set";
 // import StandardTable from '@/components/StandardTable';
 import MyStandardTable from '@/components/MyStandardTable';
@@ -26,7 +26,10 @@ const SalesCard = React.lazy(() => import('./SalesCard'));
 @Form.create()
 class Index extends PureComponent {
   state = {
-    rangePickerValue: getTimeDistance('year'),
+    rangePickerValue: getTimeDistance('today'),
+    restRoomId: 1,
+
+
     gasFlow:undefined,
     weatherInfo:{
       time:undefined,
@@ -87,43 +90,55 @@ class Index extends PureComponent {
 
   }
 
+  searchData = (activeKey) =>{
+    const { dispatch } = this.props;
+    this.setState({
+      ...this.state,
+      restRoomId: activeKey
+    })
+    try
+    {
+      dispatch({
+        type: 'device/queryHomeGasList',
+        payload: {//1?endTm=1557368198&startTm=1557281798
+          restRoomId: activeKey,
+          startTm: Math.round(this.state.rangePickerValue[0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
+          endTm: Math.round(this.state.rangePickerValue[1].valueOf()/1000),//Math.round(new Date().getTime()/1000),
+        },
+        callback:(a)=>{
+          console.log("气体数据啦啦啦:"+JSON.stringify(a));
+          // this.setState(gasFlow: a.)
+          // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+        },
+      });
+    }
+    catch (e) {
+      console.log("获取气体数据出错:"+e.toString());
+    }
+  }
 
   selectDate = type => {
-    const { dispatch } = this.props;
     this.setState({
+      ...this.state,
       rangePickerValue: getTimeDistance(type),
     });
-
-    dispatch({
-      type: 'chart/fetchSalesData',
-    });
+message.error("手动选时间"+JSON.stringify(getTimeDistance(type)));
+    this.searchData(this.state.restRoomId);
   };
 
-  isActive = type => {
-    const { rangePickerValue } = this.state;
-    const value = getTimeDistance(type);
-    if (!rangePickerValue[0] || !rangePickerValue[1]) {
-      return '';
-    }
-    if (
-      rangePickerValue[0].isSame(value[0], 'day') &&
-      rangePickerValue[1].isSame(value[1], 'day')
-    ) {
-      return styles.currentDate;
-    }
-    return '';
-  };
 
   handleRangePickerChange = rangePickerValue => {
-    const { dispatch } = this.props;
     this.setState({
+      ...this.state,
       rangePickerValue,
     });
-
-    dispatch({
-      type: 'chart/fetchSalesData',
-    });
+    message.success("22222222222"+JSON.stringify(rangePickerValue));
+    this.searchData(this.state.restRoomId);
+    // dispatch({
+    //   type: 'chart/fetchSalesData',
+    // });
   };
+
 
   render() {
     const {
@@ -192,20 +207,6 @@ class Index extends PureComponent {
     }
 
 
-
-    const salesData = [];
-    for (let i = 0; i < 12; i += 1) {
-      salesData.push({
-        x: `${i + 1}月`,
-        y: Math.floor(Math.random() * 1000) + 200,
-      });
-    }
-
-    const cols = {
-      month: {
-        range: [0, 1]
-      }
-    };
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
@@ -357,11 +358,12 @@ class Index extends PureComponent {
                 <Suspense fallback={null}>
                   <SalesCard
                     rangePickerValue={this.state.rangePickerValue}
-                    salesData={salesData}
+                    salesData={dv}
                     isActive={this.isActive}
                     handleRangePickerChange={this.handleRangePickerChange}
                     loading={loading}
                     selectDate={this.selectDate}
+                    tabOnClick={this.searchData}
                   />
                 </Suspense>
               </div>

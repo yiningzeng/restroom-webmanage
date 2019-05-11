@@ -4,6 +4,22 @@ import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import numeral from 'numeral';
 import styles from './Analysis.less';
 import { Bar } from '@/components/Charts';
+import {
+  G2,
+  Chart,
+  Geom,
+  Axis,
+  Tooltip,
+  Coord,
+  Label,
+  Legend,
+  View,
+  Guide,
+  Shape,
+  Facet,
+  Util
+} from "bizcharts";
+import moment from './Index';
 
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
@@ -16,34 +32,40 @@ for (let i = 0; i < 7; i += 1) {
   });
 }
 
+const cols = {
+  month: {
+    range: [0, 1]
+  }
+};
+
+
+
 const SalesCard = memo(
-  ({ rangePickerValue, salesData, isActive, handleRangePickerChange, loading, selectDate }) => (
-    <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
+  ({ rangePickerValue, salesData, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
+    message.success("时间是实价:"+JSON.stringify(rangePickerValue)) && <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
             <div className={styles.salesExtraWrap}>
               <div className={styles.salesExtra}>
-                <a className={isActive('today')} onClick={() => selectDate('today')}>
+                <a onClick={() => selectDate('today')}>
                   <FormattedMessage id="app.analysis.all-day" defaultMessage="All Day" />
                 </a>
-                <a className={isActive('week')} onClick={() => selectDate('week')}>
+                <a onClick={() => selectDate('week')}>
                   <FormattedMessage id="app.analysis.all-week" defaultMessage="All Week" />
                 </a>
-                <a className={isActive('month')} onClick={() => selectDate('month')}>
+                <a onClick={() => selectDate('month')}>
                   <FormattedMessage id="app.analysis.all-month" defaultMessage="All Month" />
                 </a>
               </div>
               <RangePicker
                 value={rangePickerValue}
                 onChange={handleRangePickerChange}
-                style={{ width: 256 }}
+                style={{ width: 220 }}
               />
             </div>
           }
-          onTabClick={(activeKey)=>{
-            message.success(JSON.stringify(activeKey));
-          }}
+          onTabClick={(v)=>tabOnClick(v)}
           size="large"
           tabBarStyle={{ marginBottom: 24 }}
         >
@@ -54,10 +76,43 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    <div className={styles.salesBar}>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                        <Legend/>
+                        <Axis name="x"/>
+                        <Axis
+                          name="temperature"
+                          label={{
+                            formatter: val => `${val}`
+                          }}
+                        />
+                        <Tooltip
+                          crosshairs={{
+                            type: "y"
+                          }}
+                        />
+                        <Geom
+                          type="line"
+                          position="x*temperature"
+                          size={2}
+                          color="city"
+                        />
+                        <Geom
+                          type="point"
+                          position="x*temperature"
+                          size={4}
+                          shape="circle"
+                          color="city"
+                          style={{
+                            stroke: "#fff",
+                            lineWidth: 1
+                          }}
+                        />
+                      </Chart>)
+                      }
+                    </div>
+                  </Col>
                 </div>
               </Col>
 
@@ -70,10 +125,43 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    <div className={styles.salesBar}>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                        <Legend/>
+                        <Axis name="x"/>
+                        <Axis
+                          name="temperature"
+                          label={{
+                            formatter: val => `${val}`
+                          }}
+                        />
+                        <Tooltip
+                          crosshairs={{
+                            type: "y"
+                          }}
+                        />
+                        <Geom
+                          type="line"
+                          position="x*temperature"
+                          size={2}
+                          color="city"
+                        />
+                        <Geom
+                          type="point"
+                          position="x*temperature"
+                          size={4}
+                          shape="circle"
+                          color="city"
+                          style={{
+                            stroke: "#fff",
+                            lineWidth: 1
+                          }}
+                        />
+                      </Chart>)
+                      }
+                    </div>
+                  </Col>
                 </div>
               </Col>
             </Row>
@@ -85,10 +173,43 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    <div className={styles.salesBar}>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                        <Legend/>
+                        <Axis name="x"/>
+                        <Axis
+                          name="temperature"
+                          label={{
+                            formatter: val => `${val}`
+                          }}
+                        />
+                        <Tooltip
+                          crosshairs={{
+                            type: "y"
+                          }}
+                        />
+                        <Geom
+                          type="line"
+                          position="x*temperature"
+                          size={2}
+                          color="city"
+                        />
+                        <Geom
+                          type="point"
+                          position="x*temperature"
+                          size={4}
+                          shape="circle"
+                          color="city"
+                          style={{
+                            stroke: "#fff",
+                            lineWidth: 1
+                          }}
+                        />
+                      </Chart>)
+                      }
+                    </div>
+                  </Col>
                 </div>
               </Col>
             </Row>
@@ -100,10 +221,43 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    <div className={styles.salesBar}>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                        <Legend/>
+                        <Axis name="x"/>
+                        <Axis
+                          name="temperature"
+                          label={{
+                            formatter: val => `${val}`
+                          }}
+                        />
+                        <Tooltip
+                          crosshairs={{
+                            type: "y"
+                          }}
+                        />
+                        <Geom
+                          type="line"
+                          position="x*temperature"
+                          size={2}
+                          color="city"
+                        />
+                        <Geom
+                          type="point"
+                          position="x*temperature"
+                          size={4}
+                          shape="circle"
+                          color="city"
+                          style={{
+                            stroke: "#fff",
+                            lineWidth: 1
+                          }}
+                        />
+                      </Chart>)
+                      }
+                    </div>
+                  </Col>
                 </div>
               </Col>
             </Row>
@@ -115,10 +269,43 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    <div className={styles.salesBar}>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                        <Legend/>
+                        <Axis name="x"/>
+                        <Axis
+                          name="temperature"
+                          label={{
+                            formatter: val => `${val}`
+                          }}
+                        />
+                        <Tooltip
+                          crosshairs={{
+                            type: "y"
+                          }}
+                        />
+                        <Geom
+                          type="line"
+                          position="x*temperature"
+                          size={2}
+                          color="city"
+                        />
+                        <Geom
+                          type="point"
+                          position="x*temperature"
+                          size={4}
+                          shape="circle"
+                          color="city"
+                          style={{
+                            stroke: "#fff",
+                            lineWidth: 1
+                          }}
+                        />
+                      </Chart>)
+                      }
+                    </div>
+                  </Col>
                 </div>
               </Col>
             </Row>
@@ -130,10 +317,43 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    <div className={styles.salesBar}>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                        <Legend/>
+                        <Axis name="x"/>
+                        <Axis
+                          name="temperature"
+                          label={{
+                            formatter: val => `${val}`
+                          }}
+                        />
+                        <Tooltip
+                          crosshairs={{
+                            type: "y"
+                          }}
+                        />
+                        <Geom
+                          type="line"
+                          position="x*temperature"
+                          size={2}
+                          color="city"
+                        />
+                        <Geom
+                          type="point"
+                          position="x*temperature"
+                          size={4}
+                          shape="circle"
+                          color="city"
+                          style={{
+                            stroke: "#fff",
+                            lineWidth: 1
+                          }}
+                        />
+                      </Chart>)
+                      }
+                    </div>
+                  </Col>
                 </div>
               </Col>
             </Row>
@@ -145,10 +365,43 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    <div className={styles.salesBar}>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                        <Legend/>
+                        <Axis name="x"/>
+                        <Axis
+                          name="temperature"
+                          label={{
+                            formatter: val => `${val}`
+                          }}
+                        />
+                        <Tooltip
+                          crosshairs={{
+                            type: "y"
+                          }}
+                        />
+                        <Geom
+                          type="line"
+                          position="x*temperature"
+                          size={2}
+                          color="city"
+                        />
+                        <Geom
+                          type="point"
+                          position="x*temperature"
+                          size={4}
+                          shape="circle"
+                          color="city"
+                          style={{
+                            stroke: "#fff",
+                            lineWidth: 1
+                          }}
+                        />
+                      </Chart>)
+                      }
+                    </div>
+                  </Col>
                 </div>
               </Col>
             </Row>
@@ -160,10 +413,43 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                    <div className={styles.salesBar}>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                        <Legend/>
+                        <Axis name="x"/>
+                        <Axis
+                          name="temperature"
+                          label={{
+                            formatter: val => `${val}`
+                          }}
+                        />
+                        <Tooltip
+                          crosshairs={{
+                            type: "y"
+                          }}
+                        />
+                        <Geom
+                          type="line"
+                          position="x*temperature"
+                          size={2}
+                          color="city"
+                        />
+                        <Geom
+                          type="point"
+                          position="x*temperature"
+                          size={4}
+                          shape="circle"
+                          color="city"
+                          style={{
+                            stroke: "#fff",
+                            lineWidth: 1
+                          }}
+                        />
+                      </Chart>)
+                      }
+                    </div>
+                  </Col>
                 </div>
               </Col>
             </Row>
@@ -175,10 +461,39 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  <Bar
-                    height={195}
-                    data={salesData}
-                  />
+                  {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                    <Legend/>
+                    <Axis name="x"/>
+                    <Axis
+                      name="temperature"
+                      label={{
+                        formatter: val => `${val}`
+                      }}
+                    />
+                    <Tooltip
+                      crosshairs={{
+                        type: "y"
+                      }}
+                    />
+                    <Geom
+                      type="line"
+                      position="x*temperature"
+                      size={2}
+                      color="city"
+                    />
+                    <Geom
+                      type="point"
+                      position="x*temperature"
+                      size={4}
+                      shape="circle"
+                      color="city"
+                      style={{
+                        stroke: "#fff",
+                        lineWidth: 1
+                      }}
+                    />
+                  </Chart>)
+                  }
                 </div>
               </Col>
             </Row>
