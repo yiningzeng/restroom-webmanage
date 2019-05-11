@@ -1,4 +1,9 @@
 export default {
+  'app.analysis.nan': '男厕气体指数',
+  'app.analysis.nv': '女厕气体指数',
+  'app.analysis.dating': '大厅气体指数',
+  'app.analysis.wuzhangai': '无障碍气体指数',
+
   'app.analysis.test': '工专路 {no} 号店',
   'app.analysis.introduce': '指标说明',
   'app.analysis.total-sales': '总销售额',

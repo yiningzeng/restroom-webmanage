@@ -1,48 +1,8 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Suspense } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Switch,
-  Cascader,
-  Row,
-  Col,
-  Card,
-  Form,
-  Input,
-  Select,
-  Table,
-  Icon,
-  Button,
-  Dropdown,
-  Menu,
-  InputNumber,
-  DatePicker,
-  Modal,
-  message,
-  Badge,
-  Divider,
-  Drawer,
-  Popconfirm,
-  Steps,
-  Radio,
-  List,
-  Avatar
-} from 'antd';
-import {
-  G2,
-  Chart,
-  Geom,
-  Axis,
-  Tooltip,
-  Coord,
-  Label,
-  Legend,
-  View,
-  Guide,
-  Shape,
-  Facet,
-  Util
-} from "bizcharts";
+import { getTimeDistance } from '@/utils/utils';
+import { Row, Col, Card, Form, Badge, List, Avatar } from 'antd';
 import DataSet from "@antv/data-set";
 // import StandardTable from '@/components/StandardTable';
 import MyStandardTable from '@/components/MyStandardTable';
@@ -52,6 +12,9 @@ import styles from './TableList.less';
 import { Map,Marker,InfoWindow } from "react-amap";
 import InfiniteScroll from 'react-infinite-scroller';
 import { TimelineChart } from '@/components/Charts';
+
+
+const SalesCard = React.lazy(() => import('./SalesCard'));
 //高德地图组件使用方法 https://elemefe.github.io/react-amap/components/infowindow
 /* eslint react/no-multi-comp:0 */
 @connect(({ restroom,device, loading }) => ({
@@ -63,6 +26,7 @@ import { TimelineChart } from '@/components/Charts';
 @Form.create()
 class Index extends PureComponent {
   state = {
+    rangePickerValue: getTimeDistance('year'),
     gasFlow:undefined,
     weatherInfo:{
       time:undefined,
@@ -124,6 +88,42 @@ class Index extends PureComponent {
   }
 
 
+  selectDate = type => {
+    const { dispatch } = this.props;
+    this.setState({
+      rangePickerValue: getTimeDistance(type),
+    });
+
+    dispatch({
+      type: 'chart/fetchSalesData',
+    });
+  };
+
+  isActive = type => {
+    const { rangePickerValue } = this.state;
+    const value = getTimeDistance(type);
+    if (!rangePickerValue[0] || !rangePickerValue[1]) {
+      return '';
+    }
+    if (
+      rangePickerValue[0].isSame(value[0], 'day') &&
+      rangePickerValue[1].isSame(value[1], 'day')
+    ) {
+      return styles.currentDate;
+    }
+    return '';
+  };
+
+  handleRangePickerChange = rangePickerValue => {
+    const { dispatch } = this.props;
+    this.setState({
+      rangePickerValue,
+    });
+
+    dispatch({
+      type: 'chart/fetchSalesData',
+    });
+  };
 
   render() {
     const {
@@ -193,7 +193,13 @@ class Index extends PureComponent {
 
 
 
-
+    const salesData = [];
+    for (let i = 0; i < 12; i += 1) {
+      salesData.push({
+        x: `${i + 1}月`,
+        y: Math.floor(Math.random() * 1000) + 200,
+      });
+    }
 
     const cols = {
       month: {
@@ -348,39 +354,16 @@ class Index extends PureComponent {
                 </Map>
               </div>
               <div style={{ padding: '0 24px' }}>
-                {(dv !==undefined) && (<Chart height={300} data={dv} scale={cols} forceFit>
-                  <Legend/>
-                  <Axis name="x"/>
-                  <Axis
-                    name="temperature"
-                    label={{
-                      formatter: val => `${val}`
-                    }}
+                <Suspense fallback={null}>
+                  <SalesCard
+                    rangePickerValue={this.state.rangePickerValue}
+                    salesData={salesData}
+                    isActive={this.isActive}
+                    handleRangePickerChange={this.handleRangePickerChange}
+                    loading={loading}
+                    selectDate={this.selectDate}
                   />
-                  <Tooltip
-                    crosshairs={{
-                      type: "y"
-                    }}
-                  />
-                  <Geom
-                    type="line"
-                    position="x*temperature"
-                    size={2}
-                    color="city"
-                  />
-                  <Geom
-                    type="point"
-                    position="x*temperature"
-                    size={4}
-                    shape="circle"
-                    color="city"
-                    style={{
-                      stroke: "#fff",
-                      lineWidth: 1
-                    }}
-                  />
-                </Chart>)
-                }
+                </Suspense>
               </div>
             </Col>
           </Row>
