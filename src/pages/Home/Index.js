@@ -26,7 +26,7 @@ const SalesCard = React.lazy(() => import('./SalesCard'));
 @Form.create()
 class Index extends PureComponent {
   state = {
-    rangePickerValue: getTimeDistance('today'),
+    rangePickerValue: undefined,
     restRoomId: 1,
 
 
@@ -56,14 +56,21 @@ class Index extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
 
+    this.setState({
+      ...this.state,
+      rangePickerValue: [moment().subtract(1, "days"),moment(new Date())]
+    });
+    sessionStorage.setItem("startTime", moment().subtract(1, "days"));
+    sessionStorage.setItem("endTime", moment(new Date()));
     dispatch({
       type: 'restroom/weather',
       payload: {
         page:0,
         size:1000,
       },
-      callback:(a)=>{this.setState({weatherInfo:a})},
+      callback:(a)=>{this.setState({...this.state,weatherInfo:a})},
     });
+    // message.success("fuckckckckck"+JSON.stringify(this.state.rangePickerValue));
     dispatch({
       type: 'restroom/fetch',
       payload: {
@@ -76,8 +83,8 @@ class Index extends PureComponent {
           type: 'device/queryHomeGasList',
           payload: {//1?endTm=1557368198&startTm=1557281798
             restRoomId: 1,
-            startTm:Math.round(moment().subtract(1, "days").valueOf()/1000),
-            endTm:Math.round(new Date().getTime()/1000),
+            startTm:Math.round(this.state.rangePickerValue[0].valueOf()/1000),
+            endTm:Math.round(this.state.rangePickerValue[1]/1000),
           },
           callback:(a)=>{
             console.log("气体数据啦啦啦:"+JSON.stringify(a));
@@ -95,15 +102,19 @@ class Index extends PureComponent {
     this.setState({
       ...this.state,
       restRoomId: activeKey
-    })
+    });
+    const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
+    const startTime=Math.round(fuckTime[0].valueOf()/1000);
+    const endTime = Math.round(fuckTime[1].valueOf()/1000);
+    // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
     try
     {
       dispatch({
         type: 'device/queryHomeGasList',
         payload: {//1?endTm=1557368198&startTm=1557281798
           restRoomId: activeKey,
-          startTm: Math.round(this.state.rangePickerValue[0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
-          endTm: Math.round(this.state.rangePickerValue[1].valueOf()/1000),//Math.round(new Date().getTime()/1000),
+          startTm: startTime,//Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
+          endTm: endTime,//Math.round(this.state.rangePickerValue[1].valueOf()/1000),//Math.round(new Date().getTime()/1000),
         },
         callback:(a)=>{
           console.log("气体数据啦啦啦:"+JSON.stringify(a));
@@ -118,22 +129,26 @@ class Index extends PureComponent {
   }
 
   selectDate = type => {
+    sessionStorage.setItem("startTime", getTimeDistance(type)[0]);
+    sessionStorage.setItem("endTime", getTimeDistance(type)[1]);
     this.setState({
       ...this.state,
-      rangePickerValue: getTimeDistance(type),
+      rangePickerValue: [...getTimeDistance(type)],
     });
-message.error("手动选时间"+JSON.stringify(getTimeDistance(type)));
     this.searchData(this.state.restRoomId);
+    // this.searchData(this.state.restRoomId);
   };
 
 
   handleRangePickerChange = rangePickerValue => {
+    sessionStorage.setItem("startTime", rangePickerValue[0]);
+    sessionStorage.setItem("endTime", rangePickerValue[1]);
+    // message.success("handleRangePickerChange"+JSON.stringify(rangePickerValue));
     this.setState({
-      ...this.state,
-      rangePickerValue,
+      rangePickerValue: [...rangePickerValue],
     });
-    message.success("22222222222"+JSON.stringify(rangePickerValue));
     this.searchData(this.state.restRoomId);
+    // this.searchData(this.state.restRoomId);
     // dispatch({
     //   type: 'chart/fetchSalesData',
     // });
@@ -201,10 +216,15 @@ message.error("手动选时间"+JSON.stringify(getTimeDistance(type)));
         });
         console.log("gasFlowgasFlowgasFlowgasFlow:"+dv);
       }
+      // message.success(JSON.stringify(dv));
     }
     catch (e) {
       
     }
+
+    // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
+
+    const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
 
 
     return (
@@ -243,6 +263,7 @@ message.error("手动选时间"+JSON.stringify(getTimeDistance(type)));
                             },
                           });
                           this.setState({
+                            ...this.state,
                             infoWindow:{
                               ...this.state.infoWindow,
                               visible:true,
@@ -296,7 +317,9 @@ message.error("手动选时间"+JSON.stringify(getTimeDistance(type)));
                           console.log(instance);
                         },
                         click: (e) => {
-                          this.setState({infoWindow:{
+                          this.setState({
+                            ...this.state,
+                            infoWindow:{
                             ...this.state.infoWindow,
                               visible:true,
                               name:item.restRoomName,
@@ -336,7 +359,7 @@ message.error("手动选时间"+JSON.stringify(getTimeDistance(type)));
                     <br />
                     <Badge status={this.state.infoWindow.boardStatus} text={this.state.infoWindow.boardStatusText} />
                     <br />
-                    <button onClick={() => {this.setState({infoWindow:{...this.state.infoWindow,visible:false}})}}>关闭</button>
+                    <button onClick={() => {this.setState({...this.state,infoWindow:{...this.state.infoWindow,visible:false}})}}>关闭</button>
                   </InfoWindow>
                   <Card className="customLayer" style={styleA}>
                     <Card.Meta
@@ -357,7 +380,7 @@ message.error("手动选时间"+JSON.stringify(getTimeDistance(type)));
               <div style={{ padding: '0 24px' }}>
                 <Suspense fallback={null}>
                   <SalesCard
-                    rangePickerValue={this.state.rangePickerValue}
+                    rangePickerValue={fuckTime}
                     salesData={dv}
                     isActive={this.isActive}
                     handleRangePickerChange={this.handleRangePickerChange}

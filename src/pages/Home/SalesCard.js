@@ -24,13 +24,6 @@ import moment from './Index';
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
 
-const rankingListData = [];
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: formatMessage({ id: 'app.analysis.test' }, { no: i }),
-    total: 323234,
-  });
-}
 
 const cols = {
   month: {
@@ -42,7 +35,7 @@ const cols = {
 
 const SalesCard = memo(
   ({ rangePickerValue, salesData, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
-    message.success("时间是实价:"+JSON.stringify(rangePickerValue)) && <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
+    <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
@@ -78,7 +71,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x"/>
                         <Axis
@@ -127,7 +120,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x"/>
                         <Axis
@@ -175,7 +168,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x"/>
                         <Axis
@@ -223,7 +216,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x"/>
                         <Axis
@@ -271,7 +264,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x"/>
                         <Axis
@@ -319,7 +312,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x"/>
                         <Axis
@@ -367,7 +360,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x"/>
                         <Axis
@@ -415,7 +408,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x"/>
                         <Axis
@@ -461,7 +454,7 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                  {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                     <Legend/>
                     <Axis name="x"/>
                     <Axis
