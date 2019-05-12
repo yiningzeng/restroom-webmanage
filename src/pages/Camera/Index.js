@@ -257,7 +257,8 @@ class CoverCardList extends PureComponent {
           }}
         >
           <Spin spinning={fuckloading} size="large" tip="视频载入中...请耐心等待">
-            <ReactHLS width="100%" height="70%" controls={false} paused={this.state.paused} preload="none" poster="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg" autoplay={this.state.autoplay} url={this.state.paused?undefined:this.state.fuckingLiveUrl} />
+            <ReactHLS width="100%" height="600px" paused={this.state.paused} preload="none" poster="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg" autoplay={this.state.autoplay} url={this.state.paused?undefined:this.state.fuckingLiveUrl} />
+            {/*<Dplayer video={{url: this.state.paused?undefined:this.state.fuckingLiveUrl,type: 'hls'}}/>*/}
           </Spin>
           {/*可以用iframe引用海康摄像头的sdk*/}
           {/*<iframe style={{border:0,width:"100%",height:630,}} src="http://www.baidu.com"/>*/}

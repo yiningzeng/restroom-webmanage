@@ -40,6 +40,7 @@
     "dva": "^2.4.0",
     "enquire-js": "^0.2.1",
     "hash.js": "^1.1.5",
+    "hls.js": "^0.12.4",
     "lodash": "^4.17.10",
     "lodash-decorators": "^6.0.0",
     "memoize-one": "^4.0.0",
@@ -64,7 +65,8 @@
     "react-infinite-scroller": "^1.2.4",
     "react-media": "^1.8.0",
     "react-router-dom": "^4.3.1",
-    "streamedian": "git://github.com/Streamedian/html5_rtsp_player.git"
+    "streamedian": "git://github.com/Streamedian/html5_rtsp_player.git",
+    "vue-dplayer": "^0.0.10"
   },
   "devDependencies": {
     "@types/react": "^16.7.7",
@@ -92,6 +94,7 @@
     "mockjs": "^1.0.1-beta3",
     "prettier": "1.15.2",
     "pro-download": "^1.0.1",
+    "react-dplayer": "^0.2.3",
     "stylelint": "^9.8.0",
     "stylelint-config-prettier": "^4.0.0",
     "stylelint-config-standard": "^18.0.0",
