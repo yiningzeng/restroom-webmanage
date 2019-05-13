@@ -20,14 +20,14 @@ import {
   Util
 } from "bizcharts";
 import moment from './Index';
-
+const { Line } = Guide;
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
 
 
 const cols = {
   x: {alias: '时间',},
-  temperature: {alias: '指数',},
+  temperature: {alias: '客流',},
 };
 
 
@@ -70,7 +70,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
@@ -85,12 +85,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom
-                          type="line"
-                          position="x*temperature"
-                          size={2}
-                          color="city"
-                        />
+                        <Geom type="interval" position="x*temperature" color="#3182bd" />
                         <Geom
                           type="point"
                           position="x*temperature"
@@ -135,12 +130,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom
-                          type="line"
-                          position="x*temperature"
-                          size={2}
-                          color="city"
-                        />
+                        <Geom type="interval" position="x*temperature" color="#3182bd" />
                         <Geom
                           type="point"
                           position="x*temperature"
@@ -184,12 +174,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom
-                          type="line"
-                          position="x*temperature"
-                          size={2}
-                          color="city"
-                        />
+                        <Geom type="interval" position="x*temperature" color="#3182bd" />
                         <Geom
                           type="point"
                           position="x*temperature"
@@ -233,12 +218,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom
-                          type="line"
-                          position="x*temperature"
-                          size={2}
-                          color="city"
-                        />
+                        <Geom type="interval" position="x*temperature" color="#3182bd" />
                         <Geom
                           type="point"
                           position="x*temperature"
@@ -282,12 +262,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom
-                          type="line"
-                          position="x*temperature"
-                          size={2}
-                          color="city"
-                        />
+                        <Geom type="interval" position="x*temperature" color="#3182bd" />
                         <Geom
                           type="point"
                           position="x*temperature"
@@ -331,12 +306,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom
-                          type="line"
-                          position="x*temperature"
-                          size={2}
-                          color="city"
-                        />
+                        <Geom type="interval" position="x*temperature" color="#3182bd" />
                         <Geom
                           type="point"
                           position="x*temperature"
@@ -380,12 +350,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom
-                          type="line"
-                          position="x*temperature"
-                          size={2}
-                          color="city"
-                        />
+                        <Geom type="interval" position="x*temperature" color="#3182bd" />
                         <Geom
                           type="point"
                           position="x*temperature"
@@ -429,12 +394,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom
-                          type="line"
-                          position="x*temperature"
-                          size={2}
-                          color="city"
-                        />
+                        <Geom type="interval" position="x*temperature" color="#3182bd" />
                         <Geom
                           type="point"
                           position="x*temperature"
@@ -476,12 +436,7 @@ const SalesCard = memo(
                         type: "y"
                       }}
                     />
-                    <Geom
-                      type="line"
-                      position="x*temperature"
-                      size={2}
-                      color="city"
-                    />
+                    <Geom type="interval" position="x*temperature" color="#3182bd" />
                     <Geom
                       type="point"
                       position="x*temperature"

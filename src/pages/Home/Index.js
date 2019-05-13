@@ -2,7 +2,7 @@ import React, { PureComponent, Suspense } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { getTimeDistance } from '@/utils/utils';
-import { Row, Col, Card, Form, Badge, List, Avatar,message } from 'antd';
+import { Row, Col, Card, Form, Badge, List, Avatar,Icon } from 'antd';
 import DataSet from "@antv/data-set";
 // import StandardTable from '@/components/StandardTable';
 import MyStandardTable from '@/components/MyStandardTable';
@@ -58,9 +58,9 @@ class Index extends PureComponent {
 
     this.setState({
       ...this.state,
-      rangePickerValue: [moment().subtract(1, "days"),moment(new Date())]
+      rangePickerValue: [moment().subtract(3, "days"),moment(new Date())]
     });
-    sessionStorage.setItem("startTime", moment().subtract(1, "days"));
+    sessionStorage.setItem("startTime", moment().subtract(3, "days"));
     sessionStorage.setItem("endTime", moment(new Date()));
     dispatch({
       type: 'restroom/weather',
@@ -201,14 +201,14 @@ class Index extends PureComponent {
     let dv=undefined;
     try
     {
-      if(histroy===null || histroy ===undefined)   histroy=[{"df":0,"大厅":0,"男厕":0,"女厕":0,"无障碍":0,"x":"0"}];
+      if(histroy===null || histroy ===undefined)   histroy=[{"客流": 0,"x":"0"}];
       if (histroy !== undefined){
         const ds = new DataSet();
         console.log("gasFlowgasFlowgasFlowgasFlow:"+JSON.stringify(histroy));
         dv = ds.createView().source(histroy);
         dv.transform({
           type: "fold",
-          fields: ["大厅", "女厕", "男厕", "无障碍"],
+          fields: ["客流"],
           // 展开字段集
           key: "city",
           // key字段
@@ -286,11 +286,17 @@ class Index extends PureComponent {
                           avatar={<Avatar src={item.img} shape="square" size="large" />}
                           title={item.restRoomName}
                           description={<div>
-                            <Badge status={item.deviceCameras.length>0?"success":"error"} text={item.deviceCameras.length>0?"视频正常":"未安装摄像头"} />
+                             <span>
+                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} />  {item.deviceCameras.length>0?"视频正常":"未安装摄像头"}
+                            </span>
                             <br />
-                            <Badge status={this.state.infoWindow.gasStatus} text={this.state.infoWindow.gasStatusText} />
+                            <span>
+                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} />     {this.state.infoWindow.gasStatusText}
+                            </span>
                             <br />
-                            <Badge status={this.state.infoWindow.boardStatus} text={this.state.infoWindow.boardStatusText} />
+                            <span>
+                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} />     {this.state.infoWindow.boardStatusText}
+                            </span>
                           </div>}
                         />
 
