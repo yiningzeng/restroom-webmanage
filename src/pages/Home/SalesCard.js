@@ -26,9 +26,8 @@ const { TabPane } = Tabs;
 
 
 const cols = {
-  month: {
-    range: [0, 1]
-  }
+  x: {alias: '时间',},
+  temperature: {alias: '指数',},
 };
 
 
@@ -73,8 +72,9 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
+                          title={{ offset: 38 }}
                           name="temperature"
                           label={{
                             formatter: val => `${val}`
@@ -122,8 +122,9 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
+                          title={{ offset: 38 }}
                           name="temperature"
                           label={{
                             formatter: val => `${val}`
@@ -170,8 +171,9 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
+                          title={{ offset: 38 }}
                           name="temperature"
                           label={{
                             formatter: val => `${val}`
@@ -218,8 +220,9 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
+                          title={{ offset: 38 }}
                           name="temperature"
                           label={{
                             formatter: val => `${val}`
@@ -266,8 +269,9 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
+                          title={{ offset: 38 }}
                           name="temperature"
                           label={{
                             formatter: val => `${val}`
@@ -314,8 +318,9 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
+                          title={{ offset: 38 }}
                           name="temperature"
                           label={{
                             formatter: val => `${val}`
@@ -362,8 +367,9 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
+                          title={{ offset: 38 }}
                           name="temperature"
                           label={{
                             formatter: val => `${val}`
@@ -410,8 +416,9 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="x" title={{ offset: 38 }}/>
                         <Axis
+                          title={{ offset: 38 }}
                           name="temperature"
                           label={{
                             formatter: val => `${val}`
@@ -456,8 +463,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                     <Legend/>
-                    <Axis name="x"/>
+                    <Axis name="x" title={{ offset: 38 }}/>
                     <Axis
+                      title={{ offset: 38 }}
                       name="temperature"
                       label={{
                         formatter: val => `${val}`
