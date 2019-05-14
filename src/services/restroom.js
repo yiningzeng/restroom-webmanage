@@ -51,6 +51,15 @@ export async function query(params) {
   });
 }
 
+export async function getFuckFlow(params) {
+  return request(`/api/fuck-flow/list/${params.restRoomId}?${stringify(params)}`,{
+    method: 'GET',
+    headers:{
+      authorization: sessionStorage.getItem("token"),
+    },
+  });
+}
+
 export async function getWeather(params) {
   console.log("天气妈妈妈妈们的:"+sessionStorage.getItem("token"));
   return request(`/api/v1/weather`,{

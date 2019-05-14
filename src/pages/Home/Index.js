@@ -2,7 +2,7 @@ import React, { PureComponent, Suspense } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { getTimeDistance } from '@/utils/utils';
-import { Row, Col, Card, Form, Badge, List, Avatar,Icon } from 'antd';
+import { Row, Col, Card, Form, Badge, List, Avatar,Icon, message } from 'antd';
 import DataSet from "@antv/data-set";
 // import StandardTable from '@/components/StandardTable';
 import MyStandardTable from '@/components/MyStandardTable';
@@ -58,9 +58,9 @@ class Index extends PureComponent {
 
     this.setState({
       ...this.state,
-      rangePickerValue: [moment().subtract(3, "days"),moment(new Date())]
+      rangePickerValue: [moment().subtract(1, "days"),moment(new Date())]
     });
-    sessionStorage.setItem("startTime", moment().subtract(3, "days"));
+    sessionStorage.setItem("startTime", moment().subtract(1, "days"));
     sessionStorage.setItem("endTime", moment(new Date()));
     dispatch({
       type: 'restroom/weather',
@@ -78,13 +78,12 @@ class Index extends PureComponent {
         size:1000,
       },
       callback:(a)=>{
-        console.log(JSON.stringify(a));
         dispatch({
-          type: 'device/queryHomeGasList',
+          type: 'restroom/getFuckFlow',
           payload: {//1?endTm=1557368198&startTm=1557281798
             restRoomId: 1,
-            startTm:Math.round(this.state.rangePickerValue[0].valueOf()/1000),
-            endTm:Math.round(this.state.rangePickerValue[1]/1000),
+            startTm: moment().subtract(1, "days").format('YYYY-MM-DD 00:00:00'),
+            endTm: moment(new Date()).format('YYYY-MM-DD 00:00:00'),
           },
           callback:(a)=>{
             console.log("气体数据啦啦啦:"+JSON.stringify(a));
@@ -103,14 +102,13 @@ class Index extends PureComponent {
       ...this.state,
       restRoomId: activeKey
     });
-    const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
-    const startTime=Math.round(fuckTime[0].valueOf()/1000);
-    const endTime = Math.round(fuckTime[1].valueOf()/1000);
+    const startTime=moment(sessionStorage.getItem("startTime")).format('YYYY-MM-DD 00:00:00');
+    const endTime = moment(sessionStorage.getItem("endTime")).format('YYYY-MM-DD 23:59:59');
     // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
     try
     {
       dispatch({
-        type: 'device/queryHomeGasList',
+        type: 'restroom/getFuckFlow',
         payload: {//1?endTm=1557368198&startTm=1557281798
           restRoomId: activeKey,
           startTm: startTime,//Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
@@ -157,25 +155,10 @@ class Index extends PureComponent {
 
   render() {
     const {
-      restroom: { list },
-      device: {gasFlow},
+      restroom: { list, fuckFlow },
       loading,
-      loadingDevice,
       dispatch
     } = this.props;
-
-    let histroy=[];
-    try
-    {
-  
-      if( gasFlow.code === 0 ){
-        histroy = gasFlow.data.data.items[0].histroyList
-      }
-    }
-    catch (e) {
-      
-    }
-   
 
 
     // message.success(JSON.stringify(list));
@@ -195,33 +178,16 @@ class Index extends PureComponent {
       color: '#fff',
       backgroundColor: '#000'
     }
-    console.log(JSON.stringify(this.state.weatherInfo));
-    // message.success(JSON.stringify(this.state.weatherInfo));
-    // const markerEvents =
-    let dv=undefined;
+    let yourFuckFlow=[{"number": 0,"show_time":""}];
     try
     {
-      if(histroy===null || histroy ===undefined)   histroy=[{"客流": 0,"x":"0"}];
-      if (histroy !== undefined){
-        const ds = new DataSet();
-        console.log("gasFlowgasFlowgasFlowgasFlow:"+JSON.stringify(histroy));
-        dv = ds.createView().source(histroy);
-        dv.transform({
-          type: "fold",
-          fields: ["客流"],
-          // 展开字段集
-          key: "city",
-          // key字段
-          value: "temperature" // value字段
-        });
-        console.log("gasFlowgasFlowgasFlowgasFlow:"+dv);
-      }
-      // message.success(JSON.stringify(dv));
+      yourFuckFlow= fuckFlow.data;
     }
     catch (e) {
       
     }
 
+    // message.error(JSON.stringify(yourFuckFlow));
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
 
     const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
@@ -247,32 +213,33 @@ class Index extends PureComponent {
                     dataSource={list===undefined?[]:list.data===undefined?[]:list.data.content}
                     renderItem={item => (
                       <List.Item onClick={()=>{
-                        try
-                        {
+                        try {
+                          const startTime = moment(sessionStorage.getItem("startTime")).format('YYYY-MM-DD 00:00:00');
+                          const endTime = moment(sessionStorage.getItem("endTime")).format('YYYY-MM-DD 23:59:59');
+
                           dispatch({
-                            type: 'device/queryHomeGasList',
+                            type: 'restroom/getFuckFlow',
                             payload: {//1?endTm=1557368198&startTm=1557281798
                               restRoomId: item.restRoomId,
-                              startTm:Math.round(moment().subtract(1, "days").valueOf()/1000),
-                              endTm:Math.round(new Date().getTime()/1000),
+                              startTm: startTime,//Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
+                              endTm: endTime,//Math.round(this.state.rangePickerValue[1].valueOf()/1000),//Math.round(new Date().getTime()/1000),
                             },
-                            callback:(a)=>{
-                              console.log("气体数据啦啦啦:"+JSON.stringify(a));
-                              // this.setState(gasFlow: a.)
-                              // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+                            callback: (a) => {
                             },
                           });
+
                           this.setState({
                             ...this.state,
-                            infoWindow:{
+                            infoWindow: {
                               ...this.state.infoWindow,
-                              visible:true,
-                              name:item.restRoomName,
-                              position:[item.longitude, item.latitude],
-                              videoStatus: item.deviceCameras.length>0?"success":"error",
-                              videoStatusTest: item.deviceCameras.length>0?"视频正常":"未安装摄像头",
+                              visible: true,
+                              name: item.restRoomName,
+                              position: [item.longitude, item.latitude],
+                              videoStatus: item.deviceCameras.length > 0 ? "success" : "error",
+                              videoStatusTest: item.deviceCameras.length > 0 ? "视频正常" : "未安装摄像头",
                               // gasStatus:
-                            }});
+                            }
+                          });
                         }
                         catch (e) {
                           console.log("获取气体数据出错:"+e.toString());
@@ -387,7 +354,7 @@ class Index extends PureComponent {
                 <Suspense fallback={null}>
                   <SalesCard
                     rangePickerValue={fuckTime}
-                    salesData={dv}
+                    salesData={yourFuckFlow}
                     isActive={this.isActive}
                     handleRangePickerChange={this.handleRangePickerChange}
                     loading={loading}

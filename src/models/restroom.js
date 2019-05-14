@@ -1,4 +1,4 @@
-import { query,addRestRoom,updateRestRoom,deleteRestRoom,getWeather } from '@/services/restroom';
+import { query,addRestRoom,updateRestRoom,deleteRestRoom,getWeather, getFuckFlow } from '@/services/restroom';
 
 export default {
   namespace: 'restroom',
@@ -17,6 +17,12 @@ export default {
       data: [],
     },
     list: {
+      code: undefined,
+      status: undefined,
+      msg: '',
+      data: [],
+    },
+    fuckFlow: {
       code: undefined,
       status: undefined,
       msg: '',
@@ -41,6 +47,16 @@ export default {
       });
       if (callback)callback(response);
     },
+
+    *getFuckFlow({ payload,callback}, { call, put }) {
+      const response = yield call(getFuckFlow,payload);
+      yield put({
+        type: 'fuckFlow',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
+
     *addRestRoom({ payload,callback}, { call, put }) {
       const response = yield call(addRestRoom,payload);
       yield put({
@@ -84,6 +100,12 @@ export default {
       return {
         ...state,
         list: action.payload,
+      };
+    },
+    fuckFlow(state, action) {
+      return {
+        ...state,
+        fuckFlow: action.payload,
       };
     },
   },

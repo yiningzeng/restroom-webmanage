@@ -26,8 +26,8 @@ const { TabPane } = Tabs;
 
 
 const cols = {
-  x: {alias: '时间',},
-  temperature: {alias: '客流',},
+  show_time: {alias: '时间',},
+  number: {alias: '人数',},
 };
 
 
@@ -70,34 +70,23 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
-                        <Legend/>
-                        <Axis name="x" title={{ offset: 38 }}/>
-                        <Axis
-                          title={{ offset: 38 }}
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}`
-                          }}
-                        />
-                        <Tooltip
-                          crosshairs={{
-                            type: "y"
-                          }}
-                        />
-                        <Geom type="interval" position="x*temperature" color="#3182bd" />
-                        <Geom
-                          type="point"
-                          position="x*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1
-                          }}
-                        />
-                      </Chart>)
+                      {(salesData !==undefined) && (
+                        <Chart height={280} data={salesData} scale={cols} forceFit>
+                          <Axis name="show_time" title={{ offset: 38 }} label={{
+                            autoRotate: false,
+                            formatter: val => {
+                              if(val.includes(':30') || val.includes(':00')) return `${val}`
+                            },
+
+                          }}  />
+                          <Axis name="number" title={{ offset: 38 }} />
+                          <Tooltip
+                            crosshairs={{
+                              type: "y"
+                            }}
+                          />
+                          <Geom type="interval" position="show_time*number" />
+                        </Chart>)
                       }
                     </div>
                   </Col>
@@ -115,34 +104,23 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
-                        <Legend/>
-                        <Axis name="x" title={{ offset: 38 }}/>
-                        <Axis
-                          title={{ offset: 38 }}
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}`
-                          }}
-                        />
-                        <Tooltip
-                          crosshairs={{
-                            type: "y"
-                          }}
-                        />
-                        <Geom type="interval" position="x*temperature" color="#3182bd" />
-                        <Geom
-                          type="point"
-                          position="x*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1
-                          }}
-                        />
-                      </Chart>)
+                      {(salesData !==undefined) && (
+                        <Chart height={280} data={salesData} scale={cols} forceFit>
+                          <Axis name="show_time" title={{ offset: 38 }} label={{
+                            autoRotate: false,
+                            formatter: val => {
+                              if(val.includes(':30') || val.includes(':00')) return `${val}`
+                            },
+
+                          }}  />
+                          <Axis name="number" title={{ offset: 38 }} />
+                          <Tooltip
+                            crosshairs={{
+                              type: "y"
+                            }}
+                          />
+                          <Geom type="interval" position="show_time*number" />
+                        </Chart>)
                       }
                     </div>
                   </Col>
@@ -159,33 +137,21 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
-                        <Legend/>
-                        <Axis name="x" title={{ offset: 38 }}/>
-                        <Axis
-                          title={{ offset: 38 }}
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}`
-                          }}
-                        />
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                        <Axis name="show_time" title={{ offset: 38 }} label={{
+                          autoRotate: false,
+                          formatter: val => {
+                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                          },
+
+                        }}  />
+                        <Axis name="number" title={{ offset: 38 }} />
                         <Tooltip
                           crosshairs={{
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="x*temperature" color="#3182bd" />
-                        <Geom
-                          type="point"
-                          position="x*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1
-                          }}
-                        />
+                        <Geom type="interval" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -203,33 +169,21 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
-                        <Legend/>
-                        <Axis name="x" title={{ offset: 38 }}/>
-                        <Axis
-                          title={{ offset: 38 }}
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}`
-                          }}
-                        />
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                        <Axis name="show_time" title={{ offset: 38 }} label={{
+                          autoRotate: false,
+                          formatter: val => {
+                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                          },
+
+                        }}  />
+                        <Axis name="number" title={{ offset: 38 }} />
                         <Tooltip
                           crosshairs={{
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="x*temperature" color="#3182bd" />
-                        <Geom
-                          type="point"
-                          position="x*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1
-                          }}
-                        />
+                        <Geom type="interval" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -247,33 +201,21 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
-                        <Legend/>
-                        <Axis name="x" title={{ offset: 38 }}/>
-                        <Axis
-                          title={{ offset: 38 }}
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}`
-                          }}
-                        />
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                        <Axis name="show_time" title={{ offset: 38 }} label={{
+                          autoRotate: false,
+                          formatter: val => {
+                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                          },
+
+                        }}  />
+                        <Axis name="number" title={{ offset: 38 }} />
                         <Tooltip
                           crosshairs={{
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="x*temperature" color="#3182bd" />
-                        <Geom
-                          type="point"
-                          position="x*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1
-                          }}
-                        />
+                        <Geom type="interval" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -291,33 +233,21 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
-                        <Legend/>
-                        <Axis name="x" title={{ offset: 38 }}/>
-                        <Axis
-                          title={{ offset: 38 }}
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}`
-                          }}
-                        />
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                        <Axis name="show_time" title={{ offset: 38 }} label={{
+                          autoRotate: false,
+                          formatter: val => {
+                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                          },
+
+                        }}  />
+                        <Axis name="number" title={{ offset: 38 }} />
                         <Tooltip
                           crosshairs={{
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="x*temperature" color="#3182bd" />
-                        <Geom
-                          type="point"
-                          position="x*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1
-                          }}
-                        />
+                        <Geom type="interval" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -335,33 +265,21 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
-                        <Legend/>
-                        <Axis name="x" title={{ offset: 38 }}/>
-                        <Axis
-                          title={{ offset: 38 }}
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}`
-                          }}
-                        />
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                        <Axis name="show_time" title={{ offset: 38 }} label={{
+                          autoRotate: false,
+                          formatter: val => {
+                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                          },
+
+                        }}  />
+                        <Axis name="number" title={{ offset: 38 }} />
                         <Tooltip
                           crosshairs={{
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="x*temperature" color="#3182bd" />
-                        <Geom
-                          type="point"
-                          position="x*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1
-                          }}
-                        />
+                        <Geom type="interval" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -379,33 +297,21 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
-                        <Legend/>
-                        <Axis name="x" title={{ offset: 38 }}/>
-                        <Axis
-                          title={{ offset: 38 }}
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}`
-                          }}
-                        />
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                        <Axis name="show_time" title={{ offset: 38 }} label={{
+                          autoRotate: false,
+                          formatter: val => {
+                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                          },
+
+                        }}  />
+                        <Axis name="number" title={{ offset: 38 }} />
                         <Tooltip
                           crosshairs={{
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="x*temperature" color="#3182bd" />
-                        <Geom
-                          type="point"
-                          position="x*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1
-                          }}
-                        />
+                        <Geom type="interval" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -421,33 +327,21 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
-                    <Legend/>
-                    <Axis name="x" title={{ offset: 38 }}/>
-                    <Axis
-                      title={{ offset: 38 }}
-                      name="temperature"
-                      label={{
-                        formatter: val => `${val}`
-                      }}
-                    />
+                  {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                    <Axis name="show_time" title={{ offset: 38 }} label={{
+                      autoRotate: false,
+                      formatter: val => {
+                        if(val.includes(':30') || val.includes(':00')) return `${val}`
+                      },
+
+                    }}  />
+                    <Axis name="number" title={{ offset: 38 }} />
                     <Tooltip
                       crosshairs={{
                         type: "y"
                       }}
                     />
-                    <Geom type="interval" position="x*temperature" color="#3182bd" />
-                    <Geom
-                      type="point"
-                      position="x*temperature"
-                      size={4}
-                      shape="circle"
-                      color="city"
-                      style={{
-                        stroke: "#fff",
-                        lineWidth: 1
-                      }}
-                    />
+                    <Geom type="interval" position="show_time*number" />
                   </Chart>)
                   }
                 </div>

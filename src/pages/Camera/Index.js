@@ -172,7 +172,7 @@ class CoverCardList extends PureComponent {
                 <Card.Meta title={item.restRoomName} />
                 <div>
                   <Trend flag="up" style={{ marginRight: 16,marginTop:-10 }}>
-                      客流量:
+                      当天客流量:
                     <span className={styles.trendText}>{numeral(item.peopleNum).format('0,0')}</span>
                   </Trend>
                   <br />
@@ -209,8 +209,8 @@ class CoverCardList extends PureComponent {
                 {/*<MiniArea line height={55} data={this.state.gasData} />*/}
                 <Divider style={{marginTop: "4px"}} />
                 <div className={styles.cardItemContent}>
-                  {/*<span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{`更新时间:${item.updateTime===null?"-":moment(item.updateTime).fromNow()}`}</span>*/}
-                  <span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}</span>
+                  <span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{`更新时间:${item.updateTime===null?"-":moment(item.updateTime).fromNow()}`}</span>
+                  {/*<span>责任人: {item.cleaner===""||item.cleaner==null?'-':item.cleaner}</span>*/}
                 </div>
               </Card>
             </Spin>
