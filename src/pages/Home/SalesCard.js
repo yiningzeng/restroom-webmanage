@@ -33,20 +33,20 @@ const cols = {
 
 
 const SalesCard = memo(
-  ({ rangePickerValue, salesData, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
+  ({ rangePickerValue, salesData, isActive, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
     <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
             <div className={styles.salesExtraWrap}>
               <div className={styles.salesExtra}>
-                <a onClick={() => selectDate('today')}>
+                <a className={isActive('today')} onClick={() => selectDate('today')}>
                   <FormattedMessage id="app.analysis.all-day" defaultMessage="All Day" />
                 </a>
-                <a onClick={() => selectDate('week')}>
+                <a className={isActive('week')} onClick={() => selectDate('week')}>
                   <FormattedMessage id="app.analysis.all-week" defaultMessage="All Week" />
                 </a>
-                <a onClick={() => selectDate('month')}>
+                <a className={isActive('month')} onClick={() => selectDate('month')}>
                   <FormattedMessage id="app.analysis.all-month" defaultMessage="All Month" />
                 </a>
               </div>
@@ -75,7 +75,8 @@ const SalesCard = memo(
                           <Axis name="show_time" title={{ offset: 38 }} label={{
                             autoRotate: false,
                             formatter: val => {
-                              if(val.includes(':30') || val.includes(':00')) return `${val}`
+                              return `${val}`;
+                              // if(val.includes(':30') || val.includes(':00')) return `${val}`
                             },
 
                           }}  />
@@ -109,7 +110,8 @@ const SalesCard = memo(
                           <Axis name="show_time" title={{ offset: 38 }} label={{
                             autoRotate: false,
                             formatter: val => {
-                              if(val.includes(':30') || val.includes(':00')) return `${val}`
+                              return `${val}`;
+                              // if(val.includes(':30') || val.includes(':00')) return `${val}`
                             },
 
                           }}  />
@@ -141,7 +143,8 @@ const SalesCard = memo(
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
-                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                            return `${val}`;
+                            // if(val.includes(':30') || val.includes(':00')) return `${val}`
                           },
 
                         }}  />
@@ -173,7 +176,8 @@ const SalesCard = memo(
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
-                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                            return `${val}`;
+                            // if(val.includes(':30') || val.includes(':00')) return `${val}`
                           },
 
                         }}  />
@@ -205,7 +209,8 @@ const SalesCard = memo(
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
-                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                            return `${val}`;
+                            // if(val.includes(':30') || val.includes(':00')) return `${val}`
                           },
 
                         }}  />
@@ -237,7 +242,8 @@ const SalesCard = memo(
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
-                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                            return `${val}`;
+                            // if(val.includes(':30') || val.includes(':00')) return `${val}`
                           },
 
                         }}  />
@@ -269,7 +275,8 @@ const SalesCard = memo(
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
-                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                            return `${val}`;
+                            // if(val.includes(':30') || val.includes(':00')) return `${val}`
                           },
 
                         }}  />
@@ -301,7 +308,8 @@ const SalesCard = memo(
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
-                            if(val.includes(':30') || val.includes(':00')) return `${val}`
+                            return `${val}`;
+                            // if(val.includes(':30') || val.includes(':00')) return `${val}`
                           },
 
                         }}  />
@@ -331,7 +339,8 @@ const SalesCard = memo(
                     <Axis name="show_time" title={{ offset: 38 }} label={{
                       autoRotate: false,
                       formatter: val => {
-                        if(val.includes(':30') || val.includes(':00')) return `${val}`
+                        return `${val}`;
+                        // if(val.includes(':30') || val.includes(':00')) return `${val}`
                       },
 
                     }}  />

@@ -9,6 +9,7 @@ import MyStandardTable from '@/components/MyStandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './TableList.less';
+import fuckStyles from './Analysis.less';
 import { Map,Marker,InfoWindow } from "react-amap";
 import InfiniteScroll from 'react-infinite-scroller';
 import { TimelineChart } from '@/components/Charts';
@@ -26,9 +27,9 @@ const SalesCard = React.lazy(() => import('./SalesCard'));
 @Form.create()
 class Index extends PureComponent {
   state = {
-    rangePickerValue: undefined,
+    rangePickerValue: getTimeDistance('day'),
     restRoomId: 1,
-
+    isActive: "today",
 
     gasFlow:undefined,
     weatherInfo:{
@@ -60,8 +61,9 @@ class Index extends PureComponent {
       ...this.state,
       rangePickerValue: [moment().subtract(1, "days"),moment(new Date())]
     });
-    sessionStorage.setItem("startTime", moment().subtract(1, "days"));
-    sessionStorage.setItem("endTime", moment(new Date()));
+    sessionStorage.setItem("select", "today");
+    sessionStorage.setItem("startTime", getTimeDistance("today")[0]);
+    sessionStorage.setItem("endTime", getTimeDistance("today")[1]);
     dispatch({
       type: 'restroom/weather',
       payload: {
@@ -70,6 +72,8 @@ class Index extends PureComponent {
       },
       callback:(a)=>{this.setState({...this.state,weatherInfo:a})},
     });
+    const startTime=moment(sessionStorage.getItem("startTime")).format('YYYY-MM-DD 06:00:00');
+    const endTime = moment(sessionStorage.getItem("endTime")).format('YYYY-MM-DD 22:00:00');
     // message.success("fuckckckckck"+JSON.stringify(this.state.rangePickerValue));
     dispatch({
       type: 'restroom/fetch',
@@ -82,8 +86,8 @@ class Index extends PureComponent {
           type: 'restroom/getFuckFlow',
           payload: {//1?endTm=1557368198&startTm=1557281798
             restRoomId: 1,
-            startTm: moment().subtract(1, "days").format('YYYY-MM-DD 00:00:00'),
-            endTm: moment(new Date()).format('YYYY-MM-DD 00:00:00'),
+            startTm: startTime,//moment().subtract(1, "days").format('YYYY-MM-DD 00:00:00'),
+            endTm: endTime,//moment(new Date()).format('YYYY-MM-DD 00:00:00'),
           },
           callback:(a)=>{
             console.log("气体数据啦啦啦:"+JSON.stringify(a));
@@ -96,14 +100,20 @@ class Index extends PureComponent {
 
   }
 
-  searchData = (activeKey) =>{
+  searchData = (activeKey,searchType) =>{
     const { dispatch } = this.props;
     this.setState({
       ...this.state,
       restRoomId: activeKey
     });
-    const startTime=moment(sessionStorage.getItem("startTime")).format('YYYY-MM-DD 00:00:00');
-    const endTime = moment(sessionStorage.getItem("endTime")).format('YYYY-MM-DD 23:59:59');
+    let startformat='YYYY-MM-DD 06:00:00';
+    let endformat='YYYY-MM-DD 22:00:00';
+    if(searchType === 1){
+      startformat='YYYY-MM-DD 00:00:00';
+      endformat='YYYY-MM-DD 23:59:59';
+    }
+    const startTime = moment(sessionStorage.getItem("startTime")).format(startformat);
+    const endTime = moment(sessionStorage.getItem("endTime")).format(endformat);
     // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
     try
     {
@@ -113,6 +123,7 @@ class Index extends PureComponent {
           restRoomId: activeKey,
           startTm: startTime,//Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
           endTm: endTime,//Math.round(this.state.rangePickerValue[1].valueOf()/1000),//Math.round(new Date().getTime()/1000),
+          type: searchType,
         },
         callback:(a)=>{
           console.log("气体数据啦啦啦:"+JSON.stringify(a));
@@ -129,11 +140,14 @@ class Index extends PureComponent {
   selectDate = type => {
     sessionStorage.setItem("startTime", getTimeDistance(type)[0]);
     sessionStorage.setItem("endTime", getTimeDistance(type)[1]);
+    sessionStorage.setItem("select", type);
     this.setState({
-      ...this.state,
+      isActive: type,
       rangePickerValue: [...getTimeDistance(type)],
     });
-    this.searchData(this.state.restRoomId);
+    if(type !== "today") this.searchData(this.state.restRoomId,1);
+    else this.searchData(this.state.restRoomId, 0);
+
     // this.searchData(this.state.restRoomId);
   };
 
@@ -152,6 +166,10 @@ class Index extends PureComponent {
     // });
   };
 
+  isActive = type => {
+    if(sessionStorage.getItem("select") === type)return fuckStyles.currentDate;
+    return '';
+  };
 
   render() {
     const {
@@ -186,7 +204,6 @@ class Index extends PureComponent {
     catch (e) {
       
     }
-
     // message.error(JSON.stringify(yourFuckFlow));
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
 
