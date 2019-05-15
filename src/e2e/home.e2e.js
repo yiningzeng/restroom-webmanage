@@ -10,6 +10,6 @@ describe('Homepage', () => {
       timeout: 5000,
     });
     const text = await page.evaluate(() => document.getElementsByTagName('h1')[0].innerText);
-    expect(text).toContain('智能公厕');
+    expect(text).toContain('鄞州智慧公厕');
   });
 });

@@ -1,6 +1,6 @@
 {
-  "name": "智能公厕",
-  "short_name": "智能公厕",
+  "name": "鄞州智慧公厕",
+  "short_name": "鄞州智慧公厕",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",

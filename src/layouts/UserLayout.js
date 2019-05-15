@@ -36,9 +36,9 @@ class UserLayout extends React.PureComponent {
   // getPageTitle() {
   //   const { routerData, location } = this.props;
   //   const { pathname } = location;
-  //   let title = '智能公厕';
+  //   let title = '鄞州智慧公厕';
   //   if (routerData[pathname] && routerData[pathname].name) {
-  //     title = `${routerData[pathname].name} - 智能公厕`;
+  //     title = `${routerData[pathname].name} - 鄞州智慧公厕`;
   //   }
   //   return title;
   // }
