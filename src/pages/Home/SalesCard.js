@@ -85,7 +85,7 @@ const SalesCard = memo(
                               type: "y"
                             }}
                           />
-                          <Geom type="interval" position="show_time*number" />
+                          <Geom type="line" position="show_time*number" />
                         </Chart>)
                       }
                     </div>
@@ -119,7 +119,7 @@ const SalesCard = memo(
                               type: "y"
                             }}
                           />
-                          <Geom type="interval" position="show_time*number" />
+                          <Geom type="line" position="show_time*number" />
                         </Chart>)
                       }
                     </div>
@@ -151,7 +151,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="show_time*number" />
+                        <Geom type="line" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -183,7 +183,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="show_time*number" />
+                        <Geom type="line" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -215,7 +215,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="show_time*number" />
+                        <Geom type="line" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -247,7 +247,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="show_time*number" />
+                        <Geom type="line" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -279,7 +279,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="show_time*number" />
+                        <Geom type="line" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -311,7 +311,7 @@ const SalesCard = memo(
                             type: "y"
                           }}
                         />
-                        <Geom type="interval" position="show_time*number" />
+                        <Geom type="line" position="show_time*number" />
                       </Chart>)
                       }
                     </div>
@@ -341,7 +341,7 @@ const SalesCard = memo(
                         type: "y"
                       }}
                     />
-                    <Geom type="interval" position="show_time*number" />
+                    <Geom type="line" position="show_time*number" />
                   </Chart>)
                   }
                 </div>

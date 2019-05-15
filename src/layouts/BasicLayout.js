@@ -260,7 +260,7 @@ class BasicLayout extends React.PureComponent {
                                }>退出</Dropdown.Button>
             }
           >
-            <Iframe url="http://47.99.207.5"
+            <Iframe url="http://192.168.10.10"
                     width="100%"
                     height="800px"
                     id="myId"
