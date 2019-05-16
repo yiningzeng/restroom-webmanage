@@ -244,7 +244,7 @@ class BasicLayout extends React.PureComponent {
         >
           <Card
             bordered={false}
-            title="监控总揽"
+            title="监控总览"
             extra={
               <Dropdown.Button type="danger" size="large"
                                onClick={() => {

@@ -110,6 +110,11 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                       <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                         (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                           (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                             (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                       }</span>
                       {(salesData !==undefined) && (
                         <Chart height={280} data={salesData} scale={cols} padding={'auto'} forceFit>
                           <Axis name="show_time" title={{ offset: 38 }} label={{
@@ -144,6 +149,11 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                       <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                         (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                           (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                             (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                       }</span>
                       {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
@@ -177,6 +187,11 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                       <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                         (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                           (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                             (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                       }</span>
                       {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
@@ -210,6 +225,11 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                       <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                         (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                           (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                             (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                       }</span>
                       {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
@@ -243,6 +263,11 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                       <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                         (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                           (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                             (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                       }</span>
                       {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
@@ -276,6 +301,11 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                       <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                         (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                           (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                             (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                       }</span>
                       {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
@@ -309,6 +339,11 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                       <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                         (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                           (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                             (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                       }</span>
                       {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
@@ -340,6 +375,11 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
+                   <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                     (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                       (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                         (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                   }</span>
                   {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                     <Axis name="show_time" title={{ offset: 38 }} label={{
                       autoRotate: false,
