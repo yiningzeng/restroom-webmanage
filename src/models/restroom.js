@@ -24,7 +24,7 @@ export default {
     },
     fuckFlow: {
       code: undefined,
-      status: undefined,
+      status: 0,
       msg: '',
       data: [],
     },

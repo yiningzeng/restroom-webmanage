@@ -33,7 +33,7 @@ const cols = {
 
 
 const SalesCard = memo(
-  ({ rangePickerValue, salesData, isActive, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
+  ({ rangePickerValue, salesData, allNum, isActive, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
     <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
       <div className={styles.salesCard}>
         <Tabs
@@ -57,7 +57,7 @@ const SalesCard = memo(
               />
             </div>
           }
-          onTabClick={(v)=>tabOnClick(v)}
+          onTabClick={(v)=>tabOnClick(v,sessionStorage.getItem("select")==="today"?0:1)}
           size="large"
           tabBarStyle={{ marginBottom: 24 }}
         >
@@ -70,8 +70,13 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
+                     <span style={{marginRight: "100px", float: "right", color: "#722ED1"}}>{
+                       (sessionStorage.getItem("select")==="today")?`今日累计人数: ${allNum} 人`:
+                         (sessionStorage.getItem("select")==="week")?`本周累计人数: ${allNum} 人`:
+                          (sessionStorage.getItem("select")==="month")?`本月累计人数: ${allNum} 人`:`累计人数: ${allNum} 人`
+                       }</span>
                       {(salesData !==undefined) && (
-                        <Chart height={280} data={salesData} scale={cols} forceFit>
+                        <Chart height={280} data={salesData} scale={cols} padding={'auto'} forceFit>
                           <Axis name="show_time" title={{ offset: 38 }} label={{
                             autoRotate: false,
                             formatter: val => {
@@ -106,7 +111,7 @@ const SalesCard = memo(
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (
-                        <Chart height={280} data={salesData} scale={cols} forceFit>
+                        <Chart height={280} data={salesData} scale={cols} padding={'auto'} forceFit>
                           <Axis name="show_time" title={{ offset: 38 }} label={{
                             autoRotate: false,
                             formatter: val => {
@@ -139,7 +144,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
@@ -172,7 +177,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
@@ -205,7 +210,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
@@ -238,7 +243,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
@@ -271,7 +276,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
@@ -304,7 +309,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                         <Axis name="show_time" title={{ offset: 38 }} label={{
                           autoRotate: false,
                           formatter: val => {
@@ -335,7 +340,7 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  {(salesData !==undefined) && (<Chart height={280} data={salesData} scale={cols} forceFit>
+                  {(salesData !==undefined) && (<Chart height={280} data={salesData} padding={'auto'} scale={cols} forceFit>
                     <Axis name="show_time" title={{ offset: 38 }} label={{
                       autoRotate: false,
                       formatter: val => {

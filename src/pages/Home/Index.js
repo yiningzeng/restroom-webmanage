@@ -101,6 +101,7 @@ class Index extends PureComponent {
   }
 
   searchData = (activeKey,searchType) =>{
+    // message.error(activeKey+" "+searchType);
     const { dispatch } = this.props;
     this.setState({
       ...this.state,
@@ -231,19 +232,7 @@ class Index extends PureComponent {
                     renderItem={item => (
                       <List.Item onClick={()=>{
                         try {
-                          const startTime = moment(sessionStorage.getItem("startTime")).format('YYYY-MM-DD 00:00:00');
-                          const endTime = moment(sessionStorage.getItem("endTime")).format('YYYY-MM-DD 23:59:59');
-
-                          dispatch({
-                            type: 'restroom/getFuckFlow',
-                            payload: {//1?endTm=1557368198&startTm=1557281798
-                              restRoomId: item.restRoomId,
-                              startTm: startTime,//Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
-                              endTm: endTime,//Math.round(this.state.rangePickerValue[1].valueOf()/1000),//Math.round(new Date().getTime()/1000),
-                            },
-                            callback: (a) => {
-                            },
-                          });
+                          this.searchData(item.restRoomId,sessionStorage.getItem("select")==="today"?0:1);
 
                           this.setState({
                             ...this.state,
@@ -371,6 +360,7 @@ class Index extends PureComponent {
                 <Suspense fallback={null}>
                   <SalesCard
                     rangePickerValue={fuckTime}
+                    allNum={fuckFlow.status}
                     salesData={yourFuckFlow}
                     isActive={this.isActive}
                     handleRangePickerChange={this.handleRangePickerChange}
