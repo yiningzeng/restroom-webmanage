@@ -241,8 +241,10 @@ class Index extends PureComponent {
                               visible: true,
                               name: item.restRoomName,
                               position: [item.longitude, item.latitude],
-                              videoStatus: item.deviceCameras.length > 0 ? "success" : "error",
-                              videoStatusTest: item.deviceCameras.length > 0 ? "视频正常" : "未安装摄像头",
+                              videoStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
+                              videoStatusTest: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "摄像正常" : "摄像头离线",
+                              boardStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
+                              boardStatusText: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "公告正常" : "公告屏离线",
                               // gasStatus:
                             }
                           });
@@ -259,17 +261,26 @@ class Index extends PureComponent {
                           avatar={<Avatar src={item.img} shape="square" size="large" />}
                           title={item.restRoomName}
                           description={<div>
-                             <span>
-                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} />  {item.deviceCameras.length>0?"视频正常":"未安装摄像头"}
-                            </span>
+                            {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
+                              <span>
+                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} /> 摄像正常
+                            </span>:
+                              <span>
+                              <Icon type="close-square" style={{ color: '#FF0000', marginRight: 8 }} /> 摄像头离线
+                            </span>}
+
                             <br />
                             <span>
                               <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} />     {this.state.infoWindow.gasStatusText}
                             </span>
                             <br />
-                            <span>
-                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} />     {this.state.infoWindow.boardStatusText}
-                            </span>
+                            {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
+                              <span>
+                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} /> 公告正常
+                            </span>:
+                              <span>
+                              <Icon type="close-square" style={{ color: '#FF0000', marginRight: 8 }} /> 公告屏离线
+                            </span>}
                           </div>}
                         />
 
@@ -303,16 +314,13 @@ class Index extends PureComponent {
                               visible:true,
                               name:item.restRoomName,
                               position:[item.longitude, item.latitude],
-                              videoStatus: item.deviceCameras.length>0?"success":"error",
-                              videoStatusTest: item.deviceCameras.length>0?"视频正常":"未安装摄像头",
-                              // gasStatus:
+                              videoStatus: item.deviceCameras.length>0&& item.deviceCameras[0].online === 1 ?"success":"error",
+                              videoStatusTest: item.deviceCameras.length>0&& item.deviceCameras[0].online === 1 ?"摄像正常":"摄像头离线",
+                              boardStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
+                              boardStatusText: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "公告正常" : "公告屏离线",
                           }});
                           console.log(`你点击了这个图标；调用参数为：${item.restRoomName}`);
                           console.log(e);
-
-
-
-
                         },
                         dblclick: (e) => {
                           // this.setState({infoWindowVisible:true});
