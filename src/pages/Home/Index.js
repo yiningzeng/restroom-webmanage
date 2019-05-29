@@ -90,7 +90,6 @@ class Index extends PureComponent {
             endTm: endTime,//moment(new Date()).format('YYYY-MM-DD 00:00:00'),
           },
           callback:(a)=>{
-            console.log("气体数据啦啦啦:"+JSON.stringify(a));
             // this.setState(gasFlow: a.)
             // message.success(`${JSON.stringify(this.state.gasFlow)}`);
           },
@@ -127,14 +126,12 @@ class Index extends PureComponent {
           type: searchType,
         },
         callback:(a)=>{
-          console.log("气体数据啦啦啦:"+JSON.stringify(a));
           // this.setState(gasFlow: a.)
           // message.success(`${JSON.stringify(this.state.gasFlow)}`);
         },
       });
     }
     catch (e) {
-      console.log("获取气体数据出错:"+e.toString());
     }
   }
 
@@ -250,7 +247,6 @@ class Index extends PureComponent {
                           });
                         }
                         catch (e) {
-                          console.log("获取气体数据出错:"+e.toString());
                         }
                         console.log("点点:"+JSON.stringify(item));
                         console.log("点点:"+JSON.stringify(this.state.infoWindow));

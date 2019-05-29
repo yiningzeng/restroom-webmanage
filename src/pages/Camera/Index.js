@@ -87,11 +87,7 @@ class CoverCardList extends PureComponent {
           })
         }
         catch (e) {
-          console.log(`马克思大家撒开多久 ${  JSON.stringify(newContent)}`);
         }
-
-
-        console.log(`嘛嘛嘛吗吗吗木木木木木木木木木木木木 ${  JSON.stringify(newContent)}`);
       }
     });
   }

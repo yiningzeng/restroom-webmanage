@@ -42,7 +42,7 @@ export async function updateRestRoom(params) {
 }
 
 export async function query(params) {
-  console.log("老子是token:"+sessionStorage.getItem("token"));
+  console.log("token:"+sessionStorage.getItem("token"));
   return request(`/api/v1/restroom?${stringify(params)}`,{
     method: 'GET',
     headers:{
@@ -61,7 +61,6 @@ export async function getFuckFlow(params) {
 }
 
 export async function getWeather(params) {
-  console.log("天气妈妈妈妈们的:"+sessionStorage.getItem("token"));
   return request(`/api/v1/weather`,{
     method: 'GET',
     headers:{
