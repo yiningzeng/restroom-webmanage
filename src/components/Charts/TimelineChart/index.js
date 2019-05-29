@@ -106,7 +106,7 @@ class TimelineChart extends React.Component {
         end={ds.state.end}
         backgroundChart={{ type: 'line' }}
         onChange={({ startValue, endValue }) => {
-          console.log("时间卡拉+"+startValue+" "+endValue);
+          console.log("时间+"+startValue+" "+endValue);
           ds.setState('start', startValue);
           ds.setState('end', endValue);
         }}

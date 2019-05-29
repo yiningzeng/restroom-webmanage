@@ -521,7 +521,6 @@ class Index extends PureComponent {
 
   handleRestRoomEdit = fields => {
     const { dispatch } = this.props;
-    console.log(`编辑妈的${JSON.stringify(fields)}`);
     dispatch({
       type: 'restroom/updateRestRoom',
       payload: {
@@ -552,7 +551,6 @@ class Index extends PureComponent {
       loading,
       loadingDevice,
     } = this.props;
-    console.log(`老子来了～～～～～～${JSON.stringify(list)}`);
     const { isEdit,drawerVisible,drawerName,nowRow,selectedRows, modalVisible,addCameraModalVisible,gasModalVisible,nowRestRoomId} = this.state;
 
 
