@@ -346,7 +346,7 @@ class Index extends PureComponent {
                   </InfoWindow>
                   <Card className="customLayer" style={styleA}>
                     <Card.Meta
-                      title={`宁波${this.state.weatherInfo}`===undefined?undefined: this.state.weatherInfo.data===undefined?undefined:`宁波 ${this.state.weatherInfo.data.forecast[0].type} ${this.state.weatherInfo.data.wendu}℃`}
+                      title={this.state.weatherInfo===undefined?'获取失败':this.state.weatherInfo.data===undefined?'获取失败':`宁波 ${this.state.weatherInfo.data.forecast[0].type} ${this.state.weatherInfo.data.wendu}℃`}
                       description={this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.time).fromNow()}
                     />
                   </Card>
