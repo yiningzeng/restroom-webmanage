@@ -12,8 +12,10 @@
         var value = 0 ;
         function set_time() {
             setTimeout(function() {
-                $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five",function(ip){
+                $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five-test",function(d){ // 已经写好的请求接口的demo 这里接口路径到时候改下 改成 http://rest.yining.site:8080
+                    console.log(JSON.stringify(d));
                     value += 1;
+                    document.getElementById('header').innerHTML = d.data.restRoomName;
                     document.getElementById('content').innerHTML = "<p style=\"font-size:100px;\">请求成功"+ip+" "+value+"</p>";
                 });
                 // $.post("http://172.16.29.158:8080/api/v1/user/login",
@@ -35,7 +37,7 @@
 </head>
 <body class="body-bg-star">
     <div class="page-header-warp">
-        <div class="page-header">鄞州区和邦大厦智慧公厕</div>
+        <div class="page-header" id="header">xxx</div>
     </div>
     <div style="text-align:center;width:400px;height:400px;background:#F00; color:#FFF" id="content"></div>
 <div id="chartmain" style="text-align:center;width:400px;height:400px;background:#F00; color:#FFF"></div>
