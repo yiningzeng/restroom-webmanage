@@ -1,0 +1,39 @@
+{
+	"station": {
+		"id": "",
+		"url": "/publish/forecast/AZJ/ningbo.html",
+		"code": "58562",
+		"city": "宁波",
+		"province": "浙江省"
+	},
+	"week": "",
+	"moon": "",
+	"jie_qi": "",
+	"publish_time": "2019-05-30 21:00",
+	"weather": {
+		"temperature": 22.4,  //温度
+		"temperatureDiff": 2.6,
+		"airpressure": 1009.0,
+		"humidity": 72.0,
+		"rain": 0.0,
+		"rcomfort": 65,
+		"icomfort": 0,
+		"info": "多云", //预报的天气信息，直接显示这个
+		"img": "1",
+		"feelst": 21.8 
+	},
+	"wind": {
+		"direct": "东南风",
+		"power": "微风",
+		"speed": ""
+	},
+	"warn": {
+		"alert": "9999",
+		"pic": "9999",
+		"province": "9999",
+		"city": "9999",
+		"url": "9999",
+		"issuecontent": "9999",
+		"fmeans": "9999"
+	}
+}
