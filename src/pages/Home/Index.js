@@ -32,10 +32,7 @@ class Index extends PureComponent {
     isActive: "today",
 
     gasFlow:undefined,
-    weatherInfo:{
-      time:undefined,
-      data:undefined
-    },
+    weatherInfo: undefined,
     map:{
       center:[121.554074,29.834609],
     },
@@ -346,8 +343,8 @@ class Index extends PureComponent {
                   </InfoWindow>
                   <Card className="customLayer" style={styleA}>
                     <Card.Meta
-                      title={this.state.weatherInfo===undefined?'获取失败':this.state.weatherInfo.data===undefined?'获取失败':`宁波 ${this.state.weatherInfo.data.forecast[0].type} ${this.state.weatherInfo.data.wendu}℃`}
-                      description={this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.time).fromNow()}
+                      title={this.state.weatherInfo===undefined?'获取失败':this.state.weatherInfo.weather===undefined?'获取失败':`宁波 ${this.state.weatherInfo.weather.info} ${this.state.weatherInfo.weather.temperature}℃`}
+                      description={this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.publish_time).fromNow()}
                     />
                   </Card>
                   {/*<div className="customLayer" style={styleA}>*/}
