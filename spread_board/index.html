@@ -15,6 +15,7 @@
                 $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five-test",function(d){ // 已经写好的请求接口的demo 这里接口路径到时候改下 改成 http://rest.yining.site:8080
                     console.log(JSON.stringify(d));
                     console.log("哈哈哈哈啦啦啦");
+                    console.log("分之提交啦");
                     value += 1;
                     document.getElementById('header').innerHTML = d.data.restRoomName;
                     document.getElementById('content').innerHTML = "<p style=\"font-size:100px;\">请求成功"+ip+" "+value+"</p>";
