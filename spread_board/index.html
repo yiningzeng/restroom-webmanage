@@ -6,13 +6,14 @@
   <script type="text/javascript" src="./echarts-all.js"></script>
   <link href="./index.css" rel="stylesheet">
   <meta charset="UTF-8">
+
 </head>
 
 <body class="body-bg-star">
-<div class="page-header-warp">
+<div class="page-header-warp" style="height: 6%;margin-top: 10px;">
   <div class="page-header" id="header">xxx</div>
 </div>
-<div class="body" style="text-align: center;">
+<div class="body" style="text-align: center;height: 56%">
   <div id="content">
     <span></span>
   </div>
@@ -20,125 +21,157 @@
   <div id='contentqiti'>
     <div>气味浓度参考值</div>
     <div class="qiti"><span>优</span><span>良</span><span>一般</span><span>差</span><span>极差</span></div>
-    <div class="yanse"><span style="background-color: yellowgreen"></span><span
+    <div class="yanse"><span style="background-color: #ADFF2F"></span><span
       style="background-color: green"></span><span style="background-color: yellow"></span><span
       style="background-color: red"></span><span style="background-color: darkred"></span></div>
-    <div class="shuzi"><span>0-1.5</span><span>1.5-3</span><span>4-5</span><span>5-7</span><span>8</span></div>
+    <div class="shuzi"><span>0-1.5</span><span>1.5-3</span><span>4-5</span><span>5-7</span><span>8-10</span></div>
     <div class="keliu"><span>今日客流量<div id="today"></div></span><span>当月客流量<div id="month"></div></span><span>总计客流量<div
       id="all"></div></span></div>
   </div>
-</div>
+    </div>
+  </div>
 
-<div class="bodybottom" style="text-align: center;">
-  <div id="chartmain" style="display: inline-block;width:600px;height:300px;background:#F00; color:#FFF"></div>
-</div>
+  <div class="bodybottom" style="text-align: center;height: 34%">
+    <div id="chartmain" style="display: inline-block;background:#F00; color:#FFF;width:600px;height:300px;"></div>
+  </div>
 
-
-<script type="text/javascript">
-  Date.prototype.Format = function (fmt) {
-    var o = {
-      "M+": this.getMonth() + 1, //月份
-      "d+": this.getDate(), //日
-      "H+": this.getHours(), //小时
-      "m+": this.getMinutes(), //分
-      "s+": this.getSeconds(), //秒
-      "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-      "S": this.getMilliseconds() //毫秒
+  <script type="text/javascript">
+    Date.prototype.Format = function (fmt) {
+      var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "H+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+      };
+      if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+      for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+      return fmt;
     };
-    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-      if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
-  };
-  //指定图标的配置和数据
-  var show_time = [];
-  var todaynumber = [];
-  // setTimeout(function () {
-  $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five", function (
-    d) {
-    item = d.data.gas.data.items;
-    itemfuckFlow = d.data.fuckFlow;
-    $("#today").html(itemfuckFlow.today);
-    $("#month").html(itemfuckFlow.month);
-    $("#all").html(itemfuckFlow.all);
-    var todayFlow = itemfuckFlow.todayFlow;
-    $('#contentsex').html('<div><span></span><span><img src="./img/nan.png" alt=""></span><span><img src="./img/nv.png" alt=""></span></div><div><span>室内温度</span><span>'+
-      item[1].ea +'</span><span>' + item[2].ea + '</span></div><div><span>气味浓度</span><span>'
-      + item[1].zq + '</span><span>' + item[2].zq + '</span></div>');
-    document.getElementById('header').innerHTML = d.data.restRoomName;
-    var todayFlow = d.data.fuckFlow.todayFlow;
-    $.each(todayFlow, function (i, item) {
-      // console.log(item)
-      show_time.push(item.show_time);
-      todaynumber.push(item.number);
-    });
-    console.log(show_time);
-    console.log(todaynumber);
-    var option = {
-      title: {
-        text: '当日数据统计'
-      },
-      tooltip: {},
-      toolbox: {
-        show: true,
-        feature: {
-          // mark: { show: true },
-          // dataView: { show: true, readOnly: false },
-          magicType: { show: true, type: ['line', 'bar'] },
-          // restore: { show: true },
-          // saveAsImage: { show: true }
-        }
-      },
-      legend: {
-        data: ['时间段人数统计']
-      },
-      xAxis: {
-        data: show_time
-      },
-      yAxis: {
-        type: 'category',
-        axisLine: { onZero: false },
-        axisLabel: {
-          formatter: '{value}'
+    //指定图标的配置和数据
+    var show_time = [];
+    var todaynumber = [];
+    // setTimeout(function () {
+    $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five-test", function (d) {
+      item = d.data.gas.data.items;
+      itemfuckFlow = d.data.fuckFlow;
+      $("#today").html(itemfuckFlow.today);
+      $("#month").html(itemfuckFlow.month);
+      $("#all").html(itemfuckFlow.all);
+      var todayFlow = itemfuckFlow.todayFlow;
+      $('#contentsex').html('<div><span></span><span><img src="./img/nan.png" alt=""></span><span><img src="./img/nv.png" alt=""></span></div><div><span>室内温度</span><span>'+
+        item[1].ea +'</span><span>' + item[2].ea + '</span></div><div><span>气味浓度</span><span>'
+        + item[1].zq + '</span><span>' + item[2].zq + '</span></div>');
+      document.getElementById('header').innerHTML = d.data.restRoomName;
+      var todayFlow = d.data.fuckFlow.todayFlow;
+      $.each(todayFlow, function (i, item) {
+        // console.log(item)
+        show_time.push(item.show_time);
+        todaynumber.push(item.number);
+      });
+      console.log(show_time);
+      console.log(todaynumber);
+      option = {
+        title: {
+          text: '当日访问流量图',
+          x: 'center',
+          textStyle: {
+            color: '#c3dbff', //更改坐标轴文字颜色
+            fontSize: 40 //更改坐标轴文字大小
+          }
         },
-        boundaryGap: false,
-        data: ['0', '1', '2']
-      },
-      series: [{
-        name: '访问量',
-        type: 'line',
-        data: todaynumber
-      }]
-    };
-    // //初始化echarts实例
-    var myChart = echarts.init(document.getElementById('chartmain'));
+        tooltip: {
+          trigger: 'axis',
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            // mark: { show: true },
+            // dataView: { show: true, readOnly: false },
+            // magicType: { show: true, type: ['line', 'bar'] },
+            // restore: { show: true },
+            // saveAsImage: { show: true }
+          }
+        },
+        calculable: true,
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: show_time,
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: '#c3dbff', //更改坐标轴文字颜色
+              fontSize: 30 //更改坐标轴文字大小
+            }
+          },
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#315070' //更改坐标轴颜色
+            }
+          }
+        }],
+        yAxis: [{
+          type: 'value',
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: '#c3dbff', //更改坐标轴文字颜色
+              fontSize: 30 //更改坐标轴文字大小
+            }
+          },
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: 'blue' //更改坐标轴颜色
+            }
+          }
+        }],
+        series: [{
+          name: '访问量',
+          type: 'line',
+          stack: '总量',
+          data: todaynumber
+        }, ]
+      };
+      // //初始化echarts实例
+      var myChart = echarts.init(document.getElementById('chartmain'));
 
-    // //使用制定的配置项和数据显示图表
-    myChart.setOption(option);
-    // clearInterval(setTimeout)
-  })
+
+  // //使用制定的配置项和数据显示图表
+  myChart.setOption(option);
+  // clearInterval(setTimeout)
+  });
 
   $.post("http://172.16.29.158:8080/api/v1/user/login", {
-      password: "e10adc3949ba59abbe56e057f20f883e",
-      username: "baymin"
-    },
-    function (a) {
-      $.ajax({
-        type: 'GET',
-        url: 'http://172.16.29.158:8080/api/v1/weather',
-        headers: {
-          'authorization': a.data.token
-        },
-        success: function (data) {
-          var josndata = JSON.parse(data);
-          $('#content').html('<div>'+josndata.station.city+'&nbsp;&nbsp'+
-            josndata.station.province + '&nbsp;&nbsp;鄞州区&nbsp;&nbsp' +new Date().Format("yyyy-MM-dd HH:mm") +'</div>'+
-            '<div>天气：' + josndata.weather.info + '&nbsp;&nbsp&nbsp;&nbsp温度：' +
-            josndata.weather.temperature +'°C</div><div id="cesuoqiwen"></div>')
-        },
-      });
-    });
-</script>
-</body>
+  password: "e10adc3949ba59abbe56e057f20f883e",
+  username: "baymin"
+  },
+  function (a) {
+  $.ajax({
+  type: 'GET',
+  url: 'http://172.16.29.158:8080/api/v1/weather',
+  headers: {
+  'authorization': a.data.token
+  },
+  success: function (data) {
+  var josndata = JSON.parse(data);
+  $('#content').html('<div>'+josndata.station.city+'&nbsp;&nbsp'+
+    josndata.station.province + '&nbsp;&nbsp;鄞州区&nbsp;&nbsp' +new Date().Format("yyyy-MM-dd HH:mm") +'</div>'+
+  '<div>天气：' + josndata.weather.info + '&nbsp;&nbsp&nbsp;&nbsp温度：' +
+    josndata.weather.temperature +'°C</div><div id="cesuoqiwen"></div>')
+  },
+  });
+  });
+  </script>
+  </body>
 
-</html>
+  </html>

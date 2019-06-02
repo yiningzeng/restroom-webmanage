@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="./jquery.min.js"></script>
+  <script type="text/javascript" src="./echarts-all.js"></script>
+  <link href="./index.css" rel="stylesheet">
+  <meta charset="UTF-8">
+
+  <script>
+    window.onload = set_time();
+    var value = 0;
+    function set_time() {
+      setTimeout(function () {
+        $.post("http://rest.yining.site:8080/api/v1/user/login", {
+          password: "e10adc3949ba59abbe56e057f20f883e",
+          username: "baymin"
+        },
+          function (a) {
+            $.ajax({
+              //请求类型，这里为POST
+              type: 'GET',
+              //你要请求的api的URL
+              url: "http://rest.yining.site:8080/api/v1/weather",
+              //添加额外的请求头
+              headers: {
+                'authorization': a.data.token
+              },
+              //请求成功的回调函数
+              success: function (data) {
+                var myDate = new Date();
+                var mytime = myDate.toLocaleTimeString()
+                console.log(mytime)
+                var josndata = JSON.parse(data)
+                console.log()
+                console.log(josndata)
+                $('#content').html(`<div>${josndata.station.city}&nbsp;&nbsp
+                ${josndata.station.province}&nbsp;&nbsp;鄞州区&nbsp;&nbsp${mytime}</div>
+                <div>天气：${josndata.weather.info}&nbsp;&nbsp&nbsp;&nbsp温度：
+                ${josndata.weather.temperature}°C</div><div id="cesuoqiwen"></div>
+                `)
+                //   console.log(JSON.stringify(data));
+                //函数参数 "data" 为请求成功服务端返回的数据
+              },
+            });
+          });
+        $.get("http://rest.yining.site:8080/api/v1/device/hi-give-me-five-test", function (
+          d) { // 已经写好的请求接口的demo 这里接口路径到时候改下 改成 http://rest.yining.site:8080
+          //   console.log(JSON.stringify(d));
+          // if(d.data.gas.status==200){
+          console.log(d)
+          console.log
+          item = d.data.gas.data.items
+          itemfuckFlow = d.data.fuckFlow
+          $("#today").html(itemfuckFlow.today)
+          $("#month").html(itemfuckFlow.month)
+          $("#all").html(itemfuckFlow.all)
+          var todayFlow = itemfuckFlow.todayFlow
+
+
+          $('#contentsex').html(`<div><span></span><span><img src="./img/nan.png"alt=""></span><span><img src="./img/nv.png" alt=""></span></div>
+                <div><span>室内温度</span><span>${item[1].ea}</span><span>${item[2].ea}</span></div>
+                <div><span>气味浓度</span><span>${item[1].zq}</span><span>${item[2].zq}</span></div>`)
+          console.log("哈哈哈哈啦啦啦");
+          console.log("分之提交啦");
+          value += 1;
+          document.getElementById('header').innerHTML = d.data.restRoomName;
+          document.getElementById('content').innerHTML = "<p style=\"font-size:100px;\">请求成功" + ip + " " +
+            value + "</p>";
+          // }
+        });
+        console.log(todaynumber)
+        set_time();
+      }, 1000)
+    }
+
+  </script>
+</head>
+
+<body class="body-bg-star">
+  <div class="page-header-warp">
+    <div class="page-header" id="header">xxx</div>
+  </div>
+  <div class="body" style="text-align: center;">
+    <div id="content">
+      <span></span>
+    </div>
+    <div id="contentsex"></div>
+    <div id='contentqiti'>
+      <div>气味浓度参考值</div>
+      <div class="qiti"><span>优</span><span>良</span><span>一般</span><span>差</span><span>极差</span></div>
+      <div class="yanse"><span style="background-color: yellowgreen"></span><span
+          style="background-color: green"></span><span style="background-color: yellow"></span><span
+          style="background-color: red"></span><span style="background-color: darkred"></span></div>
+      <div class="shuzi"><span>0-1.5</span><span>1.5-3</span><span>4-5</span><span>5-7</span><span>8</span></div>
+      <div class="keliu"><span>今日客流量<div id="today"></div></span><span>当月客流量<div id="month"></div></span><span>总计客流量<div
+            id="all"></div></span></div>
+    </div>
+  </div>
+
+  <div class="bodybottom" style="text-align: center;">
+    <div id="chartmain" style="display: inline-block;width:600px;height:300px;background:#F00; color:#FFF"></div>
+  </div>
+
+
+  <script type="text/javascript">
+    //指定图标的配置和数据
+    var show_time = []
+    var todaynumber = []
+    // setTimeout(function () {
+      $.get("http://rest.yining.site:8080/api/v1/device/hi-give-me-five-test", function (
+        d) {
+        console.log(d)
+        var todayFlow = d.data.fuckFlow.todayFlow
+        $.each(todayFlow, function (i, item) {
+          // console.log(item)
+          show_time.push(item.show_time)
+          todaynumber.push(item.number)
+        })
+        console.log(show_time)
+        console.log(todaynumber)
+        var option = {
+          title: {
+            text: '当日数据统计'
+          },
+          tooltip: {},
+          toolbox: {
+            show: true,
+            feature: {
+              // mark: { show: true },
+              // dataView: { show: true, readOnly: false },
+              magicType: { show: true, type: ['line', 'bar'] },
+              // restore: { show: true },
+              // saveAsImage: { show: true }
+            }
+          },
+          legend: {
+            data: ['时间段人数统计']
+          },
+          xAxis: {
+            data: show_time
+          },
+          yAxis: {
+            type: 'category',
+            axisLine: { onZero: false },
+            axisLabel: {
+              formatter: '{value}'
+            },
+            boundaryGap: false,
+            data: ['0', '1', '2']
+          },
+          series: [{
+            name: '访问量',
+            type: 'line',
+            data: todaynumber
+          }]
+        };
+        // //初始化echarts实例
+        var myChart = echarts.init(document.getElementById('chartmain'));
+
+        // //使用制定的配置项和数据显示图表
+        myChart.setOption(option);
+        // clearInterval(setTimeout)
+      })
+    // }, 1500)
+  </script>
+</body>
+
+</html>
