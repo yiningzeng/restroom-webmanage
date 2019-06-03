@@ -53,101 +53,7 @@
     var show_time = [];
     var todaynumber = [];
     // setTimeout(function () {
-    $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five", function (d) {
-      item = d.data.gas.data.items;
-      itemfuckFlow = d.data.fuckFlow;
-      $("#today").html(itemfuckFlow.today);
-      $("#month").html(itemfuckFlow.month);
-      $("#all").html(itemfuckFlow.all);
-      var todayFlow = itemfuckFlow.todayFlow;
-      $('#contentsex').html('<div><span></span><span><img src="./img/nan.png" alt=""></span><span><img src="./img/nv.png" alt=""></span></div><div><span>室内温度</span><span>'+
-        item[1].ea +'</span><span>' + item[2].ea + '</span></div><div><span>气味浓度</span><span>'
-        + item[1].zq + '</span><span>' + item[2].zq + '</span></div>');
-      document.getElementById('header').innerHTML = d.data.restRoomName;
-      var todayFlow = d.data.fuckFlow.todayFlow;
-      $.each(todayFlow, function (i, item) {
-        // console.log(item)
-        show_time.push(item.show_time);
-        todaynumber.push(item.number);
-      });
-      console.log(show_time);
-      console.log(todaynumber);
-      option = {
-        title: {
-          text: '当日访问流量图',
-          x: 'center',
-          textStyle: {
-            color: '#c3dbff', //更改坐标轴文字颜色
-            fontSize: 20 //更改坐标轴文字大小
-          }
-        },
-        tooltip: {
-          trigger: 'axis',
-        },
-        toolbox: {
-          show: true,
-          feature: {
-            // mark: { show: true },
-            // dataView: { show: true, readOnly: false },
-            // magicType: { show: true, type: ['line', 'bar'] },
-            // restore: { show: true },
-            // saveAsImage: { show: true }
-          }
-        },
-        calculable: true,
-        xAxis: [{
-          type: 'category',
-          boundaryGap: false,
-          data: show_time,
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: '#c3dbff', //更改坐标轴文字颜色
-              fontSize: 15 //更改坐标轴文字大小
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#315070' //更改坐标轴颜色
-            }
-          }
-        }],
-        yAxis: [{
-          type: 'value',
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: '#c3dbff', //更改坐标轴文字颜色
-              fontSize: 15 //更改坐标轴文字大小
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            lineStyle: {
-              color: 'blue' //更改坐标轴颜色
-            }
-          }
-        }],
-        series: [{
-          name: '访问量',
-          type: 'line',
-          stack: '总量',
-          data: todaynumber
-        }, ]
-      };
-      // //初始化echarts实例
-      var myChart = echarts.init(document.getElementById('chartmain'));
 
-
-  // //使用制定的配置项和数据显示图表
-  myChart.setOption(option);
-  // clearInterval(setTimeout)
-  });
 
   $.post("http://172.16.29.158:8080/api/v1/user/login", {
       password: "e10adc3949ba59abbe56e057f20f883e",
@@ -166,26 +72,141 @@
           josndata.station.province + '&nbsp;&nbsp;鄞州区&nbsp;&nbsp<span id="area-time">' + new Date().Format("yyyy-MM-dd HH:mm:ss") + '</span></div>' +
           '<div>天气：' + josndata.weather.info + '&nbsp;&nbsp&nbsp;&nbsp温度：' +
           josndata.weather.temperature + '°C</div><div id="cesuoqiwen"></div>');
-      },
+      }
     });
   });
 
-    window.setInterval(()=>{
-      console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+    var updateTime = function (){
       $('#area-time').text(new Date().Format("yyyy-MM-dd HH:mm:ss"));
-    },1000);
-
-    //当天客流15秒刷新一次
-    window.setInterval(()=>{
-      $.get("http://172.16.29.158:8080/api/v1/device/get-fuck-flow", (d) => {
-        console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
-        console.log(d);
-        $('#today').text(d.data.today);
-        $('#month').text(d.data.month);
-        $('#all').text(d.data.all);
+      setTimeout(updateTime,1000);
+    };
+    var updateFuckFlow = function (){
+        $.get("http://172.16.29.158:8080/api/v1/device/get-fuck-flow", function(d) {
+          console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+          console.log(d);
+          $('#today').text(d.data.today);
+          $('#month').text(d.data.month);
+          $('#all').text(d.data.all);
+        });
+      setTimeout(updateFuckFlow,35000);
+    };
+    var updateFuckFlowToday = function (){
+      $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five", function (d) {
+        item = d.data.gas.data.items;
+        itemfuckFlow = d.data.fuckFlow;
+        $("#today").html(itemfuckFlow.today);
+        $("#month").html(itemfuckFlow.month);
+        $("#all").html(itemfuckFlow.all);
+        var todayFlow = itemfuckFlow.todayFlow;
+        $("#contentsex").html('<div><span></span><span><img src="./img/nan.png" alt=""></span><span><img src="./img/nv.png" alt=""></span></div><div><span>室内温度</span><span>'+
+          item[1].ea +'</span><span>' + item[2].ea + '</span></div><div><span>气味浓度</span><span>'
+          + item[1].zq + '</span><span>' + item[2].zq + '</span></div>');
+        document.getElementById('header').innerHTML = d.data.restRoomName;
+        var todayFlow = d.data.fuckFlow.todayFlow;
+        $.each(todayFlow, function (i, item) {
+          // console.log(item)
+          show_time.push(item.show_time);
+          todaynumber.push(item.number);
+        });
+        console.log(show_time);
+        console.log(todaynumber);
+        option = {
+          title: {
+            text: '当日访问流量图',
+            x: 'center',
+            textStyle: {
+              color: '#c3dbff', //更改坐标轴文字颜色
+              fontSize: 20 //更改坐标轴文字大小
+            }
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              // mark: { show: true },
+              // dataView: { show: true, readOnly: false },
+              // magicType: { show: true, type: ['line', 'bar'] },
+              // restore: { show: true },
+              // saveAsImage: { show: true }
+            }
+          },
+          calculable: true,
+          xAxis: [{
+            type: 'category',
+            boundaryGap: false,
+            data: show_time,
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: '#c3dbff', //更改坐标轴文字颜色
+                fontSize: 15 //更改坐标轴文字大小
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#315070' //更改坐标轴颜色
+              }
+            }
+          }],
+          yAxis: [{
+            type: 'value',
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: '#c3dbff', //更改坐标轴文字颜色
+                fontSize: 15 //更改坐标轴文字大小
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              lineStyle: {
+                color: 'blue' //更改坐标轴颜色
+              }
+            }
+          }],
+          series: [{
+            name: '访问量',
+            type: 'line',
+            stack: '总量',
+            data: todaynumber
+          }, ]
+        };
+        // //初始化echarts实例
+        var myChart = echarts.init(document.getElementById('chartmain'));
+        myChart.setOption(option);
       });
+      setTimeout(updateFuckFlowToday, 3600000);
+    };
 
-    }, 15000);
+
+    updateTime();
+    updateFuckFlow();
+    updateFuckFlowToday();
+
+
+    // window.setInterval(()=>{
+    //   console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+    //   $('#area-time').text(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+    // },1000);
+    //
+    // //当天客流15秒刷新一次
+    // window.setInterval(()=>{
+    //   $.get("http://172.16.29.158:8080/api/v1/device/get-fuck-flow", (d) => {
+    //     console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+    //     console.log(d);
+    //     $('#today').text(d.data.today);
+    //     $('#month').text(d.data.month);
+    //     $('#all').text(d.data.all);
+    //   });
+    //
+    // }, 30000);
   </script>
 </body>
 
