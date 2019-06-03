@@ -142,12 +142,8 @@
       };
       // //初始化echarts实例
       var myChart = echarts.init(document.getElementById('chartmain'));
-
-
-  // //使用制定的配置项和数据显示图表
-  myChart.setOption(option);
-  // clearInterval(setTimeout)
-  });
+      myChart.setOption(option);
+    });
 
   $.post("http://172.16.29.158:8080/api/v1/user/login", {
       password: "e10adc3949ba59abbe56e057f20f883e",
