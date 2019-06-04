@@ -181,7 +181,7 @@ class Index extends PureComponent {
       left: '10px',
       padding: '5px 10px',
       border: '1px solid #d3d3d3',
-      backgroundColor: '#f9f9f9'
+      background: 'url(../../assets/daohang.png)'
     }
     const styleB = {
       position: 'absolute',
@@ -189,7 +189,10 @@ class Index extends PureComponent {
       bottom: '10px',
       padding: '10px',
       color: '#fff',
-      backgroundColor: '#000'
+      backgroundColor: 'red'
+    }
+    const styleColorwhite={
+      color:"white"
     }
     let yourFuckFlow=[{"number": 0,"show_time":""}];
     try
@@ -207,9 +210,13 @@ class Index extends PureComponent {
 
     return (
       <PageHeaderWrapper>
-        <Card bordered={false}>
+        <Card 
+          bordered={false}
+          className={"colortransparent"}
+        >
           <Row>
-            <Col span={4}>
+            
+            <Col span={4} >
               <div className={styles.infinite}>
                 <InfiniteScroll
                   initialLoad={false}
@@ -220,6 +227,7 @@ class Index extends PureComponent {
                 >
                   <List
                     size="large"
+                    color="white!important"
                     rowKey="id"
                     loading={loading}
                     dataSource={list===undefined?[]:list.data===undefined?[]:list.data.content}
@@ -245,35 +253,23 @@ class Index extends PureComponent {
                         }
                         catch (e) {
                         }
-                        console.log("点点:"+JSON.stringify(item));
-                        console.log("点点:"+JSON.stringify(this.state.infoWindow));
+                        console.log("点点:",(item));
+                        console.log("点点:",(this.state.infoWindow));
 
                       }}
                       >
                         <List.Item.Meta
-                          avatar={<Avatar src={item.img} shape="square" size="large" />}
                           title={item.restRoomName}
-                          description={<div>
-                            {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
-                              <span>
-                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} /> 摄像正常
-                            </span>:
-                              <span>
-                              <Icon type="close-square" style={{ color: '#FF0000', marginRight: 8 }} /> 摄像头离线
-                            </span>}
-
-                            <br />
-                            <span>
-                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} />     {this.state.infoWindow.gasStatusText}
-                            </span>
-                            <br />
-                            {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
-                              <span>
-                              <Icon type="check-square" style={{ color: '#66CD00', marginRight: 8 }} /> 公告正常
-                            </span>:
-                              <span>
-                              <Icon type="close-square" style={{ color: '#FF0000', marginRight: 8 }} /> 公告屏离线
-                            </span>}
+                          description={<div class="mineclassone">
+                          {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
+                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />摄像正常</span>:
+                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="close-square" />摄像头离线</span>}
+                          <br />
+                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />{this.state.infoWindow.gasStatusText}</span>
+                          <br />
+                          {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
+                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />公告正常</span>:
+                          <span style={{ color: '#FF0000', marginRight: 8 }}><Icon type="close-square" />公告屏离线</span>}
                           </div>}
                         />
 
@@ -285,8 +281,10 @@ class Index extends PureComponent {
               </div>
 
             </Col>
-            <Col span={20}>
-              <div className={styles.home}>
+            <Col span={14}>
+              <div 
+                style={{ padding: '0 24px 24px 24px' }}
+                className={styles.home}>
                 <Map center={this.state.map.center} zoom={13} plugins={['ToolBar']} zoomEnable amapkey="9859d68e8038928bd46f12fafc6f263c">
                   {
                     list!==undefined&&list.data!==undefined&&list.data.content!==undefined&&
@@ -347,7 +345,7 @@ class Index extends PureComponent {
                       description={this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.publish_time).fromNow()}
                     />
                   </Card>
-                  {/*<div className="customLayer" style={styleA}>*/}
+                  {/*<div className="customLayer" style={{styleA}}>*/}
                   {/*<h4>宁波</h4>*/}
                   {/*<p>{this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.time).fromNow()}</p>*/}
                   {/*</div>*/}
@@ -357,7 +355,27 @@ class Index extends PureComponent {
                   {/*</div>*/}
                 </Map>
               </div>
-              <div style={{ padding: '0 24px' }}>
+              <div 
+              style={{ padding: '0 24px'}}
+              >
+                <Suspense 
+                fallback={null}
+                >
+                  <SalesCard
+                    rangePickerValue={fuckTime}
+                    allNum={fuckFlow.status}
+                    salesData={yourFuckFlow}
+                    isActive={this.isActive}
+                    handleRangePickerChange={this.handleRangePickerChange}
+                    loading={loading}
+                    selectDate={this.selectDate}
+                    tabOnClick={this.searchData}
+                  />
+                </Suspense>
+              </div>
+            </Col>
+            <Col span={6}>
+              <div style={{ height:"778px"}}>
                 <Suspense fallback={null}>
                   <SalesCard
                     rangePickerValue={fuckTime}
