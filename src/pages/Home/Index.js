@@ -16,6 +16,7 @@ import { TimelineChart } from '@/components/Charts';
 
 
 const SalesCard = React.lazy(() => import('./SalesCard'));
+const GasCard = React.lazy(() => import('./GasCard'));
 //高德地图组件使用方法 https://elemefe.github.io/react-amap/components/infowindow
 /* eslint react/no-multi-comp:0 */
 @connect(({ restroom,device, loading }) => ({
@@ -91,6 +92,21 @@ class Index extends PureComponent {
             // message.success(`${JSON.stringify(this.state.gasFlow)}`);
           },
         });
+        // region 获取气体数据
+        // dispatch({
+        //   type: 'device/queryHomeGasList',
+        //   payload: {//1?endTm=1557368198&startTm=1557281798
+        //     restRoomId: 1,
+        //     startTm: Math.round(startTime.valueOf()/1000),
+        //     endTm: Math.round(endTime.valueOf()/1000),
+        //   },
+        //   callback:(a)=>{
+        //     console.log("气体数据啦啦啦:"+JSON.stringify(a));
+        //     // this.setState(gasFlow: a.)
+        //     // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+        //   },
+        // });
+        //endregion
       },
     });
 
@@ -170,6 +186,7 @@ class Index extends PureComponent {
     const {
       restroom: { list, fuckFlow },
       loading,
+      device: {gasFlow},
       dispatch
     } = this.props;
 
@@ -202,6 +219,42 @@ class Index extends PureComponent {
     catch (e) {
 
     }
+
+    //region 气体数据
+    let histroy=[];
+    try
+    {
+      if( gasFlow.code === 0 ){
+        histroy = gasFlow.data.data.items[0].histroyList
+      }
+    }
+    catch (e) {
+    }
+    let dv = undefined;
+    try
+    {
+      if(histroy===null || histroy ===undefined)   histroy=[{"df":0,"大厅":0,"男厕":0,"女厕":0,"无障碍":0,"x":"0"}];
+      if (histroy !== undefined){
+        const ds = new DataSet();
+        console.log("gasFlow:"+JSON.stringify(histroy));
+        dv = ds.createView().source(histroy);
+        dv.transform({
+          type: "fold",
+          fields: ["大厅", "女厕", "男厕", "无障碍"],
+          // 展开字段集
+          key: "city",
+          // key字段
+          value: "temperature" // value字段
+        });
+        console.log("gasFlow:dv"+dv);
+      }
+      // message.success(JSON.stringify(dv));
+    }
+    catch (e) {
+    }
+    //endregion 气体数据
+
+
     // message.error(JSON.stringify(yourFuckFlow));
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
 
@@ -381,11 +434,9 @@ class Index extends PureComponent {
                 <Suspense
                   fallback={null}
                 >
-                  <SalesCard
-                    className={styles.chartInfinite}
+                  <GasCard
                     rangePickerValue={fuckTime}
-                    allNum={fuckFlow.status}
-                    salesData={yourFuckFlow}
+                    salesData={dv}
                     isActive={this.isActive}
                     handleRangePickerChange={this.handleRangePickerChange}
                     loading={loading}
