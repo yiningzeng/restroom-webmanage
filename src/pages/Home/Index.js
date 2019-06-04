@@ -200,7 +200,7 @@ class Index extends PureComponent {
       yourFuckFlow= fuckFlow.data;
     }
     catch (e) {
-      
+
     }
     // message.error(JSON.stringify(yourFuckFlow));
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
@@ -210,13 +210,13 @@ class Index extends PureComponent {
 
     return (
       <PageHeaderWrapper>
-        <Card 
+        <Card
           bordered={false}
-          className={"colortransparent"}
+          className="colortransparent"
         >
           <Row>
-            
-            <Col span={4} >
+
+            <Col span={4}>
               <div className={styles.infinite}>
                 <InfiniteScroll
                   initialLoad={false}
@@ -282,7 +282,7 @@ class Index extends PureComponent {
 
             </Col>
             <Col span={14}>
-              <div 
+              <div
                 style={{ padding: '0 24px 24px 24px' }}
                 className={styles.home}>
                 <Map center={this.state.map.center} zoom={13} plugins={['ToolBar']} zoomEnable amapkey="9859d68e8038928bd46f12fafc6f263c">
@@ -355,29 +355,34 @@ class Index extends PureComponent {
                   {/*</div>*/}
                 </Map>
               </div>
-              <div 
-              style={{ padding: '0 24px'}}
-              >
-                <Suspense 
-                fallback={null}
-                >
-                  <SalesCard
-                    rangePickerValue={fuckTime}
-                    allNum={fuckFlow.status}
-                    salesData={yourFuckFlow}
-                    isActive={this.isActive}
-                    handleRangePickerChange={this.handleRangePickerChange}
-                    loading={loading}
-                    selectDate={this.selectDate}
-                    tabOnClick={this.searchData}
-                  />
-                </Suspense>
-              </div>
             </Col>
             <Col span={6}>
-              <div style={{ height:"778px"}}>
-                <Suspense fallback={null}>
+              <Row>
+                <div>
+                  <Suspense fallback={null}>
+                    <SalesCard
+                      className={styles.chartInfinite}
+                      rangePickerValue={fuckTime}
+                      allNum={fuckFlow.status}
+                      salesData={yourFuckFlow}
+                      isActive={this.isActive}
+                      handleRangePickerChange={this.handleRangePickerChange}
+                      loading={loading}
+                      selectDate={this.selectDate}
+                      tabOnClick={this.searchData}
+                    />
+                  </Suspense>
+                </div>
+              </Row>
+              <Row>
+              <div
+                style={{ padding: '0 24px'}}
+              >
+                <Suspense
+                  fallback={null}
+                >
                   <SalesCard
+                    className={styles.chartInfinite}
                     rangePickerValue={fuckTime}
                     allNum={fuckFlow.status}
                     salesData={yourFuckFlow}
@@ -389,6 +394,7 @@ class Index extends PureComponent {
                   />
                 </Suspense>
               </div>
+              </Row>
             </Col>
           </Row>
 
