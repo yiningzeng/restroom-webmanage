@@ -35,7 +35,7 @@ const cols = {
 
 const SalesCard = memo(
   ({ rangePickerValue, salesData, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
-    <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
+    <div>
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
@@ -64,7 +64,7 @@ const SalesCard = memo(
         >
           <TabPane
             tab={<FormattedMessage id="app.analysis.1" defaultMessage="Sales" />}
-            key="1"
+            key="gas-1"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -113,7 +113,7 @@ const SalesCard = memo(
           </TabPane>
           <TabPane
             tab={<FormattedMessage id="app.analysis.2" defaultMessage="Visits" />}
-            key="36"
+            key="gas-36"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -161,7 +161,7 @@ const SalesCard = memo(
           </TabPane>
           <TabPane
             tab={<FormattedMessage id="app.analysis.3" defaultMessage="Visits" />}
-            key="32"
+            key="gas-32"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -209,7 +209,7 @@ const SalesCard = memo(
           </TabPane>
           <TabPane
             tab={<FormattedMessage id="app.analysis.4" defaultMessage="Visits" />}
-            key="33"
+            key="gas-33"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -257,7 +257,7 @@ const SalesCard = memo(
           </TabPane>
           <TabPane
             tab={<FormattedMessage id="app.analysis.5" defaultMessage="Visits" />}
-            key="34"
+            key="gas-34"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -305,7 +305,7 @@ const SalesCard = memo(
           </TabPane>
           <TabPane
             tab={<FormattedMessage id="app.analysis.6" defaultMessage="Visits" />}
-            key="35"
+            key="gas-35"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -353,7 +353,7 @@ const SalesCard = memo(
           </TabPane>
           <TabPane
             tab={<FormattedMessage id="app.analysis.7" defaultMessage="Visits" />}
-            key="37"
+            key="gas-37"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -401,7 +401,7 @@ const SalesCard = memo(
           </TabPane>
           <TabPane
             tab={<FormattedMessage id="app.analysis.8" defaultMessage="Visits" />}
-            key="38"
+            key="gas-38"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -449,7 +449,7 @@ const SalesCard = memo(
           </TabPane>
           <TabPane
             tab={<FormattedMessage id="app.analysis.9" defaultMessage="Visits" />}
-            key="39"
+            key="gas-39"
           >
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -493,7 +493,7 @@ const SalesCard = memo(
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
   )
 );
 

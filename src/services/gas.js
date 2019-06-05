@@ -45,7 +45,7 @@ export async function query(params) {
 }
 
 export async function queryHomeGasList(params) {
-  return request(`/api/v1/device/gas-home/list/${params.restRoomId}?${stringify(params)}`,{
+  return request(`/api/v2/device/gas-home/list/${params.restRoomId}?${stringify(params)}`,{
     method: 'GET',
     headers:{
       authorization: sessionStorage.getItem("token"),
