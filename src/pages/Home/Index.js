@@ -220,7 +220,7 @@ class Index extends PureComponent {
         >
           <Row>
 
-            <Col span={4}>
+            <Col span={4} id="dazhu">
               <div className={styles.infinite}>
                 <InfiniteScroll
                   initialLoad={false}
