@@ -34,7 +34,7 @@ const cols = {
 
 const SalesCard = memo(
   ({ rangePickerValue, salesData, allNum, isActive, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
-    <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
+    <div>    {/*<Card loading={loading} bordered={false} bodyStyle={{ padding: 0, background: "#f3f"}}> /!**此处可以通过bodyStyle设置card样式**!/*/}
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
@@ -404,7 +404,7 @@ const SalesCard = memo(
           </TabPane>
         </Tabs>
       </div>
-    </Card>
+    </div>
   )
 );
 
