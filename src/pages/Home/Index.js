@@ -32,6 +32,10 @@ class Index extends PureComponent {
     restRoomId: 1,
     isActive: "today",
 
+    rangePickerValueGas: getTimeDistance('day'),
+    restRoomIdGas: 1,
+    isActiveGas: "today",
+
     gasFlow:undefined,
     weatherInfo: undefined,
     map:{
@@ -93,25 +97,26 @@ class Index extends PureComponent {
           },
         });
         // region 获取气体数据
-        // dispatch({
-        //   type: 'device/queryHomeGasList',
-        //   payload: {//1?endTm=1557368198&startTm=1557281798
-        //     restRoomId: 1,
-        //     startTm: Math.round(startTime.valueOf()/1000),
-        //     endTm: Math.round(endTime.valueOf()/1000),
-        //   },
-        //   callback:(a)=>{
-        //     console.log("气体数据啦啦啦:"+JSON.stringify(a));
-        //     // this.setState(gasFlow: a.)
-        //     // message.success(`${JSON.stringify(this.state.gasFlow)}`);
-        //   },
-        // });
+        dispatch({
+          type: 'device/queryHomeGasList',
+          payload: {//1?endTm=1557368198&startTm=1557281798
+            restRoomId: 1,
+            startTm: startTime,
+            endTm: endTime,
+          },
+          callback:(a)=>{
+            console.log("v2最新气体数据:"+JSON.stringify(a));
+            // this.setState(gasFlow: a.)
+            // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+          },
+        });
         //endregion
       },
     });
 
   }
 
+  //region 客流
   searchData = (activeKey,searchType) =>{
     // message.error(activeKey+" "+searchType);
     const { dispatch } = this.props;
@@ -181,6 +186,82 @@ class Index extends PureComponent {
     if(sessionStorage.getItem("select") === type)return fuckStyles.currentDate;
     return '';
   };
+  //endregion
+
+  //region 控制质量图表
+  searchDataGas = (activeKey,searchType) =>{
+    activeKey = activeKey.replace("gas-","");
+    // message.error(activeKey+" "+searchType);
+    const { dispatch } = this.props;
+    this.setState({
+      ...this.state,
+      restRoomIdGas: activeKey
+    });
+    let startformat='YYYY-MM-DD 06:00:00';
+    let endformat='YYYY-MM-DD 22:00:00';
+    if(searchType === 1){
+      startformat='YYYY-MM-DD 00:00:00';
+      endformat='YYYY-MM-DD 23:59:59';
+    }
+    const startTime = moment(sessionStorage.getItem("startTimeGas")).format(startformat);
+    const endTime = moment(sessionStorage.getItem("endTimeGas")).format(endformat);
+    // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
+    try
+    {
+      // region 获取气体数据
+      dispatch({
+        type: 'device/queryHomeGasList',
+        payload: {//1?endTm=1557368198&startTm=1557281798
+          restRoomId: activeKey,
+          startTm: startTime,
+          endTm: endTime,
+        },
+        callback:(a)=>{
+          console.log("v2最新气体数据:"+JSON.stringify(a));
+          // this.setState(gasFlow: a.)
+          // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+        },
+      });
+      //endregion
+    }
+    catch (e) {
+    }
+  }
+
+  selectDateGas = type => {
+    sessionStorage.setItem("startTimeGas", getTimeDistance(type)[0]);
+    sessionStorage.setItem("endTimeGas", getTimeDistance(type)[1]);
+    sessionStorage.setItem("selectGas", type);
+    this.setState({
+      isActiveGas: type,
+      rangePickerValueGas: [...getTimeDistance(type)],
+    });
+    if(type !== "today") this.searchDataGas(this.state.restRoomIdGas,1);
+    else this.searchDataGas(this.state.restRoomIdGas, 0);
+
+    // this.searchData(this.state.restRoomId);
+  };
+
+
+  handleRangePickerChangeGas = rangePickerValue => {
+    sessionStorage.setItem("startTimeGas", rangePickerValue[0]);
+    sessionStorage.setItem("endTimeGas", rangePickerValue[1]);
+    // message.success("handleRangePickerChange"+JSON.stringify(rangePickerValue));
+    this.setState({
+      rangePickerValueGas: [...rangePickerValue],
+    });
+    this.searchDataGas(this.state.restRoomIdGas);
+    // this.searchData(this.state.restRoomId);
+    // dispatch({
+    //   type: 'chart/fetchSalesData',
+    // });
+  };
+
+  isActiveGas = type => {
+    if(sessionStorage.getItem("selectGas") === type)return fuckStyles.currentDate;
+    return '';
+  };
+  //endregion
 
   render() {
     const {
@@ -198,7 +279,10 @@ class Index extends PureComponent {
       left: '10px',
       padding: '5px 10px',
       border: '1px solid #d3d3d3',
-      background: 'url(../../assets/daohang.png)'
+      backgroundColor: '#92c0ff',
+      opacity: '0.4',
+      border:'4px solid #2bccff',
+      // border-radius: '20px',
     }
     const styleB = {
       position: 'absolute',
@@ -221,33 +305,20 @@ class Index extends PureComponent {
     }
 
     //region 气体数据
-    let histroy=[];
-    try
-    {
-      if( gasFlow.code === 0 ){
-        histroy = gasFlow.data.data.items[0].histroyList
-      }
-    }
-    catch (e) {
-    }
     let dv = undefined;
     try
     {
-      if(histroy===null || histroy ===undefined)   histroy=[{"df":0,"大厅":0,"男厕":0,"女厕":0,"无障碍":0,"x":"0"}];
-      if (histroy !== undefined){
-        const ds = new DataSet();
-        console.log("gasFlow:"+JSON.stringify(histroy));
-        dv = ds.createView().source(histroy);
-        dv.transform({
-          type: "fold",
-          fields: ["大厅", "女厕", "男厕", "无障碍"],
-          // 展开字段集
-          key: "city",
-          // key字段
-          value: "temperature" // value字段
-        });
-        console.log("gasFlow:dv"+dv);
-      }
+      const ds = new DataSet();
+      dv = ds.createView().source(gasFlow.data[0].infoGases);
+      dv.transform({
+        type: "fold",
+        fields: ["大厅", "女厕", "男厕", "无障碍"],
+        // 展开字段集
+        key: "city",
+        // key字段
+        value: "score" // value字段
+      });
+      console.log("gasFlow:dv"+dv);
       // message.success(JSON.stringify(dv));
     }
     catch (e) {
@@ -259,17 +330,18 @@ class Index extends PureComponent {
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
 
     const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
-
+    const  fuckTimeGas =[moment(sessionStorage.getItem("startTimeGas")),moment(sessionStorage.getItem("endTimeGas"))];
 
     return (
       <PageHeaderWrapper>
         <Card
+          style={{ padding: '0' }}
           bordered={false}
           className="colortransparent"
         >
           <Row>
 
-            <Col span={4}>
+            <Col span={4} id="dazhu">
               <div className={styles.infinite}>
                 <InfiniteScroll
                   initialLoad={false}
@@ -316,7 +388,7 @@ class Index extends PureComponent {
                           description={<div class="mineclassone">
                           {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
                           <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />摄像正常</span>:
-                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="close-square" />摄像头离线</span>}
+                          <span style={{ color: "#FF0000", marginRight: 8 }}><Icon type="close-square" />摄像头离线</span>}
                           <br />
                           <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />{this.state.infoWindow.gasStatusText}</span>
                           <br />
@@ -334,9 +406,11 @@ class Index extends PureComponent {
               </div>
 
             </Col>
-            <Col span={14}>
+            <Col span={20}>
+            <Row
+              style={{ margin: '0 0 0 24px' }}>
               <div
-                style={{ padding: '0 24px 24px 24px' }}
+                style={{ margin: '0' }}
                 className={styles.home}>
                 <Map center={this.state.map.center} zoom={13} plugins={['ToolBar']} zoomEnable amapkey="9859d68e8038928bd46f12fafc6f263c">
                   {
@@ -408,43 +482,48 @@ class Index extends PureComponent {
                   {/*</div>*/}
                 </Map>
               </div>
-            </Col>
-            <Col span={6}>
-              <Row>
-                <div>
-                  <Suspense fallback={null}>
-                    <SalesCard
-                      className={styles.chartInfinite}
-                      rangePickerValue={fuckTime}
-                      allNum={fuckFlow.status}
-                      salesData={yourFuckFlow}
-                      isActive={this.isActive}
-                      handleRangePickerChange={this.handleRangePickerChange}
-                      loading={loading}
-                      selectDate={this.selectDate}
-                      tabOnClick={this.searchData}
-                    />
-                  </Suspense>
-                </div>
               </Row>
               <Row>
-              <div
-                style={{ padding: '0 24px'}}
-              >
-                <Suspense
-                  fallback={null}
+                <Col span={12}
+                className={styles.biankuang}
                 >
-                  <GasCard
-                    rangePickerValue={fuckTime}
-                    salesData={dv}
-                    isActive={this.isActive}
-                    handleRangePickerChange={this.handleRangePickerChange}
-                    loading={loading}
-                    selectDate={this.selectDate}
-                    tabOnClick={this.searchData}
-                  />
-                </Suspense>
-              </div>
+                <div>
+                  <div
+                  >
+                    <Suspense fallback={null}>
+                      <SalesCard
+                        className={styles.chartInfinite}
+                        rangePickerValue={fuckTime}
+                        allNum={fuckFlow.status}
+                        salesData={yourFuckFlow}
+                        isActive={this.isActive}
+                        handleRangePickerChange={this.handleRangePickerChange}
+                        loading={loading}
+                        selectDate={this.selectDate}
+                        tabOnClick={this.searchData}
+                      />
+                    </Suspense>
+                  </div>
+                </div>
+                  </Col>
+                  <Col span={12}
+                  className={styles.biankuang}
+                  >
+                      <div>
+                      <Suspense fallback={null}>
+                        <GasCard
+                          className={styles.chartInfinite}
+                          rangePickerValue={fuckTimeGas}
+                          salesData={dv}
+                          isActive={this.isActiveGas}
+                          handleRangePickerChange={this.handleRangePickerChangeGas}
+                          loading={loading}
+                          selectDate={this.selectDateGas}
+                          tabOnClick={this.searchDataGas}
+                        />
+                      </Suspense>
+                      </div>
+                    </Col>
               </Row>
             </Col>
           </Row>
