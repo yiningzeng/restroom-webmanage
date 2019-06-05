@@ -181,7 +181,10 @@ class Index extends PureComponent {
       left: '10px',
       padding: '5px 10px',
       border: '1px solid #d3d3d3',
-      background: 'url(../../assets/daohang.png)'
+      backgroundColor: '#92c0ff',
+      opacity: '0.4',
+      border:'4px solid #2bccff',
+      // border-radius: '20px',
     }
     const styleB = {
       position: 'absolute',
@@ -211,6 +214,7 @@ class Index extends PureComponent {
     return (
       <PageHeaderWrapper>
         <Card
+          style={{ padding: '0' }}
           bordered={false}
           className="colortransparent"
         >
@@ -263,7 +267,7 @@ class Index extends PureComponent {
                           description={<div class="mineclassone">
                           {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
                           <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />摄像正常</span>:
-                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="close-square" />摄像头离线</span>}
+                          <span style={{ color: "#FF0000", marginRight: 8 }}><Icon type="close-square" />摄像头离线</span>}
                           <br />
                           <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />{this.state.infoWindow.gasStatusText}</span>
                           <br />
@@ -281,9 +285,11 @@ class Index extends PureComponent {
               </div>
 
             </Col>
-            <Col span={14}>
+            <Col span={20}>
+            <Row
+              style={{ margin: '0 0 0 24px' }}>
               <div
-                style={{ padding: '0 24px 24px 24px' }}
+                style={{ margin: '0' }}
                 className={styles.home}>
                 <Map center={this.state.map.center} zoom={13} plugins={['ToolBar']} zoomEnable amapkey="9859d68e8038928bd46f12fafc6f263c">
                   {
@@ -355,45 +361,49 @@ class Index extends PureComponent {
                   {/*</div>*/}
                 </Map>
               </div>
-            </Col>
-            <Col span={6}>
-              <Row>
-                <div>
-                  <Suspense fallback={null}>
-                    <SalesCard
-                      className={styles.chartInfinite}
-                      rangePickerValue={fuckTime}
-                      allNum={fuckFlow.status}
-                      salesData={yourFuckFlow}
-                      isActive={this.isActive}
-                      handleRangePickerChange={this.handleRangePickerChange}
-                      loading={loading}
-                      selectDate={this.selectDate}
-                      tabOnClick={this.searchData}
-                    />
-                  </Suspense>
-                </div>
               </Row>
               <Row>
-              <div
-                style={{ padding: '0 24px'}}
-              >
-                <Suspense
-                  fallback={null}
+                <Col span={12}
+                className={styles.biankuang}
                 >
-                  <SalesCard
-                    className={styles.chartInfinite}
-                    rangePickerValue={fuckTime}
-                    allNum={fuckFlow.status}
-                    salesData={yourFuckFlow}
-                    isActive={this.isActive}
-                    handleRangePickerChange={this.handleRangePickerChange}
-                    loading={loading}
-                    selectDate={this.selectDate}
-                    tabOnClick={this.searchData}
-                  />
-                </Suspense>
-              </div>
+                <div>
+                  <div
+                  >
+                    <Suspense fallback={null}>
+                      <SalesCard
+                        className={styles.chartInfinite}
+                        rangePickerValue={fuckTime}
+                        allNum={fuckFlow.status}
+                        salesData={yourFuckFlow}
+                        isActive={this.isActive}
+                        handleRangePickerChange={this.handleRangePickerChange}
+                        loading={loading}
+                        selectDate={this.selectDate}
+                        tabOnClick={this.searchData}
+                      />
+                    </Suspense>
+                  </div>
+                </div>
+                  </Col>
+                  <Col span={12}
+                  className={styles.biankuang}
+                  >
+                      <div>
+                      <Suspense fallback={null}>
+                        <SalesCard
+                          className={styles.chartInfinite}
+                          rangePickerValue={fuckTime}
+                          allNum={fuckFlow.status}
+                          salesData={yourFuckFlow}
+                          isActive={this.isActive}
+                          handleRangePickerChange={this.handleRangePickerChange}
+                          loading={loading}
+                          selectDate={this.selectDate}
+                          tabOnClick={this.searchData}
+                        />
+                      </Suspense>
+                      </div>
+                    </Col>
               </Row>
             </Col>
           </Row>
