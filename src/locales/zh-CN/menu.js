@@ -1,6 +1,8 @@
 export default {
   'menu.workspace': '监控总览',
   'menu.home': '首页',
+  'menu.air': '空气质量',
+  'menu.passenger': '客流统计',
   'menu.video-list': '公厕监控',
   'menu.smell-list': '气味监控',
   'menu.restroom': '公厕管理',
