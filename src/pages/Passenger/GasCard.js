@@ -34,20 +34,20 @@ const cols = {
 
 
 const SalesCard = memo(
-  ({ rangePickerValue, salesData, isActive, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
+  ({ rangePickerValue, salesData, handleRangePickerChange, tabOnClick, loading, selectDate }) => (
     <div>
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
             <div className={styles.salesExtraWrap}>
               <div className={styles.salesExtra}>
-                <a className={isActive('today')} onClick={() => selectDate('today')}>
+                <a onClick={() => selectDate('today')}>
                   <FormattedMessage id="app.analysis.all-day" defaultMessage="All Day" />
                 </a>
-                <a className={isActive('week')} onClick={() => selectDate('week')}>
+                <a onClick={() => selectDate('week')}>
                   <FormattedMessage id="app.analysis.all-week" defaultMessage="All Week" />
                 </a>
-                <a className={isActive('month')} onClick={() => selectDate('month')}>
+                <a onClick={() => selectDate('month')}>
                   <FormattedMessage id="app.analysis.all-month" defaultMessage="All Month" />
                 </a>
               </div>
@@ -71,9 +71,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="update_time"/>
+                        <Axis name="x"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -87,13 +87,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -120,9 +120,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="update_time"/>
+                        <Axis name="x"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -136,13 +136,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -168,9 +168,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="update_time"/>
+                        <Axis name="x"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -184,13 +184,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -216,9 +216,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="update_time"/>
+                        <Axis name="x"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -232,13 +232,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -264,9 +264,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="update_time"/>
+                        <Axis name="x"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -280,13 +280,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -312,9 +312,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="update_time"/>
+                        <Axis name="x"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -328,13 +328,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -360,9 +360,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="update_time"/>
+                        <Axis name="x"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -376,13 +376,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -408,9 +408,9 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="update_time"/>
+                        <Axis name="x"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -424,13 +424,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="update_time*temperature"
+                          position="x*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -454,9 +454,9 @@ const SalesCard = memo(
             <Row>
               <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <div className={styles.salesBar}>
-                  {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
+                  {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                     <Legend/>
-                    <Axis name="update_time"/>
+                    <Axis name="x"/>
                     <Axis
                       name="temperature"
                       label={{
@@ -470,13 +470,13 @@ const SalesCard = memo(
                     />
                     <Geom
                       type="line"
-                      position="update_time*temperature"
+                      position="x*temperature"
                       size={2}
                       color="city"
                     />
                     <Geom
                       type="point"
-                      position="update_time*temperature"
+                      position="x*temperature"
                       size={4}
                       shape="circle"
                       color="city"
