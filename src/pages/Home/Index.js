@@ -312,14 +312,14 @@ class Index extends PureComponent {
     try
     {
       const ds = new DataSet();
-      dv = ds.createView().source(gasFlow.data[0].infoGases);
+      dv = ds.createView().source(gasFlow.data);
       dv.transform({
         type: "fold",
         fields: ["大厅", "女厕", "男厕", "无障碍"],
         // 展开字段集
         key: "city",
         // key字段
-        value: "score" // value字段
+        value: "temperature" // value字段
       });
       console.log("gasFlow:dv"+dv);
       // message.success(JSON.stringify(dv));

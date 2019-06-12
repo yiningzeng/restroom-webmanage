@@ -73,7 +73,7 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="update_time"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -87,13 +87,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -122,7 +122,7 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="update_time"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -136,13 +136,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -170,7 +170,7 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="update_time"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -184,13 +184,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -218,7 +218,7 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="update_time"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -232,13 +232,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -266,7 +266,7 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="update_time"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -280,13 +280,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -314,7 +314,7 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="update_time"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -328,13 +328,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -362,7 +362,7 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="update_time"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -376,13 +376,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -410,7 +410,7 @@ const SalesCard = memo(
                     <div className={styles.salesBar}>
                       {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                         <Legend/>
-                        <Axis name="x"/>
+                        <Axis name="update_time"/>
                         <Axis
                           name="temperature"
                           label={{
@@ -424,13 +424,13 @@ const SalesCard = memo(
                         />
                         <Geom
                           type="line"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={2}
                           color="city"
                         />
                         <Geom
                           type="point"
-                          position="x*temperature"
+                          position="update_time*temperature"
                           size={4}
                           shape="circle"
                           color="city"
@@ -456,7 +456,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
                     <Legend/>
-                    <Axis name="x"/>
+                    <Axis name="update_time"/>
                     <Axis
                       name="temperature"
                       label={{
@@ -470,13 +470,13 @@ const SalesCard = memo(
                     />
                     <Geom
                       type="line"
-                      position="x*temperature"
+                      position="update_time*temperature"
                       size={2}
                       color="city"
                     />
                     <Geom
                       type="point"
-                      position="x*temperature"
+                      position="update_time*temperature"
                       size={4}
                       shape="circle"
                       color="city"
