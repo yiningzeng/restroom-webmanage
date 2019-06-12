@@ -13,10 +13,7 @@ import fuckStyles from './Analysis.less';
 import { Map,Marker,InfoWindow } from "react-amap";
 import InfiniteScroll from 'react-infinite-scroller';
 import { TimelineChart } from '@/components/Charts';
-
-
 const SalesCard = React.lazy(() => import('./SalesCard'));
-const GasCard = React.lazy(() => import('./GasCard'));
 //高德地图组件使用方法 https://elemefe.github.io/react-amap/components/infowindow
 /* eslint react/no-multi-comp:0 */
 @connect(({ restroom,device, loading }) => ({
@@ -144,8 +141,9 @@ class Index extends PureComponent {
           type: searchType,
         },
         callback:(a)=>{
+          console.log(this)
           // this.setState(gasFlow: a.)
-          // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+          message.success(`${JSON.stringify(this.state.gasFlow)}`);
         },
       });
     }
@@ -188,81 +186,8 @@ class Index extends PureComponent {
   };
   //endregion
 
-  //region 控制质量图表
-  searchDataGas = (activeKey,searchType) =>{
-    activeKey = activeKey.replace("gas-","");
-    // message.error(activeKey+" "+searchType);
-    const { dispatch } = this.props;
-    this.setState({
-      ...this.state,
-      restRoomIdGas: activeKey
-    });
-    let startformat='YYYY-MM-DD 06:00:00';
-    let endformat='YYYY-MM-DD 22:00:00';
-    if(searchType === 1){
-      startformat='YYYY-MM-DD 00:00:00';
-      endformat='YYYY-MM-DD 23:59:59';
-    }
-    const startTime = moment(sessionStorage.getItem("startTimeGas")).format(startformat);
-    const endTime = moment(sessionStorage.getItem("endTimeGas")).format(endformat);
-    // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
-    try
-    {
-      // region 获取气体数据
-      dispatch({
-        type: 'device/queryHomeGasList',
-        payload: {//1?endTm=1557368198&startTm=1557281798
-          restRoomId: activeKey,
-          startTm: startTime,
-          endTm: endTime,
-        },
-        callback:(a)=>{
-          console.log("v2最新气体数据:"+JSON.stringify(a));
-          // this.setState(gasFlow: a.)
-          // message.success(`${JSON.stringify(this.state.gasFlow)}`);
-        },
-      });
-      //endregion
-    }
-    catch (e) {
-    }
-  }
-
-  selectDateGas = type => {
-    sessionStorage.setItem("startTimeGas", getTimeDistance(type)[0]);
-    sessionStorage.setItem("endTimeGas", getTimeDistance(type)[1]);
-    sessionStorage.setItem("selectGas", type);
-    this.setState({
-      isActiveGas: type,
-      rangePickerValueGas: [...getTimeDistance(type)],
-    });
-    if(type !== "today") this.searchDataGas(this.state.restRoomIdGas,1);
-    else this.searchDataGas(this.state.restRoomIdGas, 0);
-
-    // this.searchData(this.state.restRoomId);
-  };
-
-
-  handleRangePickerChangeGas = rangePickerValue => {
-    sessionStorage.setItem("startTimeGas", rangePickerValue[0]);
-    sessionStorage.setItem("endTimeGas", rangePickerValue[1]);
-    // message.success("handleRangePickerChange"+JSON.stringify(rangePickerValue));
-    this.setState({
-      rangePickerValueGas: [...rangePickerValue],
-    });
-    this.searchDataGas(this.state.restRoomIdGas);
-    // this.searchData(this.state.restRoomId);
-    // dispatch({
-    //   type: 'chart/fetchSalesData',
-    // });
-  };
-
-  isActiveGas = type => {
-    if(sessionStorage.getItem("selectGas") === type)return fuckStyles.currentDate;
-    return '';
-  };
   //endregion
-
+  
   render() {
     const {
       restroom: { list, fuckFlow },
@@ -270,7 +195,6 @@ class Index extends PureComponent {
       device: {gasFlow},
       dispatch
     } = this.props;
-    console.log(fuckFlow)
 
 
     // message.success(JSON.stringify(list));
@@ -299,40 +223,16 @@ class Index extends PureComponent {
     let yourFuckFlow=[{"number": 0,"show_time":""}];
     try
     {
+      // console.log(this)
       yourFuckFlow= fuckFlow.data;
-      onsole.log(yourFuckFlow)
     }
     catch (e) {
 
     }
-
-    //region 气体数据
-    let dv = undefined;
-    try
-    {
-      const ds = new DataSet();
-      dv = ds.createView().source(gasFlow.data[0].infoGases);
-      dv.transform({
-        type: "fold",
-        fields: ["大厅", "女厕", "男厕", "无障碍"],
-        // 展开字段集
-        key: "city",
-        // key字段
-        value: "score" // value字段
-      });
-      console.log("gasFlow:dv"+dv);
-      // message.success(JSON.stringify(dv));
-    }
-    catch (e) {
-    }
-    //endregion 气体数据
-
-
     // message.error(JSON.stringify(yourFuckFlow));
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
 
     const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
-    const  fuckTimeGas =[moment(sessionStorage.getItem("startTimeGas")),moment(sessionStorage.getItem("endTimeGas"))];
 
     return (
       <PageHeaderWrapper>
@@ -362,7 +262,6 @@ class Index extends PureComponent {
                       <List.Item onClick={()=>{
                         try {
                           this.searchData(item.restRoomId,sessionStorage.getItem("select")==="today"?0:1);
-
                           this.setState({
                             ...this.state,
                             infoWindow: {
@@ -409,120 +308,95 @@ class Index extends PureComponent {
 
             </Col>
             <Col span={20}>
-            <Row
-              style={{ margin: '0 0 0 24px' }}>
-              <div
-                style={{ margin: '0' }}
-                className={styles.home}>
-                <Map center={this.state.map.center} zoom={13} plugins={['ToolBar']} zoomEnable amapkey="9859d68e8038928bd46f12fafc6f263c">
-                  {
-                    list!==undefined&&list.data!==undefined&&list.data.content!==undefined&&
-                    list.data.content.map((item, i) => (
-                      <Marker
-                        position={[item.longitude,item.latitude]}
-                        clickable
-                        events={{
-                        created: (instance) => {
-                          console.log('Marker 实例创建成功；如果你需要对原生实例进行操作，可以从这里开始；');
-                          console.log(instance);
-                        },
-                        click: (e) => {
-                          this.setState({
-                            ...this.state,
-                            infoWindow:{
-                            ...this.state.infoWindow,
-                              visible:true,
-                              name:item.restRoomName,
-                              position:[item.longitude, item.latitude],
-                              videoStatus: item.deviceCameras.length>0&& item.deviceCameras[0].online === 1 ?"success":"error",
-                              videoStatusTest: item.deviceCameras.length>0&& item.deviceCameras[0].online === 1 ?"摄像正常":"摄像头离线",
-                              boardStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
-                              boardStatusText: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "公告正常" : "公告屏离线",
-                          }});
-                          console.log(`你点击了这个图标；调用参数为：${item.restRoomName}`);
-                          console.log(e);
-                        },
-                        dblclick: (e) => {
-                          // this.setState({infoWindowVisible:true});
-                          console.log(`你刚刚双击了这个图标；调用参数为：${item.restRoomName}`);
-                          console.log(e);
-                        },
-                        // ... 支持绑定所有原生的高德 Marker 事件
-                      }}
-                      />
-                    ))
-                  }
-                  <InfoWindow
-                    position={this.state.infoWindow.position}
-                    visible={this.state.infoWindow.visible}
-                    isCustom
-                  >
-                    <h3>{this.state.infoWindow.name}</h3>
-                    <Badge status={this.state.infoWindow.status} text={this.state.infoWindow.statusText} />
-                    <br />
-                    <Badge status={this.state.infoWindow.videoStatus} text={this.state.infoWindow.videoStatusTest} />
-                    <br />
-                    <Badge status={this.state.infoWindow.gasStatus} text={this.state.infoWindow.gasStatusText} />
-                    <br />
-                    <Badge status={this.state.infoWindow.boardStatus} text={this.state.infoWindow.boardStatusText} />
-                    <br />
-                    <button onClick={() => {this.setState({...this.state,infoWindow:{...this.state.infoWindow,visible:false}})}}>关闭</button>
-                  </InfoWindow>
-                  <Card className="customLayer" style={styleA}>
-                    <Card.Meta
-                      title={this.state.weatherInfo===undefined?'获取失败':this.state.weatherInfo.weather===undefined?'获取失败':`宁波 ${this.state.weatherInfo.weather.info} ${this.state.weatherInfo.weather.temperature}℃`}
-                      description={this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.publish_time).fromNow()}
-                    />
-                  </Card>
-                  {/*<div className="customLayer" style={{styleA}}>*/}
-                  {/*<h4>宁波</h4>*/}
-                  {/*<p>{this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.time).fromNow()}</p>*/}
-                  {/*</div>*/}
-                  {/*<div className="customLayer" style={styleB}>*/}
-                  {/*<p> Another Custom Layer</p>*/}
-                  {/*<Button onClick={()=>{alert('You Clicked!')}}>An Ant Design Button</Button>*/}
-                  {/*</div>*/}
-                </Map>
-              </div>
-              </Row>
               <Row>
-                <Col span={12}
-                >
-                <div>
-                  <div style={{background: 'whitesmoke',margin:'10px'}}
+              <Col span={12}
                   >
-                    <Suspense fallback={null}>
-                      <SalesCard
-                        className={styles.chartInfinite}
-                        rangePickerValue={fuckTime}
-                        allNum={fuckFlow.status}
-                        salesData={yourFuckFlow}
-                        isActive={this.isActive}
-                        handleRangePickerChange={this.handleRangePickerChange}
-                        loading={loading}
-                        selectDate={this.selectDate}
-                        tabOnClick={this.searchData}
-                      />
-                    </Suspense>
-                  </div>
-                </div>
+                    <div style={{background: 'whitesmoke',margin:'10px'}}>
+                      <div>
+                      这里放本日客流量
+                        <Suspense fallback={null}>
+                          <SalesCard
+                            className={styles.chartInfinite}
+                            rangePickerValue={fuckTime}
+                            allNum={fuckFlow.status}
+                            salesData={yourFuckFlow}
+                            isActive={this.isActive}
+                            handleRangePickerChange={this.handleRangePickerChange}
+                            loading={loading}
+                            selectDate={this.selectDate}
+                            tabOnClick={this.searchData}
+                          />
+                        </Suspense>
+                      </div>
+                    </div>
                   </Col>
                   <Col span={12}
                   >
-                      <div style={{background: 'whitesmoke',margin:'10px'}}>
-                      <Suspense fallback={null}>
-                        <GasCard
-                          className={styles.chartInfinite}
-                          rangePickerValue={fuckTimeGas}
-                          salesData={dv}
-                          isActive={this.isActiveGas}
-                          handleRangePickerChange={this.handleRangePickerChangeGas}
-                          loading={loading}
-                          selectDate={this.selectDateGas}
-                          tabOnClick={this.searchDataGas}
-                        />
-                      </Suspense>
+                    <div style={{background: 'whitesmoke',margin:'10px'}}>
+                      <div>
+                      这里放本日客流量
+                        <Suspense fallback={null}>
+                          <SalesCard
+                            className={styles.chartInfinite}
+                            rangePickerValue={fuckTime}
+                            allNum={fuckFlow.status}
+                            salesData={yourFuckFlow}
+                            isActive={this.isActive}
+                            handleRangePickerChange={this.handleRangePickerChange}
+                            loading={loading}
+                            selectDate={this.selectDate}
+                            tabOnClick={this.searchData}
+                          />
+                        </Suspense>
                       </div>
+                    </div>
+                  </Col>
+             </Row>
+              <Row>
+              <Col span={12}
+                  >
+                    <div style={{background: 'whitesmoke',margin:'10px'}}>
+                      <div>
+                      这里放本日客流量
+                        <Suspense fallback={null}>
+                          <SalesCard
+                            className={styles.chartInfinite}
+                            rangePickerValue={fuckTime}
+                            allNum={fuckFlow.status}
+                            salesData={yourFuckFlow}
+                            isActive={this.isActive}
+                            handleRangePickerChange={this.handleRangePickerChange}
+                            loading={loading}
+                            selectDate={this.selectDate}
+                            tabOnClick={this.searchData}
+                          />
+                        </Suspense>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col span={12} id="wo">
+                  
+                  <Row style={{'margin': '50px 0 0 30px '}}>
+                  这里是死数据，你放动态数据进去
+                      <Col span={8}>
+                        <div style={{'text-align': 'center','width': '200px','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid','border-radius': '100px'}}>
+                         今日 <div style={{'margin':'20px'}}>123</div>
+                         </div>
+                      </Col>
+                      <Col span={8}>
+                        <div style={{'text-align': 'center','width': '200px','color': 'rgb(43, 204, 255)','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid rgb(43, 204, 255)','border-radius': '100px'}}> 
+                        本周 <div style={{'margin':'20px'}}>523</div>
+                        </div>
+                      </Col>
+                      <Col span={8}>
+                        <div style={{'text-align': 'center','width': '200px','color': 'red','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid red','border-radius': '100px'}}> 
+                        本月 <div style={{'margin':'20px'}}>1251</div>
+                        </div>
+                      </Col>
+                      </Row>
+                      <Row>
+                        <div style={{'text-align': 'center','font-size': '28px'}}>数据单位：人次</div>
+                      </Row>
                     </Col>
               </Row>
             </Col>
