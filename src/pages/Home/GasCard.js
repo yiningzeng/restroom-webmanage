@@ -71,7 +71,7 @@ const SalesCard = memo(
                 <div className={styles.salesBar}>
                   <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      {(salesData !==undefined) && (<Chart height={210} data={salesData} scale={cols} forceFit>
+                      {(salesData !==undefined) && (<Chart height={300} data={salesData} scale={cols} forceFit>
                         <Legend/>
                         <Axis name="update_time"/>
                         <Axis
