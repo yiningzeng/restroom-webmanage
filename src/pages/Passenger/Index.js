@@ -13,10 +13,7 @@ import fuckStyles from './Analysis.less';
 import { Map,Marker,InfoWindow } from "react-amap";
 import InfiniteScroll from 'react-infinite-scroller';
 import { TimelineChart } from '@/components/Charts';
-
-
 const SalesCard = React.lazy(() => import('./SalesCard'));
-const GasCard = React.lazy(() => import('./GasCard'));
 //高德地图组件使用方法 https://elemefe.github.io/react-amap/components/infowindow
 /* eslint react/no-multi-comp:0 */
 @connect(({ restroom,device, loading }) => ({
@@ -144,8 +141,9 @@ class Index extends PureComponent {
           type: searchType,
         },
         callback:(a)=>{
+          console.log(this)
           // this.setState(gasFlow: a.)
-          // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+          message.success(`${JSON.stringify(this.state.gasFlow)}`);
         },
       });
     }
@@ -188,81 +186,8 @@ class Index extends PureComponent {
   };
   //endregion
 
-  //region 控制质量图表
-  searchDataGas = (activeKey,searchType) =>{
-    activeKey = activeKey.replace("gas-","");
-    // message.error(activeKey+" "+searchType);
-    const { dispatch } = this.props;
-    this.setState({
-      ...this.state,
-      restRoomIdGas: activeKey
-    });
-    let startformat='YYYY-MM-DD 06:00:00';
-    let endformat='YYYY-MM-DD 22:00:00';
-    if(searchType === 1){
-      startformat='YYYY-MM-DD 00:00:00';
-      endformat='YYYY-MM-DD 23:59:59';
-    }
-    const startTime = moment(sessionStorage.getItem("startTimeGas")).format(startformat);
-    const endTime = moment(sessionStorage.getItem("endTimeGas")).format(endformat);
-    // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
-    try
-    {
-      // region 获取气体数据
-      dispatch({
-        type: 'device/queryHomeGasList',
-        payload: {//1?endTm=1557368198&startTm=1557281798
-          restRoomId: activeKey,
-          startTm: startTime,
-          endTm: endTime,
-        },
-        callback:(a)=>{
-          console.log("v2最新气体数据:"+JSON.stringify(a));
-          // this.setState(gasFlow: a.)
-          // message.success(`${JSON.stringify(this.state.gasFlow)}`);
-        },
-      });
-      //endregion
-    }
-    catch (e) {
-    }
-  }
-
-  selectDateGas = type => {
-    sessionStorage.setItem("startTimeGas", getTimeDistance(type)[0]);
-    sessionStorage.setItem("endTimeGas", getTimeDistance(type)[1]);
-    sessionStorage.setItem("selectGas", type);
-    this.setState({
-      isActiveGas: type,
-      rangePickerValueGas: [...getTimeDistance(type)],
-    });
-    if(type !== "today") this.searchDataGas(this.state.restRoomIdGas,1);
-    else this.searchDataGas(this.state.restRoomIdGas, 0);
-
-    // this.searchData(this.state.restRoomId);
-  };
-
-
-  handleRangePickerChangeGas = rangePickerValue => {
-    sessionStorage.setItem("startTimeGas", rangePickerValue[0]);
-    sessionStorage.setItem("endTimeGas", rangePickerValue[1]);
-    // message.success("handleRangePickerChange"+JSON.stringify(rangePickerValue));
-    this.setState({
-      rangePickerValueGas: [...rangePickerValue],
-    });
-    this.searchDataGas(this.state.restRoomIdGas);
-    // this.searchData(this.state.restRoomId);
-    // dispatch({
-    //   type: 'chart/fetchSalesData',
-    // });
-  };
-
-  isActiveGas = type => {
-    if(sessionStorage.getItem("selectGas") === type)return fuckStyles.currentDate;
-    return '';
-  };
   //endregion
-
+  
   render() {
     const {
       restroom: { list, fuckFlow },
@@ -298,39 +223,16 @@ class Index extends PureComponent {
     let yourFuckFlow=[{"number": 0,"show_time":""}];
     try
     {
+      // console.log(this)
       yourFuckFlow= fuckFlow.data;
     }
     catch (e) {
 
     }
-
-    //region 气体数据
-    let dv = undefined;
-    try
-    {
-      const ds = new DataSet();
-      dv = ds.createView().source(gasFlow.data[0].infoGases);
-      dv.transform({
-        type: "fold",
-        fields: ["大厅", "女厕", "男厕", "无障碍"],
-        // 展开字段集
-        key: "city",
-        // key字段
-        value: "score" // value字段
-      });
-      console.log("gasFlow:dv"+dv);
-      // message.success(JSON.stringify(dv));
-    }
-    catch (e) {
-    }
-    //endregion 气体数据
-
-
     // message.error(JSON.stringify(yourFuckFlow));
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
 
     const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
-    const  fuckTimeGas =[moment(sessionStorage.getItem("startTimeGas")),moment(sessionStorage.getItem("endTimeGas"))];
 
     return (
       <PageHeaderWrapper>
@@ -360,7 +262,6 @@ class Index extends PureComponent {
                       <List.Item onClick={()=>{
                         try {
                           this.searchData(item.restRoomId,sessionStorage.getItem("select")==="today"?0:1);
-
                           this.setState({
                             ...this.state,
                             infoWindow: {
@@ -407,84 +308,95 @@ class Index extends PureComponent {
 
             </Col>
             <Col span={20}>
-            <Row>
-                            <Col span={12}
-                >
-                <div>
-                  <div
-                  >
-                    <Suspense fallback={null}>
-                      <SalesCard
-                        className={styles.chartInfinite}
-                        rangePickerValue={fuckTime}
-                        allNum={fuckFlow.status}
-                        salesData={yourFuckFlow}
-                        isActive={this.isActive}
-                        handleRangePickerChange={this.handleRangePickerChange}
-                        loading={loading}
-                        selectDate={this.selectDate}
-                        tabOnClick={this.searchData}
-                      />
-                    </Suspense>
-                  </div>
-                </div>
-                  </Col>
-                  <Col span={12}
-                  >
-                      <div>
-                      <Suspense fallback={null}>
-                        <GasCard
-                          className={styles.chartInfinite}
-                          rangePickerValue={fuckTimeGas}
-                          salesData={dv}
-                          isActive={this.isActiveGas}
-                          handleRangePickerChange={this.handleRangePickerChangeGas}
-                          loading={loading}
-                          selectDate={this.selectDateGas}
-                          tabOnClick={this.searchDataGas}
-                        />
-                      </Suspense>
-                      </div>
-                    </Col>
-            </Row>
               <Row>
-                <Col span={12}
-                >
-                <div>
-                  <div
+              <Col span={12}
                   >
-                    <Suspense fallback={null}>
-                      <SalesCard
-                        className={styles.chartInfinite}
-                        rangePickerValue={fuckTime}
-                        allNum={fuckFlow.status}
-                        salesData={yourFuckFlow}
-                        isActive={this.isActive}
-                        handleRangePickerChange={this.handleRangePickerChange}
-                        loading={loading}
-                        selectDate={this.selectDate}
-                        tabOnClick={this.searchData}
-                      />
-                    </Suspense>
-                  </div>
-                </div>
+                    <div style={{background: 'whitesmoke',margin:'10px'}}>
+                      <div>
+                      这里放本日客流量
+                        <Suspense fallback={null}>
+                          <SalesCard
+                            className={styles.chartInfinite}
+                            rangePickerValue={fuckTime}
+                            allNum={fuckFlow.status}
+                            salesData={yourFuckFlow}
+                            isActive={this.isActive}
+                            handleRangePickerChange={this.handleRangePickerChange}
+                            loading={loading}
+                            selectDate={this.selectDate}
+                            tabOnClick={this.searchData}
+                          />
+                        </Suspense>
+                      </div>
+                    </div>
                   </Col>
                   <Col span={12}
                   >
+                    <div style={{background: 'whitesmoke',margin:'10px'}}>
                       <div>
-                      <Suspense fallback={null}>
-                        <GasCard
-                          className={styles.chartInfinite}
-                          rangePickerValue={fuckTimeGas}
-                          salesData={dv}
-                          isActive={this.isActiveGas}
-                          handleRangePickerChange={this.handleRangePickerChangeGas}
-                          loading={loading}
-                          selectDate={this.selectDateGas}
-                          tabOnClick={this.searchDataGas}
-                        />
-                      </Suspense>
+                      这里放本日客流量
+                        <Suspense fallback={null}>
+                          <SalesCard
+                            className={styles.chartInfinite}
+                            rangePickerValue={fuckTime}
+                            allNum={fuckFlow.status}
+                            salesData={yourFuckFlow}
+                            isActive={this.isActive}
+                            handleRangePickerChange={this.handleRangePickerChange}
+                            loading={loading}
+                            selectDate={this.selectDate}
+                            tabOnClick={this.searchData}
+                          />
+                        </Suspense>
                       </div>
+                    </div>
+                  </Col>
+             </Row>
+              <Row>
+              <Col span={12}
+                  >
+                    <div style={{background: 'whitesmoke',margin:'10px'}}>
+                      <div>
+                      这里放本日客流量
+                        <Suspense fallback={null}>
+                          <SalesCard
+                            className={styles.chartInfinite}
+                            rangePickerValue={fuckTime}
+                            allNum={fuckFlow.status}
+                            salesData={yourFuckFlow}
+                            isActive={this.isActive}
+                            handleRangePickerChange={this.handleRangePickerChange}
+                            loading={loading}
+                            selectDate={this.selectDate}
+                            tabOnClick={this.searchData}
+                          />
+                        </Suspense>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col span={12} id="wo">
+                  
+                  <Row style={{'margin': '50px 0 0 30px '}}>
+                  这里是死数据，你放动态数据进去
+                      <Col span={8}>
+                        <div style={{'text-align': 'center','width': '200px','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid','border-radius': '100px'}}>
+                         今日 <div style={{'margin':'20px'}}>123</div>
+                         </div>
+                      </Col>
+                      <Col span={8}>
+                        <div style={{'text-align': 'center','width': '200px','color': 'rgb(43, 204, 255)','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid rgb(43, 204, 255)','border-radius': '100px'}}> 
+                        本周 <div style={{'margin':'20px'}}>523</div>
+                        </div>
+                      </Col>
+                      <Col span={8}>
+                        <div style={{'text-align': 'center','width': '200px','color': 'red','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid red','border-radius': '100px'}}> 
+                        本月 <div style={{'margin':'20px'}}>1251</div>
+                        </div>
+                      </Col>
+                      </Row>
+                      <Row>
+                        <div style={{'text-align': 'center','font-size': '28px'}}>数据单位：人次</div>
+                      </Row>
                     </Col>
               </Row>
             </Col>

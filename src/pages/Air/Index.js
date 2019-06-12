@@ -407,86 +407,62 @@ class Index extends PureComponent {
 
             </Col>
             <Col span={20}>
-            <Row>
-                            <Col span={12}
-                >
-                <div>
-                  <div
-                  >
-                    <Suspense fallback={null}>
-                      <SalesCard
-                        className={styles.chartInfinite}
-                        rangePickerValue={fuckTime}
-                        allNum={fuckFlow.status}
-                        salesData={yourFuckFlow}
-                        isActive={this.isActive}
-                        handleRangePickerChange={this.handleRangePickerChange}
-                        loading={loading}
-                        selectDate={this.selectDate}
-                        tabOnClick={this.searchData}
-                      />
-                    </Suspense>
-                  </div>
-                </div>
-                  </Col>
-                  <Col span={12}
-                  >
-                      <div>
+                <Col span={10}>
+                  <div>
+                    <div style={{background: 'whitesmoke',margin:'10px'}}>
+                      <div style={{'text-align': 'center','font-size':'28px'}}>空气状况</div>
+                      <div style={{'text-align': 'center',display:'flex','margin-top':'20px'}}><span style={{flex:'1'}}>大厅</span><span style={{flex:'1'}}>第三卫</span><span style={{flex:'1'}}>男厕</span><span style={{flex:'1'}}>女厕</span></div>
+                      <div style={{'text-align': 'center',display:'flex','margin-top':'6px'}}><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span></div>
+                      <div style={{'text-align': 'center',display:'flex','margin-top':'6px','margin-bottom':'20px'}}><span style={{flex:'1'}}>优</span><span style={{flex:'1'}}>良</span><span style={{flex:'1'}}>优</span><span style={{flex:'1'}}>良</span></div>
                       <Suspense fallback={null}>
-                        <GasCard
-                          className={styles.chartInfinite}
-                          rangePickerValue={fuckTimeGas}
-                          salesData={dv}
-                          isActive={this.isActiveGas}
-                          handleRangePickerChange={this.handleRangePickerChangeGas}
+                        <SalesCard
+                          className={styles.infinite}
+                          rangePickerValue={fuckTime}
+                          allNum={fuckFlow.status}
+                          salesData={yourFuckFlow}
+                          isActive={this.isActive}
+                          handleRangePickerChange={this.handleRangePickerChange}
                           loading={loading}
-                          selectDate={this.selectDateGas}
-                          tabOnClick={this.searchDataGas}
+                          selectDate={this.selectDate}
+                          tabOnClick={this.searchData}
+                        />
+                      </Suspense>
+                      <div style={{'text-align': 'center','font-size':'16px',margin:'20px'}}>空气指标质量等级参考</div>
+                      <div style={{'text-align': 'center',display:'flex',margin:'2px 50px'}}><span style={{flex:'1'}}>优秀</span><span style={{flex:'1'}}>良好</span><span style={{flex:'1'}}>一般</span><span style={{flex:'1'}}>很差</span><span style={{flex:'1'}}>极差</span></div>
+                      <div style={{'text-align': 'center',display:'flex',margin:'2px 50px',height:'20px'}}><span style={{flex:'1','background-color':'#ADFF2F'}}></span><span style={{flex:'1','background-color':'green'}}></span><span style={{flex:'1','background-color':'yellow'}}></span><span style={{flex:'1','background-color':'red'}}></span><span style={{flex:'1','background-color':'darkred'}}></span></div>
+                      <div style={{'text-align': 'left',display:'flex',margin:'2px 50px'}}><span style={{flex:'1'}}>1</span><span style={{flex:'1'}}>3</span><span style={{flex:'1'}}>5</span><span style={{flex:'1'}}>7</span><span style={{flex:'1'}}>9</span>10</div>
+                    </div>
+                  </div>
+                </Col>
+                <Col span={14}>
+                  <Row>
+                      <div style={{background: 'whitesmoke',margin:'10px',height:'300px'}}> 
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'30px','font-size':'16px'}}><span style={{flex:'1'}}>空气质量</span><span style={{flex:'1'}}>本周</span><span style={{flex:'1'}}>本月</span><span style={{flex:'1'}}>本年</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'20px'}}><span style={{flex:'1',color:"darkred"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"darkred"}}></span>极差</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"red"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"red"}}></span>很差</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"yellow"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"yellow"}}></span>一般</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"green"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"green"}}></span>良好</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"#ADFF2F"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"#ADFF2F"}}></span>优秀</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
+                      </div>
+                  </Row>
+                  <Row>
+                      <div style={{background: 'whitesmoke',margin:'10px'}}>
+                      <Suspense fallback={null}>
+                        <SalesCard
+                          className={styles.chartInfinite}
+                          rangePickerValue={fuckTime}
+                          allNum={fuckFlow.status}
+                          salesData={yourFuckFlow}
+                          isActive={this.isActive}
+                          handleRangePickerChange={this.handleRangePickerChange}
+                          loading={loading}
+                          selectDate={this.selectDate}
+                          tabOnClick={this.searchData}
                         />
                       </Suspense>
                       </div>
-                    </Col>
-            </Row>
-              <Row>
-                <Col span={12}
-                >
-                <div>
-                  <div
-                  >
-                    <Suspense fallback={null}>
-                      <SalesCard
-                        className={styles.chartInfinite}
-                        rangePickerValue={fuckTime}
-                        allNum={fuckFlow.status}
-                        salesData={yourFuckFlow}
-                        isActive={this.isActive}
-                        handleRangePickerChange={this.handleRangePickerChange}
-                        loading={loading}
-                        selectDate={this.selectDate}
-                        tabOnClick={this.searchData}
-                      />
-                    </Suspense>
-                  </div>
-                </div>
-                  </Col>
-                  <Col span={12}
-                  >
-                      <div>
-                      <Suspense fallback={null}>
-                        <GasCard
-                          className={styles.chartInfinite}
-                          rangePickerValue={fuckTimeGas}
-                          salesData={dv}
-                          isActive={this.isActiveGas}
-                          handleRangePickerChange={this.handleRangePickerChangeGas}
-                          loading={loading}
-                          selectDate={this.selectDateGas}
-                          tabOnClick={this.searchDataGas}
-                        />
-                      </Suspense>
-                      </div>
-                    </Col>
-              </Row>
+                  </Row>
+                </Col>
             </Col>
           </Row>
 

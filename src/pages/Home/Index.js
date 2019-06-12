@@ -489,7 +489,7 @@ class Index extends PureComponent {
                 <Col span={12}
                 >
                 <div>
-                  <div
+                  <div style={{background: 'whitesmoke',margin:'10px'}}
                   >
                     <Suspense fallback={null}>
                       <SalesCard
@@ -509,7 +509,7 @@ class Index extends PureComponent {
                   </Col>
                   <Col span={12}
                   >
-                      <div>
+                      <div style={{background: 'whitesmoke',margin:'10px'}}>
                       <Suspense fallback={null}>
                         <GasCard
                           className={styles.chartInfinite}
