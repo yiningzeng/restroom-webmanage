@@ -22,7 +22,7 @@ export default [
       {
         path: '/home',
         name: 'home',
-        icon: 'video-camera',
+        icon: 'home',
         component: './Home/Index',
       },
       {
@@ -40,9 +40,22 @@ export default [
       {
         path: '/restroom',
         name: 'restroom',
-        icon: 'home',
+        icon: 'bank',
         component: './RestRoom/Index',
       },
+                  {
+        path: '/passenger',
+        name: 'passenger',
+        icon: 'area-chart',
+        component: './Passenger/Index',
+      },
+            {
+        path: '/air',
+        name: 'air',
+        icon: 'dot-chart',
+        component: './Air/Index',
+      },
+
       // {
       //   path: '/message',
       //   name: 'message',

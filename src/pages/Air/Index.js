@@ -270,7 +270,6 @@ class Index extends PureComponent {
       device: {gasFlow},
       dispatch
     } = this.props;
-    console.log(fuckFlow)
 
 
     // message.success(JSON.stringify(list));
@@ -300,7 +299,6 @@ class Index extends PureComponent {
     try
     {
       yourFuckFlow= fuckFlow.data;
-      onsole.log(yourFuckFlow)
     }
     catch (e) {
 
@@ -409,82 +407,46 @@ class Index extends PureComponent {
 
             </Col>
             <Col span={20}>
-            <Row
-              style={{ margin: '0 0 0 24px' }}>
-              <div
-                style={{ margin: '0' }}
-                className={styles.home}>
-                <Map center={this.state.map.center} zoom={13} plugins={['ToolBar']} zoomEnable amapkey="9859d68e8038928bd46f12fafc6f263c">
-                  {
-                    list!==undefined&&list.data!==undefined&&list.data.content!==undefined&&
-                    list.data.content.map((item, i) => (
-                      <Marker
-                        position={[item.longitude,item.latitude]}
-                        clickable
-                        events={{
-                        created: (instance) => {
-                          console.log('Marker 实例创建成功；如果你需要对原生实例进行操作，可以从这里开始；');
-                          console.log(instance);
-                        },
-                        click: (e) => {
-                          this.setState({
-                            ...this.state,
-                            infoWindow:{
-                            ...this.state.infoWindow,
-                              visible:true,
-                              name:item.restRoomName,
-                              position:[item.longitude, item.latitude],
-                              videoStatus: item.deviceCameras.length>0&& item.deviceCameras[0].online === 1 ?"success":"error",
-                              videoStatusTest: item.deviceCameras.length>0&& item.deviceCameras[0].online === 1 ?"摄像正常":"摄像头离线",
-                              boardStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
-                              boardStatusText: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "公告正常" : "公告屏离线",
-                          }});
-                          console.log(`你点击了这个图标；调用参数为：${item.restRoomName}`);
-                          console.log(e);
-                        },
-                        dblclick: (e) => {
-                          // this.setState({infoWindowVisible:true});
-                          console.log(`你刚刚双击了这个图标；调用参数为：${item.restRoomName}`);
-                          console.log(e);
-                        },
-                        // ... 支持绑定所有原生的高德 Marker 事件
-                      }}
-                      />
-                    ))
-                  }
-                  <InfoWindow
-                    position={this.state.infoWindow.position}
-                    visible={this.state.infoWindow.visible}
-                    isCustom
+            <Row>
+                            <Col span={12}
+                >
+                <div>
+                  <div
                   >
-                    <h3>{this.state.infoWindow.name}</h3>
-                    <Badge status={this.state.infoWindow.status} text={this.state.infoWindow.statusText} />
-                    <br />
-                    <Badge status={this.state.infoWindow.videoStatus} text={this.state.infoWindow.videoStatusTest} />
-                    <br />
-                    <Badge status={this.state.infoWindow.gasStatus} text={this.state.infoWindow.gasStatusText} />
-                    <br />
-                    <Badge status={this.state.infoWindow.boardStatus} text={this.state.infoWindow.boardStatusText} />
-                    <br />
-                    <button onClick={() => {this.setState({...this.state,infoWindow:{...this.state.infoWindow,visible:false}})}}>关闭</button>
-                  </InfoWindow>
-                  <Card className="customLayer" style={styleA}>
-                    <Card.Meta
-                      title={this.state.weatherInfo===undefined?'获取失败':this.state.weatherInfo.weather===undefined?'获取失败':`宁波 ${this.state.weatherInfo.weather.info} ${this.state.weatherInfo.weather.temperature}℃`}
-                      description={this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.publish_time).fromNow()}
-                    />
-                  </Card>
-                  {/*<div className="customLayer" style={{styleA}}>*/}
-                  {/*<h4>宁波</h4>*/}
-                  {/*<p>{this.state.weatherInfo===undefined?undefined:moment(this.state.weatherInfo.time).fromNow()}</p>*/}
-                  {/*</div>*/}
-                  {/*<div className="customLayer" style={styleB}>*/}
-                  {/*<p> Another Custom Layer</p>*/}
-                  {/*<Button onClick={()=>{alert('You Clicked!')}}>An Ant Design Button</Button>*/}
-                  {/*</div>*/}
-                </Map>
-              </div>
-              </Row>
+                    <Suspense fallback={null}>
+                      <SalesCard
+                        className={styles.chartInfinite}
+                        rangePickerValue={fuckTime}
+                        allNum={fuckFlow.status}
+                        salesData={yourFuckFlow}
+                        isActive={this.isActive}
+                        handleRangePickerChange={this.handleRangePickerChange}
+                        loading={loading}
+                        selectDate={this.selectDate}
+                        tabOnClick={this.searchData}
+                      />
+                    </Suspense>
+                  </div>
+                </div>
+                  </Col>
+                  <Col span={12}
+                  >
+                      <div>
+                      <Suspense fallback={null}>
+                        <GasCard
+                          className={styles.chartInfinite}
+                          rangePickerValue={fuckTimeGas}
+                          salesData={dv}
+                          isActive={this.isActiveGas}
+                          handleRangePickerChange={this.handleRangePickerChangeGas}
+                          loading={loading}
+                          selectDate={this.selectDateGas}
+                          tabOnClick={this.searchDataGas}
+                        />
+                      </Suspense>
+                      </div>
+                    </Col>
+            </Row>
               <Row>
                 <Col span={12}
                 >
