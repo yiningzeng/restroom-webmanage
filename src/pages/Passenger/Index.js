@@ -13,12 +13,27 @@ import fuckStyles from './Analysis.less';
 import { Map,Marker,InfoWindow } from "react-amap";
 import InfiniteScroll from 'react-infinite-scroller';
 import { TimelineChart } from '@/components/Charts';
+import {
+  G2,
+  Chart,
+  Geom,
+  Axis,
+  Tooltip,
+  Coord,
+  Label,
+  Legend,
+  View,
+  Guide,
+  Shape,
+  Facet,
+  Util
+} from "bizcharts";
 const SalesCard = React.lazy(() => import('./SalesCard'));
 //高德地图组件使用方法 https://elemefe.github.io/react-amap/components/infowindow
 /* eslint react/no-multi-comp:0 */
-@connect(({ restroom,device, loading }) => ({
+@connect(({ restroom,passenger, loading }) => ({
   restroom,
-  device,
+  passenger,
   loading: loading.effects['restroom/fetch'],
   loadingDevice: loading.effects['device/fetch']
 }))
@@ -93,18 +108,23 @@ class Index extends PureComponent {
             // message.success(`${JSON.stringify(this.state.gasFlow)}`);
           },
         });
-        // region 获取气体数据
+        // region 获取统计的数据，只有
         dispatch({
-          type: 'device/queryHomeGasList',
+          type: 'passenger/onlyGetFuckFlow',
           payload: {//1?endTm=1557368198&startTm=1557281798
             restRoomId: 1,
-            startTm: startTime,
-            endTm: endTime,
           },
-          callback:(a)=>{
-            console.log("v2最新气体数据:"+JSON.stringify(a));
-            // this.setState(gasFlow: a.)
-            // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+        });
+        dispatch({
+          type: 'passenger/getOnlyFuckFlowByWeek',
+          payload: {//1?endTm=1557368198&startTm=1557281798
+            restRoomId: 1,
+          },
+        });
+        dispatch({
+          type: 'passenger/getOnlyFuckFlowByMonth',
+          payload: {//1?endTm=1557368198&startTm=1557281798
+            restRoomId: 1,
           },
         });
         //endregion
@@ -132,6 +152,12 @@ class Index extends PureComponent {
     // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
     try
     {
+      dispatch({
+        type: 'passenger/onlyGetFuckFlow',
+        payload: {//1?endTm=1557368198&startTm=1557281798
+          restRoomId: activeKey,
+        },
+      });
       dispatch({
         type: 'restroom/getFuckFlow',
         payload: {//1?endTm=1557368198&startTm=1557281798
@@ -192,7 +218,7 @@ class Index extends PureComponent {
     const {
       restroom: { list, fuckFlow },
       loading,
-      device: {gasFlow},
+      passenger: { onlyFuckFlow, onlyFuckFlowWeek, onlyFuckFlowMonth },
       dispatch
     } = this.props;
 
@@ -233,7 +259,12 @@ class Index extends PureComponent {
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
 
     const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
+    console.log("asssssssssssssssssssssssssssssss");
 
+    console.log(JSON.stringify(onlyFuckFlowWeek));
+    console.log(JSON.stringify(onlyFuckFlowMonth));
+
+    // alert(dvMonth);
     return (
       <PageHeaderWrapper>
         <Card
@@ -313,19 +344,33 @@ class Index extends PureComponent {
                   >
                     <div style={{background: 'whitesmoke',margin:'10px'}}>
                       <div>
-                      这里放本日客流量
                         <Suspense fallback={null}>
-                          <SalesCard
-                            className={styles.chartInfinite}
-                            rangePickerValue={fuckTime}
-                            allNum={fuckFlow.status}
-                            salesData={yourFuckFlow}
-                            isActive={this.isActive}
-                            handleRangePickerChange={this.handleRangePickerChange}
-                            loading={loading}
-                            selectDate={this.selectDate}
-                            tabOnClick={this.searchData}
-                          />
+                          <span style={{marginTop: "30px", marginLeft: "30px", float: "left", color: "#722ED1"}}>本周和上周对比图</span>
+                          <span style={{marginTop: "30px", marginRight: "100px", float: "right", color: "#722ED1"}}>
+                            {`上周累计人数: ${onlyFuckFlowWeek.data.lastWeek} 人`}<br />
+                            {`本周累计人数: ${onlyFuckFlowWeek.data.thisWeek} 人`}
+                          </span>
+                          <Chart height={300} data={onlyFuckFlowWeek.data.list} forceFit>
+                            <Axis name="day_of_week" />
+                            <Axis name="number" />
+                            <Legend />
+                            <Tooltip
+                              crosshairs={{
+                                type: "y"
+                              }}
+                            />
+                            <Geom
+                              type="interval"
+                              position="day_of_week*number"
+                              color="type"
+                              adjust={[
+                                {
+                                  type: "dodge",
+                                  marginRatio: 1 / 32
+                                }
+                              ]}
+                            />
+                          </Chart>
                         </Suspense>
                       </div>
                     </div>
@@ -334,19 +379,33 @@ class Index extends PureComponent {
                   >
                     <div style={{background: 'whitesmoke',margin:'10px'}}>
                       <div>
-                      这里放本日客流量
                         <Suspense fallback={null}>
-                          <SalesCard
-                            className={styles.chartInfinite}
-                            rangePickerValue={fuckTime}
-                            allNum={fuckFlow.status}
-                            salesData={yourFuckFlow}
-                            isActive={this.isActive}
-                            handleRangePickerChange={this.handleRangePickerChange}
-                            loading={loading}
-                            selectDate={this.selectDate}
-                            tabOnClick={this.searchData}
-                          />
+                          <span style={{marginTop: "30px", marginLeft: "30px", float: "left", color: "#722ED1"}}>本月和上月对比图</span>
+                          <span style={{marginTop: "30px", marginRight: "100px", float: "right", color: "#722ED1"}}>
+                            上月累计人数: { onlyFuckFlowMonth.data.lastMonth } 人<br />
+                            本月累计人数: { onlyFuckFlowMonth.data.thisMonth } 人
+                          </span>
+                          <Chart height={300} data={onlyFuckFlowMonth.data.list} forceFit>
+                            <Axis name="day_of_month" />
+                            <Axis name="number" />
+                            <Legend />
+                            <Tooltip
+                              crosshairs={{
+                                type: "y"
+                              }}
+                            />
+                            <Geom
+                              type="interval"
+                              position="day_of_month*number"
+                              color="type"
+                              adjust={[
+                                {
+                                  type: "dodge",
+                                  marginRatio: 1 / 32
+                                }
+                              ]}
+                            />
+                          </Chart>
                         </Suspense>
                       </div>
                     </div>
@@ -357,7 +416,6 @@ class Index extends PureComponent {
                   >
                     <div style={{background: 'whitesmoke',margin:'10px'}}>
                       <div>
-                      这里放本日客流量
                         <Suspense fallback={null}>
                           <SalesCard
                             className={styles.chartInfinite}
@@ -377,20 +435,19 @@ class Index extends PureComponent {
                   <Col span={12} id="wo">
                   
                   <Row style={{'margin': '50px 0 0 30px '}}>
-                  这里是死数据，你放动态数据进去
                       <Col span={8}>
                         <div style={{'text-align': 'center','width': '200px','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid','border-radius': '100px'}}>
-                         今日 <div style={{'margin':'20px'}}>123</div>
+                         今日 <div style={{'margin':'20px'}}>{onlyFuckFlow.data.today===undefined?0:onlyFuckFlow.data.today}</div>
                          </div>
                       </Col>
                       <Col span={8}>
                         <div style={{'text-align': 'center','width': '200px','color': 'rgb(43, 204, 255)','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid rgb(43, 204, 255)','border-radius': '100px'}}> 
-                        本周 <div style={{'margin':'20px'}}>523</div>
+                        本月 <div style={{'margin':'20px'}}>{onlyFuckFlow.data.month===undefined?0:onlyFuckFlow.data.month}</div>
                         </div>
                       </Col>
                       <Col span={8}>
                         <div style={{'text-align': 'center','width': '200px','color': 'red','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid red','border-radius': '100px'}}> 
-                        本月 <div style={{'margin':'20px'}}>1251</div>
+                        总计 <div style={{'margin':'20px'}}>{onlyFuckFlow.data.all===undefined?0:onlyFuckFlow.data.all}</div>
                         </div>
                       </Col>
                       </Row>
