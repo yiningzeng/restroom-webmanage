@@ -264,58 +264,6 @@ class Index extends PureComponent {
     console.log(JSON.stringify(onlyFuckFlowWeek));
     console.log(JSON.stringify(onlyFuckFlowMonth));
 
-    const ds = new DataSet();
-    const dvWeek = ds.createView().source( [{
-      "show_time": "周一",
-      "number": 218,
-      "type": "上周"
-    }, {
-      "show_time": "周二",
-      "number": 202,
-      "type": "上周"
-    }, {
-      "show_time": "周三",
-      "number": 181,
-      "type": "上周"
-    }, {
-      "show_time": "周四",
-      "type": "上周",
-      "number": 150
-    }, {
-      "number": 141,
-      "show_time": "周五",
-      "type": "上周"
-    }, {
-      "number": 151,
-      "type": "上周",
-      "show_time": "周六"
-    }, {
-      "number": 187,
-      "show_time": "周日",
-      "type": "上周"
-    }, {
-      "number": 176,
-      "type": "本周",
-      "show_time": "周一"
-    }, {
-      "number": 240,
-      "show_time": "周二",
-      "type": "本周"
-    }, {
-      "show_time": "周三",
-      "type": "本周",
-      "number": 244
-    }, {
-      "show_time": "周四",
-      "type": "本周",
-      "number": 227
-    }, {
-      "show_time": "周五",
-      "number": 0,
-      "type": "本周"
-    }]);
-    bizcharts error.多列柱状图由于数据横坐标不一致导致
-    const dvMonth = ds.createView().source(onlyFuckFlowMonth.data);
     // alert(dvMonth);
     return (
       <PageHeaderWrapper>
@@ -399,11 +347,11 @@ class Index extends PureComponent {
                         <Suspense fallback={null}>
                           <span style={{marginTop: "30px", marginLeft: "30px", float: "left", color: "#722ED1"}}>本周和上周对比图</span>
                           <span style={{marginTop: "30px", marginRight: "100px", float: "right", color: "#722ED1"}}>
-                            上周累计人数: 13 人<br />
-                            本周累计人数: 13 人
+                            {`上周累计人数: ${onlyFuckFlowWeek.data.lastWeek} 人`}<br />
+                            {`本周累计人数: ${onlyFuckFlowWeek.data.thisWeek} 人`}
                           </span>
-                          <Chart height={300} data={dvWeek} forceFit>
-                            <Axis name="show_time" />
+                          <Chart height={300} data={onlyFuckFlowWeek.data.list} forceFit>
+                            <Axis name="day_of_week" />
                             <Axis name="number" />
                             <Legend />
                             <Tooltip
@@ -413,7 +361,7 @@ class Index extends PureComponent {
                             />
                             <Geom
                               type="interval"
-                              position="show_time*number"
+                              position="day_of_week*number"
                               color="type"
                               adjust={[
                                 {
@@ -434,11 +382,11 @@ class Index extends PureComponent {
                         <Suspense fallback={null}>
                           <span style={{marginTop: "30px", marginLeft: "30px", float: "left", color: "#722ED1"}}>本月和上月对比图</span>
                           <span style={{marginTop: "30px", marginRight: "100px", float: "right", color: "#722ED1"}}>
-                            上月累计人数: 13 人<br />
-                            本月累计人数: 13 人
+                            上月累计人数: { onlyFuckFlowMonth.data.lastMonth } 人<br />
+                            本月累计人数: { onlyFuckFlowMonth.data.thisMonth } 人
                           </span>
-                          <Chart height={300} data={dvMonth} forceFit>
-                            <Axis name="show_time" />
+                          <Chart height={300} data={onlyFuckFlowMonth.data.list} forceFit>
+                            <Axis name="day_of_month" />
                             <Axis name="number" />
                             <Legend />
                             <Tooltip
@@ -448,7 +396,7 @@ class Index extends PureComponent {
                             />
                             <Geom
                               type="interval"
-                              position="show_time*number"
+                              position="day_of_month*number"
                               color="type"
                               adjust={[
                                 {
