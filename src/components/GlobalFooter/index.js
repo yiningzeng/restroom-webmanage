@@ -5,10 +5,11 @@ import styles from './index.less';
 const GlobalFooter = ({ className, links, copyright }) => {
   const clsString = classNames(styles.globalFooter, className);
   return (
-    <footer className={clsString}>
-      {links && (
+    <footer>
+      {/* {links && (
         <div className={styles.links}>
           {links.map(link => (
+            className={clsString}
             <a
               key={link.key}
               title={link.key}
@@ -20,7 +21,7 @@ const GlobalFooter = ({ className, links, copyright }) => {
           ))}
         </div>
       )}
-      {copyright && <div className={styles.copyright}>{copyright}</div>}
+      {copyright && <div className={styles.copyright}>{copyright}</div>} */}
     </footer>
   );
 };

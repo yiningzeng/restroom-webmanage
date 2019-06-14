@@ -80,6 +80,7 @@ const SalesCard = memo(
                           <Axis name="show_time" title={{ offset: 38 }} label={{
                             autoRotate: false,
                             formatter: val => {
+                              console.log(`${val}`)
                               return `${val}`;
                               // if(val.includes(':30') || val.includes(':00')) return `${val}`
                             },
@@ -98,7 +99,6 @@ const SalesCard = memo(
                   </Col>
                 </div>
               </Col>
-
             </Row>
           </TabPane>
           <TabPane

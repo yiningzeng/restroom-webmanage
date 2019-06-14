@@ -328,7 +328,7 @@ const CreateGasForm = Form.create()(props => {
         {form.getFieldDecorator('gasDeviceId', {
           rules: [{ required: true, message: '请输入终端编号'}],
         })(<Input placeholder="请输入终端编号" />)}
-      </FormItem>
+      </FormItem> 
       <FormItem
         {...formItemLayout}
         label={
