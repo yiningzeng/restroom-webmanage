@@ -167,9 +167,9 @@ class Index extends PureComponent {
           type: searchType,
         },
         callback:(a)=>{
-          console.log(this)
+          // console.log(this)
           // this.setState(gasFlow: a.)
-          message.success(`${JSON.stringify(this.state.gasFlow)}`);
+          // message.success(`${JSON.stringify(this.state.gasFlow)}`);
         },
       });
     }
