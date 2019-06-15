@@ -96,24 +96,24 @@ class Index extends PureComponent {
             // message.success(`${JSON.stringify(this.state.gasFlow)}`);
           },
         });
-        // region 获取气体数据
-        dispatch({
-          type: 'device/queryHomeGasList',
-          payload: {//1?endTm=1557368198&startTm=1557281798
-            restRoomId: 1,
-            startTm: startTime,
-            endTm: endTime,
-          },
-          callback:(a)=>{
-            console.log("v2最新气体数据:"+JSON.stringify(a));
-            // this.setState(gasFlow: a.)
-            // message.success(`${JSON.stringify(this.state.gasFlow)}`);
-          },
-        });
-        //endregion
       },
     });
 
+    // region 获取气体数据
+    dispatch({
+      type: 'device/queryHomeGasList',
+      payload: {//1?endTm=1557368198&startTm=1557281798
+        restRoomId: 1,
+        startTm: startTime,
+        endTm: endTime,
+      },
+      callback:(a)=>{
+        console.log("v2最新气体数据:"+JSON.stringify(a));
+        // this.setState(gasFlow: a.)
+        // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+      },
+    });
+    //endregion
   }
 
   //region 客流
@@ -135,19 +135,21 @@ class Index extends PureComponent {
     // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
     try
     {
+      // region 获取气体数据
       dispatch({
-        type: 'restroom/getFuckFlow',
+        type: 'device/queryHomeGasList',
         payload: {//1?endTm=1557368198&startTm=1557281798
           restRoomId: activeKey,
-          startTm: startTime,//Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
-          endTm: endTime,//Math.round(this.state.rangePickerValue[1].valueOf()/1000),//Math.round(new Date().getTime()/1000),
-          type: searchType,
+          startTm: startTime,
+          endTm: endTime,
         },
         callback:(a)=>{
+          console.log("v2最新气体数据:"+JSON.stringify(a));
           // this.setState(gasFlow: a.)
           // message.success(`${JSON.stringify(this.state.gasFlow)}`);
         },
       });
+      //endregion
     }
     catch (e) {
     }
@@ -190,7 +192,7 @@ class Index extends PureComponent {
 
   //region 控制质量图表
   searchDataGas = (activeKey,searchType) =>{
-    activeKey = activeKey.replace("gas-","");
+    // activeKey = activeKey.replace("gas-","");
     // message.error(activeKey+" "+searchType);
     const { dispatch } = this.props;
     this.setState({
@@ -309,14 +311,14 @@ class Index extends PureComponent {
     try
     {
       const ds = new DataSet();
-      dv = ds.createView().source(gasFlow.data[0].infoGases);
+      dv = ds.createView().source(gasFlow.data);
       dv.transform({
         type: "fold",
         fields: ["大厅", "女厕", "男厕", "无障碍"],
         // 展开字段集
         key: "city",
         // key字段
-        value: "score" // value字段
+        value: "temperature" // value字段
       });
       console.log("gasFlow:dv"+dv);
       // message.success(JSON.stringify(dv));
@@ -415,16 +417,15 @@ class Index extends PureComponent {
                       <div style={{'text-align': 'center',display:'flex','margin-top':'6px'}}><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span></div>
                       <div style={{'text-align': 'center',display:'flex','margin-top':'6px','margin-bottom':'20px'}}><span style={{flex:'1'}}>优</span><span style={{flex:'1'}}>良</span><span style={{flex:'1'}}>优</span><span style={{flex:'1'}}>良</span></div>
                       <Suspense fallback={null}>
-                        <SalesCard
-                          className={styles.infinite}
-                          rangePickerValue={fuckTime}
-                          allNum={fuckFlow.status}
-                          salesData={yourFuckFlow}
-                          isActive={this.isActive}
-                          handleRangePickerChange={this.handleRangePickerChange}
+                        <GasCard
+                          className={styles.chartInfinite}
+                          rangePickerValue={fuckTimeGas}
+                          salesData={dv}
+                          isActive={this.isActiveGas}
+                          handleRangePickerChange={this.handleRangePickerChangeGas}
                           loading={loading}
-                          selectDate={this.selectDate}
-                          tabOnClick={this.searchData}
+                          selectDate={this.selectDateGas}
+                          tabOnClick={this.searchDataGas}
                         />
                       </Suspense>
                       <div style={{'text-align': 'center','font-size':'16px',margin:'20px'}}>空气指标质量等级参考</div>
