@@ -363,7 +363,7 @@ class Index extends PureComponent {
                       <List.Item onClick={()=>{
                         try {
                           this.searchData(item.restRoomId,sessionStorage.getItem("select")==="today"?0:1);
-
+                          this.searchDataGas(item.restRoomId, 1);
                           this.setState({
                             ...this.state,
                             infoWindow: {
