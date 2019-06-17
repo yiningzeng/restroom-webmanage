@@ -1,5 +1,6 @@
 import { query as queryCamera,add as addCamera,del as deleteCamera,push as pushStream,stop as stopStream} from '@/services/camera';
 import { query as queryGas,add as addGas,del as deleteGas,queryHomeGasList } from '@/services/gas';
+import { getFuckGasInfo } from '@/services/nothing';
 
 export default {
   namespace: 'device',
@@ -96,6 +97,15 @@ export default {
     },
     *deleteGas({ payload,callback}, { call, put }) {
       const response = yield call(deleteGas,payload);
+      yield put({
+        type: 'res',
+        payload: response,
+      });
+      if (callback)callback(response);
+    },
+
+    *searchDeviceStatus({ payload,callback}, { call, put }) {
+      const response = yield call(getFuckGasInfo,payload);
       yield put({
         type: 'res',
         payload: response,
