@@ -37,12 +37,6 @@ export default [
         icon: 'video-camera',
         component: './Camera/Index',
       },
-      {
-        path: '/restroom',
-        name: 'restroom',
-        icon: 'bank',
-        component: './RestRoom/Index',
-      },
                   {
         path: '/passenger',
         name: 'passenger',
@@ -54,6 +48,12 @@ export default [
         name: 'air',
         icon: 'dot-chart',
         component: './Air/Index',
+      },
+      {
+        path: '/restroom',
+        name: 'restroom',
+        icon: 'bank',
+        component: './RestRoom/Index',
       },
 
       // {
