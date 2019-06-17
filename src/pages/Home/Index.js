@@ -66,6 +66,8 @@ class Index extends PureComponent {
     sessionStorage.setItem("select", "today");
     sessionStorage.setItem("startTime", getTimeDistance("today")[0]);
     sessionStorage.setItem("endTime", getTimeDistance("today")[1]);
+    sessionStorage.setItem("startTimeGas", getTimeDistance("today")[0]);
+    sessionStorage.setItem("endTimeGas", getTimeDistance("today")[1]);
     dispatch({
       type: 'restroom/weather',
       payload: {
@@ -190,8 +192,7 @@ class Index extends PureComponent {
 
   //region 控制质量图表
   searchDataGas = (activeKey,searchType) =>{
-    activeKey = activeKey.replace("gas-","");
-    // message.error(activeKey+" "+searchType);
+    activeKey = activeKey.toString().replace("gas-","");
     const { dispatch } = this.props;
     this.setState({
       ...this.state,
@@ -311,14 +312,14 @@ class Index extends PureComponent {
     try
     {
       const ds = new DataSet();
-      dv = ds.createView().source(gasFlow.data[0].infoGases);
+      dv = ds.createView().source(gasFlow.data);
       dv.transform({
         type: "fold",
         fields: ["大厅", "女厕", "男厕", "无障碍"],
         // 展开字段集
         key: "city",
         // key字段
-        value: "score" // value字段
+        value: "temperature" // value字段
       });
       console.log("gasFlow:dv"+dv);
       // message.success(JSON.stringify(dv));

@@ -19,15 +19,23 @@ const SalesCard = React.lazy(() => import('./SalesCard'));
 const GasCard = React.lazy(() => import('./GasCard'));
 //高德地图组件使用方法 https://elemefe.github.io/react-amap/components/infowindow
 /* eslint react/no-multi-comp:0 */
-@connect(({ restroom,device, loading }) => ({
+@connect(({ restroom,device, nothing, loading }) => ({
   restroom,
   device,
+  nothing,
   loading: loading.effects['restroom/fetch'],
   loadingDevice: loading.effects['device/fetch']
 }))
 @Form.create()
 class Index extends PureComponent {
   state = {
+    nothing: {
+      week: [],
+      month: [],
+      year: [],
+    },
+    selectMonth: moment().month()+"",
+
     rangePickerValue: getTimeDistance('day'),
     restRoomId: 1,
     isActive: "today",
@@ -96,24 +104,140 @@ class Index extends PureComponent {
             // message.success(`${JSON.stringify(this.state.gasFlow)}`);
           },
         });
-        // region 获取气体数据
-        dispatch({
-          type: 'device/queryHomeGasList',
-          payload: {//1?endTm=1557368198&startTm=1557281798
-            restRoomId: 1,
-            startTm: startTime,
-            endTm: endTime,
-          },
-          callback:(a)=>{
-            console.log("v2最新气体数据:"+JSON.stringify(a));
-            // this.setState(gasFlow: a.)
-            // message.success(`${JSON.stringify(this.state.gasFlow)}`);
-          },
-        });
-        //endregion
       },
     });
 
+    // region 获取气体数据
+    dispatch({
+      type: 'device/queryHomeGasList',
+      payload: {//1?endTm=1557368198&startTm=1557281798
+        restRoomId: 1,
+        startTm: startTime,
+        endTm: endTime,
+      },
+      callback:(a)=>{
+        console.log("v2最新气体数据:"+JSON.stringify(a));
+        // this.setState(gasFlow: a.)
+        // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+      },
+    });
+    //endregion
+
+    this.setNothing(1);
+
+    this.getNothingDailyData(1, moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'), moment().endOf('month').format('YYYY-MM-DD HH:mm:ss'));
+  }
+
+  // 更具时间获取气体数据，返回的是每天的总和数据
+  startGetNothingDailyData=(as)=>{
+    switch (as) {
+      case "0":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-01-01 00:00:00', moment().year()+'-01-31 23:59:59');
+        break;
+      case "1":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-02-01 00:00:00', moment().year()+'-02-29 23:59:59');
+        break;
+      case "2":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-03-01 00:00:00', moment().year()+'-03-31 23:59:59');
+        break;
+      case "3":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-04-01 00:00:00', moment().year()+'-04-30 23:59:59');
+        break;
+      case "4":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-05-01 00:00:00', moment().year()+'-05-31 23:59:59');
+        break;
+      case "5":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-06-01 00:00:00', moment().year()+'-06-30 23:59:59');
+        break;
+      case "6":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-07-01 00:00:00', moment().year()+'-07-31 23:59:59');
+        break;
+      case "7":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-08-01 00:00:00', moment().year()+'-08-31 23:59:59');
+        break;
+      case "8":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-09-01 00:00:00', moment().year()+'-09-30 23:59:59');
+        break;
+      case "9":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-10-01 00:00:00', moment().year()+'-10-31 23:59:59');
+        break;
+      case "10":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-11-01 00:00:00', moment().year()+'-11-30 23:59:59');
+        break;
+      case "11":
+        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-12-01 00:00:00', moment().year()+'-12-31 23:59:59');
+        break;
+    }
+  };
+
+  getNothingDailyData = (id, startTime, endTime) =>{
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'nothing/getStatisticList',
+      payload: {//1?endTm=1557368198&startTm=1557281798
+        restRoomId: id,
+        startTm: startTime,
+        endTm: endTime,
+      },
+      callback:(a)=>{
+        // message.success(`${JSON.stringify(a)}`);
+      },
+    });
+    dispatch({
+      type: 'nothing/getFuckGasInfoQuery',
+      payload: {//1?endTm=1557368198&startTm=1557281798
+        restRoomId: id,
+      },
+      callback:(a)=>{
+        // message.success(`${JSON.stringify(a)}`);
+      },
+    });
+  }
+
+  // 获取气体状态在选择时间内出现的次数
+  setNothing = (id) =>{
+    const { dispatch } = this.props;
+    // region 获取气体状态在选择时间内出现的次数
+    dispatch({
+      type: 'nothing/getStatistic',
+      payload: {//1?endTm=1557368198&startTm=1557281798
+        restRoomId: id,
+        startTm: moment().startOf('week').format('YYYY-MM-DD HH:mm:ss'),
+        endTm: moment().endOf('week').format('YYYY-MM-DD HH:mm:ss'),
+      },
+      callback:(a)=>{
+        this.setState({nothing: {...this.state.nothing, week: a.data}});
+        // this.setState(gasFlow: a.)
+        // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+      },
+    });
+    dispatch({
+      type: 'nothing/getStatistic',
+      payload: {//1?endTm=1557368198&startTm=1557281798
+        restRoomId: id,
+        startTm: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'),
+        endTm: moment().endOf('month').format('YYYY-MM-DD HH:mm:ss'),
+      },
+      callback:(a)=>{
+        this.setState({nothing: {...this.state.nothing, month: a.data}});
+        // this.setState(gasFlow: a.)
+        // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+      },
+    });
+    dispatch({
+      type: 'nothing/getStatistic',
+      payload: {//1?endTm=1557368198&startTm=1557281798
+        restRoomId: id,
+        startTm: moment().startOf('year').format('YYYY-MM-DD HH:mm:ss'),
+        endTm: moment().endOf('year').format('YYYY-MM-DD HH:mm:ss'),
+      },
+      callback:(a)=>{
+        this.setState({nothing: {...this.state.nothing, year: a.data}});
+        // this.setState(gasFlow: a.)
+        // message.success(`${JSON.stringify(this.state.gasFlow)}`);
+      },
+    });
+    //endregion
   }
 
   //region 客流
@@ -135,19 +259,23 @@ class Index extends PureComponent {
     // message.success("malegebi"+JSON.stringify(startTime)+" "+JSON.stringify(endTime));
     try
     {
+      // region 获取气体数据
       dispatch({
-        type: 'restroom/getFuckFlow',
+        type: 'device/queryHomeGasList',
         payload: {//1?endTm=1557368198&startTm=1557281798
           restRoomId: activeKey,
-          startTm: startTime,//Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
-          endTm: endTime,//Math.round(this.state.rangePickerValue[1].valueOf()/1000),//Math.round(new Date().getTime()/1000),
-          type: searchType,
+          startTm: startTime,
+          endTm: endTime,
         },
         callback:(a)=>{
+          console.log("v2最新气体数据:"+JSON.stringify(a));
           // this.setState(gasFlow: a.)
           // message.success(`${JSON.stringify(this.state.gasFlow)}`);
         },
       });
+      //endregion
+
+      this.setNothing(activeKey);
     }
     catch (e) {
     }
@@ -190,7 +318,7 @@ class Index extends PureComponent {
 
   //region 控制质量图表
   searchDataGas = (activeKey,searchType) =>{
-    activeKey = activeKey.replace("gas-","");
+    // activeKey = activeKey.replace("gas-","");
     // message.error(activeKey+" "+searchType);
     const { dispatch } = this.props;
     this.setState({
@@ -226,6 +354,7 @@ class Index extends PureComponent {
     }
     catch (e) {
     }
+
   }
 
   selectDateGas = type => {
@@ -267,11 +396,10 @@ class Index extends PureComponent {
     const {
       restroom: { list, fuckFlow },
       loading,
+      nothing: { statisticList, fuckGasInfo },
       device: {gasFlow},
       dispatch
     } = this.props;
-
-
     // message.success(JSON.stringify(list));
     const styleA = {
       position: 'absolute',
@@ -309,14 +437,14 @@ class Index extends PureComponent {
     try
     {
       const ds = new DataSet();
-      dv = ds.createView().source(gasFlow.data[0].infoGases);
+      dv = ds.createView().source(gasFlow.data);
       dv.transform({
         type: "fold",
         fields: ["大厅", "女厕", "男厕", "无障碍"],
         // 展开字段集
         key: "city",
         // key字段
-        value: "score" // value字段
+        value: "temperature" // value字段
       });
       console.log("gasFlow:dv"+dv);
       // message.success(JSON.stringify(dv));
@@ -325,8 +453,6 @@ class Index extends PureComponent {
     }
     //endregion 气体数据
 
-
-    // message.error(JSON.stringify(yourFuckFlow));
     // message.error("fffffffff"+JSON.stringify(this.state.rangePickerValue));Math.round([0].valueOf()/1000),//Math.round(moment().subtract(1, "days").valueOf()/1000),
 
     const  fuckTime =[moment(sessionStorage.getItem("startTime")),moment(sessionStorage.getItem("endTime"))];
@@ -363,6 +489,8 @@ class Index extends PureComponent {
 
                           this.setState({
                             ...this.state,
+                            restRoomId: item.restRoomId,
+                            restRoomIdGas: item.restRoomId,
                             infoWindow: {
                               ...this.state.infoWindow,
                               visible: true,
@@ -375,6 +503,7 @@ class Index extends PureComponent {
                               // gasStatus:
                             }
                           });
+                          this.startGetNothingDailyData(this.state.selectMonth);
                         }
                         catch (e) {
                         }
@@ -411,20 +540,47 @@ class Index extends PureComponent {
                   <div>
                     <div style={{background: 'whitesmoke',margin:'10px'}}>
                       <div style={{'text-align': 'center','font-size':'28px'}}>空气状况</div>
-                      <div style={{'text-align': 'center',display:'flex','margin-top':'20px'}}><span style={{flex:'1'}}>大厅</span><span style={{flex:'1'}}>第三卫</span><span style={{flex:'1'}}>男厕</span><span style={{flex:'1'}}>女厕</span></div>
-                      <div style={{'text-align': 'center',display:'flex','margin-top':'6px'}}><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span><span style={{flex:'1'}}>26℃</span></div>
-                      <div style={{'text-align': 'center',display:'flex','margin-top':'6px','margin-bottom':'20px'}}><span style={{flex:'1'}}>优</span><span style={{flex:'1'}}>良</span><span style={{flex:'1'}}>优</span><span style={{flex:'1'}}>良</span></div>
+                      <div style={{'text-align': 'center',display:'flex','margin-top':'20px'}}><span style={{flex:'1'}}>大厅</span><span style={{flex:'1'}}>无障碍</span><span style={{flex:'1'}}>男厕</span><span style={{flex:'1'}}>女厕</span></div>
+                      <div style={{'text-align': 'center',display:'flex','margin-top':'6px'}}><span style={{flex:'1'}}>
+                        {//大厅 fuckGasInfo {0：大厅|1：女厕|2：男厕|3：无障碍}
+                          fuckGasInfo.data.filter(v => v.type===0).length===0?"未知":fuckGasInfo.data.filter(v => v.type===0)[0].temperature
+                        }℃</span><span style={{flex:'1'}}>
+                         {//无障碍 fuckGasInfo
+                           fuckGasInfo.data.filter(v => v.type===3).length===0?"未知":fuckGasInfo.data.filter(v => v.type===3)[0].temperature
+                         }℃</span><span style={{flex:'1'}}>
+                        {//男厕 fuckGasInfo
+                          fuckGasInfo.data.filter(v => v.type===2).length===0?"未知":fuckGasInfo.data.filter(v => v.type===2)[0].temperature
+                        }℃</span><span style={{flex:'1'}}>
+                         {//女厕 fuckGasInfo
+                           fuckGasInfo.data.filter(v => v.type===1).length===0?"未知":fuckGasInfo.data.filter(v => v.type===1)[0].temperature
+                         }℃</span></div>
+                      <div style={{'text-align': 'center',display:'flex','margin-top':'6px','margin-bottom':'20px'}}><span style={{flex:'1'}}>
+                        {//大厅 fuckGasInfo {0：大厅|1：女厕|2：男厕|3：无障碍}
+                          fuckGasInfo.data.filter(v => v.type===0).length===0?"未知":fuckGasInfo.data.filter(v => v.type===0)[0].score
+                        }
+                      </span><span style={{flex:'1'}}>
+                          {//无障碍 fuckGasInfo
+                            fuckGasInfo.data.filter(v => v.type===3).length===0?"未知":fuckGasInfo.data.filter(v => v.type===3)[0].score
+                          }
+                      </span><span style={{flex:'1'}}>
+                             {//男厕 fuckGasInfo
+                               fuckGasInfo.data.filter(v => v.type===2).length===0?"未知":fuckGasInfo.data.filter(v => v.type===2)[0].score
+                             }
+                      </span><span style={{flex:'1'}}>
+                             {//女厕 fuckGasInfo
+                               fuckGasInfo.data.filter(v => v.type===1).length===0?"未知":fuckGasInfo.data.filter(v => v.type===1)[0].score
+                             }
+                      </span></div>
                       <Suspense fallback={null}>
-                        <SalesCard
-                          className={styles.infinite}
-                          rangePickerValue={fuckTime}
-                          allNum={fuckFlow.status}
-                          salesData={yourFuckFlow}
-                          isActive={this.isActive}
-                          handleRangePickerChange={this.handleRangePickerChange}
+                        <GasCard
+                          className={styles.chartInfinite}
+                          rangePickerValue={fuckTimeGas}
+                          salesData={dv}
+                          isActive={this.isActiveGas}
+                          handleRangePickerChange={this.handleRangePickerChangeGas}
                           loading={loading}
-                          selectDate={this.selectDate}
-                          tabOnClick={this.searchData}
+                          selectDate={this.selectDateGas}
+                          tabOnClick={this.searchDataGas}
                         />
                       </Suspense>
                       <div style={{'text-align': 'center','font-size':'16px',margin:'20px'}}>空气指标质量等级参考</div>
@@ -438,21 +594,70 @@ class Index extends PureComponent {
                   <Row>
                       <div style={{background: 'whitesmoke',margin:'10px',height:'300px'}}> 
                         <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'30px','font-size':'16px'}}><span style={{flex:'1'}}>空气质量</span><span style={{flex:'1'}}>本周</span><span style={{flex:'1'}}>本月</span><span style={{flex:'1'}}>本年</span></div>
-                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'20px'}}><span style={{flex:'1',color:"darkred"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"darkred"}}></span>极差</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
-                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"red"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"red"}}></span>很差</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
-                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"yellow"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"yellow"}}></span>一般</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
-                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"green"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"green"}}></span>良好</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
-                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"#ADFF2F"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"#ADFF2F"}}></span>优秀</span><span style={{flex:'1'}}>2天</span><span style={{flex:'1'}}>10天</span><span style={{flex:'1'}}>120天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'20px'}}><span style={{flex:'1',color:"darkred"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"darkred"}}></span>极差</span><span style={{flex:'1'}}>{
+                          // 本周 极差
+                          this.state.nothing.week.filter(v=> v.remark === '极差').length===0?0:this.state.nothing.week.filter(v=> v.remark === '极差')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本月 极差
+                          this.state.nothing.month.filter(v=> v.remark === '极差').length===0?0:this.state.nothing.month.filter(v=> v.remark === '极差')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本年 极差
+                          this.state.nothing.year.filter(v=> v.remark === '极差').length===0?0:this.state.nothing.year.filter(v=> v.remark === '极差')[0].num
+                        }天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"red"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"red"}}></span>很差</span><span style={{flex:'1'}}>{
+                          // 本周 很差
+                          this.state.nothing.week.filter(v=> v.remark === '很差').length===0?0:this.state.nothing.week.filter(v=> v.remark === '很差')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本月 很差
+                          this.state.nothing.month.filter(v=> v.remark === '很差').length===0?0:this.state.nothing.month.filter(v=> v.remark === '很差')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本年 极差
+                          this.state.nothing.year.filter(v=> v.remark === '很差').length===0?0:this.state.nothing.year.filter(v=> v.remark === '很差')[0].num
+                        }天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"yellow"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"yellow"}}></span>一般</span><span style={{flex:'1'}}>{
+                          // 本周 一般
+                          this.state.nothing.week.filter(v=> v.remark === '一般').length===0?0:this.state.nothing.week.filter(v=> v.remark === '一般')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本月 一般
+                          this.state.nothing.month.filter(v=> v.remark === '一般').length===0?0:this.state.nothing.month.filter(v=> v.remark === '一般')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本年 一般
+                          this.state.nothing.year.filter(v=> v.remark === '一般').length===0?0:this.state.nothing.year.filter(v=> v.remark === '一般')[0].num
+                        }天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"green"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"green"}}></span>良好</span><span style={{flex:'1'}}>{
+                          // 本周 良好
+                          this.state.nothing.week.filter(v=> v.remark === '良好').length===0?0:this.state.nothing.week.filter(v=> v.remark === '良好')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本月 良好
+                          this.state.nothing.month.filter(v=> v.remark === '良好').length===0?0:this.state.nothing.month.filter(v=> v.remark === '良好')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本年 良好
+                          this.state.nothing.year.filter(v=> v.remark === '良好').length===0?0:this.state.nothing.year.filter(v=> v.remark === '良好')[0].num
+                        }天</span></div>
+                        <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'10px'}}><span style={{flex:'1',color:"#ADFF2F"}}><span style={{width:'30px',height:'10px','margin-right':'10px',display: 'inline-block','background-color':"#ADFF2F"}}></span>优秀</span><span style={{flex:'1'}}>{
+                          // 本周 优秀
+                          this.state.nothing.week.filter(v=> v.remark === '优秀').length===0?0:this.state.nothing.week.filter(v=> v.remark === '优秀')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本月 优秀
+                          this.state.nothing.month.filter(v=> v.remark === '优秀').length===0?0:this.state.nothing.month.filter(v=> v.remark === '优秀')[0].num
+                        }天</span><span style={{flex:'1'}}>{
+                          // 本年 优秀
+                          this.state.nothing.year.filter(v=> v.remark === '优秀').length===0?0:this.state.nothing.year.filter(v=> v.remark === '优秀')[0].num
+                        }天</span></div>
                       </div>
                   </Row>
                   <Row>
                       <div style={{background: 'whitesmoke',margin:'10px'}}>
                       <Suspense fallback={null}>
                         <SalesCard
+                          onSelectHandleChange={(as)=>{
+                            this.setState({selectMonth: as});
+                            this.startGetNothingDailyData(as);
+                          }}
                           className={styles.chartInfinite}
                           rangePickerValue={fuckTime}
                           allNum={fuckFlow.status}
-                          salesData={yourFuckFlow}
+                          salesData={statisticList.data}
                           isActive={this.isActive}
                           handleRangePickerChange={this.handleRangePickerChange}
                           loading={loading}
