@@ -281,9 +281,9 @@ class Index extends PureComponent {
       left: '10px',
       padding: '5px 10px',
       border: '1px solid #d3d3d3',
-      backgroundColor: '#92c0ff',
-      opacity: '0.4',
-      border:'4px solid #2bccff',
+      backgroundColor: 'white',
+      opacity: '0.8',
+      border:'1px solid #2bccff',
       // border-radius: '20px',
     }
     const styleB = {
