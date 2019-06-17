@@ -536,7 +536,7 @@ class Index extends PureComponent {
 
             </Col>
             <Col span={20}>
-                <Col span={10}>
+                <Col span={12}>
                   <div>
                     <div style={{background: 'whitesmoke',margin:'10px'}}>
                       <div style={{'text-align': 'center','font-size':'28px'}}>空气状况</div>
@@ -590,7 +590,7 @@ class Index extends PureComponent {
                     </div>
                   </div>
                 </Col>
-                <Col span={14}>
+                <Col span={12}>
                   <Row>
                       <div style={{background: 'whitesmoke',margin:'10px',height:'300px'}}> 
                         <div style={{'text-align': 'center',display:'flex',margin:'2px 50px','padding-top':'30px','font-size':'16px'}}><span style={{flex:'1'}}>空气质量</span><span style={{flex:'1'}}>本周</span><span style={{flex:'1'}}>本月</span><span style={{flex:'1'}}>本年</span></div>
