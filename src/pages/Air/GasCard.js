@@ -38,32 +38,13 @@ const SalesCard = memo(
     <div>
       <div className={styles.salesCard}>
         <Tabs
-          tabBarExtraContent={
-            <div className={styles.salesExtraWrap}>
-              <div className={styles.salesExtra}>
-                <a className={isActive('today')} onClick={() => selectDate('today')}>
-                  <FormattedMessage id="app.analysis.all-day" defaultMessage="All Day" />
-                </a>
-                <a className={isActive('week')} onClick={() => selectDate('week')}>
-                  <FormattedMessage id="app.analysis.all-week" defaultMessage="All Week" />
-                </a>
-                <a className={isActive('month')} onClick={() => selectDate('month')}>
-                  <FormattedMessage id="app.analysis.all-month" defaultMessage="All Month" />
-                </a>
-              </div>
-              <RangePicker
-                value={rangePickerValue}
-                onChange={handleRangePickerChange}
-                style={{ width: 220 }}
-              />
-            </div>
-          }
+
           onTabClick={(v)=>tabOnClick(v)}
           size="large"
           tabBarStyle={{ marginBottom: 24 }}
         >
           <TabPane
-            tab="气体数据"
+            tab="今日气体数据"
             key="gas-1"
           >
             <Row>
