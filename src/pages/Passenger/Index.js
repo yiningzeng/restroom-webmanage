@@ -293,6 +293,26 @@ class Index extends PureComponent {
                       <List.Item onClick={()=>{
                         try {
                           this.searchData(item.restRoomId,sessionStorage.getItem("select")==="today"?0:1);
+                          // region 获取统计的数据，只有
+                          dispatch({
+                            type: 'passenger/onlyGetFuckFlow',
+                            payload: {//1?endTm=1557368198&startTm=1557281798
+                              restRoomId: item.restRoomId,
+                            },
+                          });
+                          dispatch({
+                            type: 'passenger/getOnlyFuckFlowByWeek',
+                            payload: {//1?endTm=1557368198&startTm=1557281798
+                              restRoomId: item.restRoomId,
+                            },
+                          });
+                          dispatch({
+                            type: 'passenger/getOnlyFuckFlowByMonth',
+                            payload: {//1?endTm=1557368198&startTm=1557281798
+                              restRoomId: item.restRoomId,
+                            },
+                          });
+                          //endregion
                           this.setState({
                             ...this.state,
                             infoWindow: {
