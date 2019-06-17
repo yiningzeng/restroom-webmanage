@@ -433,27 +433,27 @@ class Index extends PureComponent {
                     </div>
                   </Col>
                   <Col span={12} id="wo">
-                  
-                  <Row style={{'margin': '50px 0 0 30px '}}>
+                  <Row>
+                        <div style={{'text-align': 'right','font-size': '18px','margin': '20px 46px 20px 0'}}>数据单位：人次</div>
+                      </Row>
+                  <Row style={{'margin-left': '60px'}}>
                       <Col span={8}>
-                        <div style={{'text-align': 'center','width': '200px','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid','border-radius': '100px'}}>
+                        <div style={{'text-align': 'center','width': '160px','font-size': '30px','padding-top': '20px','font-weight': 'bold','height': '160px','margin': '36px 20px','border':'2px solid','border-radius': '100px'}}>
                          今日 <div style={{'margin':'20px'}}>{onlyFuckFlow.data.today===undefined?0:onlyFuckFlow.data.today}</div>
                          </div>
                       </Col>
                       <Col span={8}>
-                        <div style={{'text-align': 'center','width': '200px','color': 'rgb(43, 204, 255)','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid rgb(43, 204, 255)','border-radius': '100px'}}> 
+                        <div style={{'text-align': 'center','width': '160px','font-size': '30px','padding-top': '20px','font-weight': 'bold','height': '160px','margin': '36px 20px','border':'2px solid' ,'border-radius': '100px'}}> 
                         本月 <div style={{'margin':'20px'}}>{onlyFuckFlow.data.month===undefined?0:onlyFuckFlow.data.month}</div>
                         </div>
                       </Col>
                       <Col span={8}>
-                        <div style={{'text-align': 'center','width': '200px','color': 'red','font-size': '36px','font-weight': 'bold','height': '200px','margin': '36px 20px','border':'2px solid red','border-radius': '100px'}}> 
+                        <div style={{'text-align': 'center','width': '160px','font-size': '30px','padding-top': '20px','font-weight': 'bold','height': '160px','margin': '36px 20px','border':'2px solid','border-radius': '100px'}}> 
                         总计 <div style={{'margin':'20px'}}>{onlyFuckFlow.data.all===undefined?0:onlyFuckFlow.data.all}</div>
                         </div>
                       </Col>
                       </Row>
-                      <Row>
-                        <div style={{'text-align': 'center','font-size': '28px'}}>数据单位：人次</div>
-                      </Row>
+
                     </Col>
               </Row>
             </Col>
