@@ -116,6 +116,7 @@ class Index extends PureComponent {
       },
     });
 
+
   }
 
   //region 客流
@@ -372,9 +373,12 @@ class Index extends PureComponent {
                               name: item.restRoomName,
                               position: [item.longitude, item.latitude],
                               videoStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
-                              videoStatusTest: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "摄像正常" : "摄像头离线",
+                              videoStatusTest: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "摄像头正常" : "摄像头离线",
                               boardStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
-                              boardStatusText: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "公告正常" : "公告屏离线",
+                              boardStatusText: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "公告屏正常" : "公告屏离线",
+                              gasStatus: item.deviceGases.length > 0 && item.deviceGases.filter(v => v.score===0).length>0 ? "error":"success",
+                              gasStatusText: item.deviceGases.length > 0 && item.deviceGases.filter(v => v.score===0).length>0 ? "测气仪离线":"测气仪正常",
+                              // gasStatusText: item.deviceGases.length > 0 && item.deviceCameras[0].online === 1 ? "公告正常" : "公告屏离线",
                               // gasStatus:
                             }
                           });
@@ -390,13 +394,15 @@ class Index extends PureComponent {
                           title={item.restRoomName}
                           description={<div class="mineclassone">
                           {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
-                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />摄像正常</span>:
+                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />摄像头正常</span>:
                           <span style={{ color: "#FF0000", marginRight: 8 }}><Icon type="close-square" />摄像头离线</span>}
                           <br />
-                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />{this.state.infoWindow.gasStatusText}</span>
+                          {item.deviceGases.length > 0 && item.deviceGases.filter(v => v.score===0).length>0 ?
+                            <span style={{ color: "#FF0000", marginRight: 8 }}><Icon type="close-square" />测气仪离线</span>:
+                              <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />测气仪正常</span>}
                           <br />
                           {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
-                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />公告正常</span>:
+                          <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />公告屏正常</span>:
                           <span style={{ color: '#FF0000', marginRight: 8 }}><Icon type="close-square" />公告屏离线</span>}
                           </div>}
                         />
@@ -435,10 +441,12 @@ class Index extends PureComponent {
                               visible:true,
                               name:item.restRoomName,
                               position:[item.longitude, item.latitude],
-                              videoStatus: item.deviceCameras.length>0&& item.deviceCameras[0].online === 1 ?"success":"error",
-                              videoStatusTest: item.deviceCameras.length>0&& item.deviceCameras[0].online === 1 ?"摄像正常":"摄像头离线",
+                              videoStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
+                              videoStatusTest: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "摄像头正常" : "摄像头离线",
                               boardStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
-                              boardStatusText: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "公告正常" : "公告屏离线",
+                              boardStatusText: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "公告屏正常" : "公告屏离线",
+                              gasStatus: item.deviceGases.length > 0 && item.deviceGases.filter(v => v.score===0).length>0 ? "error":"success",
+                              gasStatusText: item.deviceGases.length > 0 && item.deviceGases.filter(v => v.score===0).length>0 ? "测气仪离线":"测气仪正常",
                           }});
                           console.log(`你点击了这个图标；调用参数为：${item.restRoomName}`);
                           console.log(e);
