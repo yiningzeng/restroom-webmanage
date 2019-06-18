@@ -10,69 +10,88 @@
 </head>
 
 <body class="body-bg">
-  <div class="body-bg-star">
-    <div class="page-header-warp">
-<<<<<<< Updated upstream
-      <div class="page-header" id="header"></div>
+<div class="body-bg-star">
+  <div class="page-header-warp">
+    <div class="page-header" id="header"></div>
+  </div>
+  <div class="body" style="text-align: center;">
+    <div id="content">
+      <span></span>
     </div>
-    <div class="body" style="text-align: center;">
-      <div id="content">
-        <span></span>
-      </div>
-      <div id="contentsex"></div>
-      <div id='contentqiti'>
-        <div>气味浓度参考值</div>
-        <div class="qiti"><span>优</span><span>良</span><span>一般</span><span>差</span><span>极差</span></div>
-        <div class="yanse"><span style="background-color: #ADFF2F"></span><span style="background-color: green"></span><span style="background-color: yellow"></span><span style="background-color: red"></span><span style="background-color: darkred"></span></div>
-        <div class="shuzi"><span>0-1.5</span><span>1.5-3</span><span>4-5</span><span>5-7</span><span>8-10</span></div>
-        <div class="keliu"><span style="font-size:14px">今日客流量<div id="today"></div></span><span style="font-size:14px">当月客流量<div id="month"></div></span><span style="font-size:14px">总计客流量<div id="all"></div></span></div>
-      </div>
-    </div>
-=======
-      <div class="page-header" id="header">xxx</div>
-    </div>
-    <div class="body" style="text-align: center;">
-      <div id="content">
-        <span></span>
-      </div>
-      <div id="contentsex"></div>
-      <div id='contentqiti'>
-        <div>气味浓度参考值</div>
-        <div class="qiti"><span>优</span><span>良</span><span>一般</span><span>差</span><span>极差</span></div>
-        <div class="yanse"><span style="background-color: #ADFF2F"></span><span style="background-color: green"></span><span style="background-color: yellow"></span><span style="background-color: red"></span><span style="background-color: darkred"></span></div>
-        <div class="shuzi"><span>0-1.5</span><span>1.5-3</span><span>4-5</span><span>5-7</span><span>8-10</span></div>
-        <div class="keliu"><span style="font-size:14px">今日客流量<div id="today"></div></span><span style="font-size:14px">当月客流量<div id="month"></div></span><span style="font-size:14px">总计客流量<div id="all"></div></span></div>
-      </div>
-    </div>
->>>>>>> Stashed changes
-
-    <div class="bodybottom" style="text-align: center;">
-      <div id="chartmain" style="display: inline-block;background:#F00; color:#FFF;width:450px;height:220px;"></div>
+    <div id="contentsex"></div>
+    <div id='contentqiti'>
+      <div>气味浓度参考值</div>
+      <div class="qiti"><span>优</span><span>良</span><span>一般</span><span>差</span><span>极差</span></div>
+      <div class="yanse"><span style="background-color: #ADFF2F"></span><span style="background-color: green"></span><span style="background-color: yellow"></span><span style="background-color: red"></span><span style="background-color: darkred"></span></div>
+      <div class="shuzi"><span>0-1.5</span><span>1.5-3</span><span>4-5</span><span>5-7</span><span>8-10</span></div>
+      <div class="keliu"><span style="font-size:14px">今日客流量<div id="today"></div></span><span style="font-size:14px">当月客流量<div id="month"></div></span><span style="font-size:14px">总计客流量<div id="all"></div></span></div>
     </div>
   </div>
 
-  <script type="text/javascript">
-    Date.prototype.Format = function (fmt) {
-      var o = {
-        "M+": this.getMonth() + 1, //月份
-        "d+": this.getDate(), //日
-        "H+": this.getHours(), //小时
-        "m+": this.getMinutes(), //分
-        "s+": this.getSeconds(), //秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        "S": this.getMilliseconds() //毫秒
-      };
-      if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-      for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-      return fmt;
+  <div class="bodybottom" style="text-align: center;">
+    <div id="chartmain" style="display: inline-block;background:#F00; color:#FFF;width:450px;height:220px;"></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  Date.prototype.Format = function (fmt) {
+    var o = {
+      "M+": this.getMonth() + 1, //月份
+      "d+": this.getDate(), //日
+      "H+": this.getHours(), //小时
+      "m+": this.getMinutes(), //分
+      "s+": this.getSeconds(), //秒
+      "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+      "S": this.getMilliseconds() //毫秒
     };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+      if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+  };
 
-    // setTimeout(function () {
-<<<<<<< Updated upstream
+  // setTimeout(function () {
 
 
-=======
+  $.post("http://172.16.29.158:8080/api/v1/user/login", {
+      password: "e10adc3949ba59abbe56e057f20f883e",
+      username: "baymin"
+    },
+    function (a) {
+      $.ajax({
+        type: 'GET',
+        url: 'http://172.16.29.158:8080/api/v1/weather',
+        headers: {
+          'authorization': a.data.token
+        },
+        success: function(data) {
+          var josndata = JSON.parse(data);
+          $('#content').html('<div>' + josndata.station.city + '&nbsp;&nbsp' +
+            josndata.station.province + '&nbsp;&nbsp;鄞州区&nbsp;&nbsp<span id="area-time">' + new Date().Format("yyyy-MM-dd HH:mm:ss") + '</span></div>' +
+            '<div>天气：' + josndata.weather.info + '&nbsp;&nbsp&nbsp;&nbsp温度：' +
+            josndata.weather.temperature + '°C</div><div id="cesuoqiwen"></div>');
+        }
+      });
+    });
+
+  var updateTime = function (){
+    $('#area-time').text(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+    setTimeout(updateTime,1000);
+  };
+  var updateFuckFlow = function (){
+    $.get("http://172.16.29.158:8080/api/v1/device/get-fuck-flow", function(d) {
+      console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+      console.log(d);
+      $('#today').text(d.data.today);
+      $('#month').text(d.data.month);
+      $('#all').text(d.data.all);
+    });
+    setTimeout(updateFuckFlow,35000);
+  };
+  var updateFuckFlowToday = function (){
+    //指定图标的配置和数据
+    var show_time = [];
+    var todaynumber = [];
     $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five", function (d) {
       item = d.data.gas.data.items;
       itemfuckFlow = d.data.fuckFlow;
@@ -80,7 +99,7 @@
       $("#month").html(itemfuckFlow.month);
       $("#all").html(itemfuckFlow.all);
       var todayFlow = itemfuckFlow.todayFlow;
-      $('#contentsex').html('<div><span></span><span><img src="./img/nan.png" alt=""></span><span><img src="./img/nv.png" alt=""></span></div><div><span>室内温度</span><span>'+
+      $("#contentsex").html('<div><span></span><span><img src="./img/nan.png" alt=""></span><span><img src="./img/nv.png" alt=""></span></div><div><span>室内温度</span><span>'+
         item[1].ea +'</span><span>' + item[2].ea + '</span></div><div><span>气味浓度</span><span>'
         + item[1].zq + '</span><span>' + item[2].zq + '</span></div>');
       document.getElementById('header').innerHTML = d.data.restRoomName;
@@ -102,7 +121,7 @@
           }
         },
         tooltip: {
-          trigger: 'axis',
+          trigger: 'axis'
         },
         toolbox: {
           show: true,
@@ -162,179 +181,34 @@
       };
       // //初始化echarts实例
       var myChart = echarts.init(document.getElementById('chartmain'));
-
-
-  // //使用制定的配置项和数据显示图表
-  myChart.setOption(option);
-  // clearInterval(setTimeout)
-  });
-
->>>>>>> Stashed changes
-  $.post("http://172.16.29.158:8080/api/v1/user/login", {
-      password: "e10adc3949ba59abbe56e057f20f883e",
-      username: "baymin"
-    },
-  function (a) {
-    $.ajax({
-      type: 'GET',
-      url: 'http://172.16.29.158:8080/api/v1/weather',
-      headers: {
-        'authorization': a.data.token
-      },
-      success: function(data) {
-        var josndata = JSON.parse(data);
-        $('#content').html('<div>' + josndata.station.city + '&nbsp;&nbsp' +
-<<<<<<< Updated upstream
-          josndata.station.province + '&nbsp;&nbsp;鄞州区&nbsp;&nbsp<span id="area-time">' + new Date().Format("yyyy-MM-dd HH:mm:ss") + '</span></div>' +
-          '<div>天气：' + josndata.weather.info + '&nbsp;&nbsp&nbsp;&nbsp温度：' +
-          josndata.weather.temperature + '°C</div><div id="cesuoqiwen"></div>');
-      }
+      myChart.setOption(option);
     });
-  });
-
-    var updateTime = function (){
-      $('#area-time').text(new Date().Format("yyyy-MM-dd HH:mm:ss"));
-      setTimeout(updateTime,1000);
-    };
-    var updateFuckFlow = function (){
-        $.get("http://172.16.29.158:8080/api/v1/device/get-fuck-flow", function(d) {
-          console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
-          console.log(d);
-          $('#today').text(d.data.today);
-          $('#month').text(d.data.month);
-          $('#all').text(d.data.all);
-        });
-      setTimeout(updateFuckFlow,35000);
-    };
-    var updateFuckFlowToday = function (){
-          //指定图标的配置和数据
-      var show_time = [];
-      var todaynumber = [];
-      $.get("http://172.16.29.158:8080/api/v1/device/hi-give-me-five", function (d) {
-        item = d.data.gas.data.items;
-        itemfuckFlow = d.data.fuckFlow;
-        $("#today").html(itemfuckFlow.today);
-        $("#month").html(itemfuckFlow.month);
-        $("#all").html(itemfuckFlow.all);
-        var todayFlow = itemfuckFlow.todayFlow;
-        $("#contentsex").html('<div><span></span><span><img src="./img/nan.png" alt=""></span><span><img src="./img/nv.png" alt=""></span></div><div><span>室内温度</span><span>'+
-          item[1].ea +'</span><span>' + item[2].ea + '</span></div><div><span>气味浓度</span><span>'
-          + item[1].zq + '</span><span>' + item[2].zq + '</span></div>');
-        document.getElementById('header').innerHTML = d.data.restRoomName;
-        var todayFlow = d.data.fuckFlow.todayFlow;
-        $.each(todayFlow, function (i, item) {
-          // console.log(item)
-          show_time.push(item.show_time);
-          todaynumber.push(item.number);
-        });
-        console.log(show_time);
-        console.log(todaynumber);
-        option = {
-          title: {
-            text: '当日访问流量图',
-            x: 'center',
-            textStyle: {
-              color: '#c3dbff', //更改坐标轴文字颜色
-              fontSize: 20 //更改坐标轴文字大小
-            }
-          },
-          tooltip: {
-            trigger: 'axis'
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              // mark: { show: true },
-              // dataView: { show: true, readOnly: false },
-              // magicType: { show: true, type: ['line', 'bar'] },
-              // restore: { show: true },
-              // saveAsImage: { show: true }
-            }
-          },
-          calculable: true,
-          xAxis: [{
-            type: 'category',
-            boundaryGap: false,
-            data: show_time,
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: '#c3dbff', //更改坐标轴文字颜色
-                fontSize: 15 //更改坐标轴文字大小
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#315070' //更改坐标轴颜色
-              }
-            }
-          }],
-          yAxis: [{
-            type: 'value',
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: '#c3dbff', //更改坐标轴文字颜色
-                fontSize: 15 //更改坐标轴文字大小
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              lineStyle: {
-                color: 'blue' //更改坐标轴颜色
-              }
-            }
-          }],
-          series: [{
-            name: '访问量',
-            type: 'line',
-            stack: '总量',
-            data: todaynumber
-          }, ]
-        };
-        // //初始化echarts实例
-        var myChart = echarts.init(document.getElementById('chartmain'));
-        myChart.setOption(option);
-      });
-      setTimeout(updateFuckFlowToday, 300000);
-    };
+    setTimeout(updateFuckFlowToday, 300000);
+  };
 
 
-    updateTime();
-    updateFuckFlow();
-    updateFuckFlowToday();
+  updateTime();
+  updateFuckFlow();
+  updateFuckFlowToday();
 
 
-    // window.setInterval(()=>{
-    //   console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
-    //   $('#area-time').text(new Date().Format("yyyy-MM-dd HH:mm:ss"));
-    // },1000);
-    //
-    // //当天客流15秒刷新一次
-    // window.setInterval(()=>{
-    //   $.get("http://172.16.29.158:8080/api/v1/device/get-fuck-flow", (d) => {
-    //     console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
-    //     console.log(d);
-    //     $('#today').text(d.data.today);
-    //     $('#month').text(d.data.month);
-    //     $('#all').text(d.data.all);
-    //   });
-    //
-    // }, 30000);
-=======
-          josndata.station.province + '&nbsp;&nbsp;鄞州区&nbsp;&nbsp' + new Date().Format("yyyy-MM-dd HH:mm") + '</div>' +
-          '<div>天气：' + josndata.weather.info + '&nbsp;&nbsp&nbsp;&nbsp温度：' +
-          josndata.weather.temperature + '°C</div><div id="cesuoqiwen"></div>')
-      },
-    });
-  });
->>>>>>> Stashed changes
-  </script>
+  // window.setInterval(()=>{
+  //   console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+  //   $('#area-time').text(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+  // },1000);
+  //
+  // //当天客流15秒刷新一次
+  // window.setInterval(()=>{
+  //   $.get("http://172.16.29.158:8080/api/v1/device/get-fuck-flow", (d) => {
+  //     console.log(new Date().Format("yyyy-MM-dd HH:mm:ss"));
+  //     console.log(d);
+  //     $('#today').text(d.data.today);
+  //     $('#month').text(d.data.month);
+  //     $('#all').text(d.data.all);
+  //   });
+  //
+  // }, 30000);
+</script>
 </body>
 
 </html>
