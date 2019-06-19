@@ -129,43 +129,44 @@ class Index extends PureComponent {
   }
 
   // 更具时间获取气体数据，返回的是每天的总和数据
-  startGetNothingDailyData=(as)=>{
+  startGetNothingDailyData=(id, as)=>{
+    // message.success(as);
     switch (as) {
       case "0":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-01-01 00:00:00', moment().year()+'-01-31 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-01-01 00:00:00', moment().year()+'-01-31 23:59:59');
         break;
       case "1":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-02-01 00:00:00', moment().year()+'-02-29 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-02-01 00:00:00', moment().year()+'-02-29 23:59:59');
         break;
       case "2":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-03-01 00:00:00', moment().year()+'-03-31 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-03-01 00:00:00', moment().year()+'-03-31 23:59:59');
         break;
       case "3":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-04-01 00:00:00', moment().year()+'-04-30 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-04-01 00:00:00', moment().year()+'-04-30 23:59:59');
         break;
       case "4":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-05-01 00:00:00', moment().year()+'-05-31 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-05-01 00:00:00', moment().year()+'-05-31 23:59:59');
         break;
       case "5":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-06-01 00:00:00', moment().year()+'-06-30 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-06-01 00:00:00', moment().year()+'-06-30 23:59:59');
         break;
       case "6":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-07-01 00:00:00', moment().year()+'-07-31 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-07-01 00:00:00', moment().year()+'-07-31 23:59:59');
         break;
       case "7":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-08-01 00:00:00', moment().year()+'-08-31 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-08-01 00:00:00', moment().year()+'-08-31 23:59:59');
         break;
       case "8":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-09-01 00:00:00', moment().year()+'-09-30 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-09-01 00:00:00', moment().year()+'-09-30 23:59:59');
         break;
       case "9":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-10-01 00:00:00', moment().year()+'-10-31 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-10-01 00:00:00', moment().year()+'-10-31 23:59:59');
         break;
       case "10":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-11-01 00:00:00', moment().year()+'-11-30 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-11-01 00:00:00', moment().year()+'-11-30 23:59:59');
         break;
       case "11":
-        this.getNothingDailyData(this.state.restRoomIdGas, moment().year()+'-12-01 00:00:00', moment().year()+'-12-31 23:59:59');
+        this.getNothingDailyData(id, moment().year()+'-12-01 00:00:00', moment().year()+'-12-31 23:59:59');
         break;
     }
   };
@@ -180,18 +181,19 @@ class Index extends PureComponent {
         endTm: endTime,
       },
       callback:(a)=>{
+        dispatch({
+          type: 'nothing/getFuckGasInfoQuery',
+          payload: {//1?endTm=1557368198&startTm=1557281798
+            restRoomId: id,
+          },
+          callback:(a)=>{
+            // message.success(`${JSON.stringify(a)}`);
+          },
+        });
         // message.success(`${JSON.stringify(a)}`);
       },
     });
-    dispatch({
-      type: 'nothing/getFuckGasInfoQuery',
-      payload: {//1?endTm=1557368198&startTm=1557281798
-        restRoomId: id,
-      },
-      callback:(a)=>{
-        // message.success(`${JSON.stringify(a)}`);
-      },
-    });
+
   }
 
   // 获取气体状态在选择时间内出现的次数
@@ -484,7 +486,7 @@ class Index extends PureComponent {
                     dataSource={list===undefined?[]:list.data===undefined?[]:list.data.content}
                     renderItem={item => (
                       <List.Item onClick={()=>{
-                        try {
+                        // try {
                           this.searchData(item.restRoomId,sessionStorage.getItem("select")==="today"?0:1);
 
                           this.setState({
@@ -505,12 +507,13 @@ class Index extends PureComponent {
                               // gasStatus:
                             }
                           });
-                          this.startGetNothingDailyData(this.state.selectMonth);
-                        }
-                        catch (e) {
-                        }
-                        console.log("点点:",(item));
-                        console.log("点点:",(this.state.infoWindow));
+                          this.startGetNothingDailyData(item.restRoomId,this.state.selectMonth);
+                        // }
+                        // catch (e) {
+                        //   console.error(e);
+                        // }
+                        // console.log("点点:",(item));
+                        // console.log("点点:",(this.state.infoWindow));
 
                       }}
                       >
