@@ -441,8 +441,8 @@ class Index extends PureComponent {
                               visible:true,
                               name:item.restRoomName,
                               position:[item.longitude, item.latitude],
-                              videoStatus: item.deviceCameras.length > 0 && item.deviceCameras.filter(v => v.online===0).length===0 === 1 ? "success" : "error",
-                              videoStatusTest: item.deviceCameras.length > 0 && item.deviceCameras.filter(v => v.online===0).length===0 === 1 ? "摄像头正常" : "摄像头离线",
+                              videoStatus: item.deviceCameras.length > 0 && item.deviceCameras.filter(v => v.online===0).length===0 ? "success" : "error",
+                              videoStatusTest: item.deviceCameras.length > 0 && item.deviceCameras.filter(v => v.online===0).length===0 ? "摄像头正常" : "摄像头离线",
                               boardStatus: item.deviceBoards.length > 0 && item.deviceBoards.filter(v => v.online===0).length>0 ? "error" : "success",
                               boardStatusText: item.deviceBoards.length > 0 && item.deviceBoards.filter(v => v.online===0).length>0 ? "公告屏离线" : "公告屏正常",
                               gasStatus: item.deviceGases.length > 0 && item.deviceGases.filter(v => v.score===0).length>0 ? "error":"success",
@@ -458,7 +458,22 @@ class Index extends PureComponent {
                         },
                         // ... 支持绑定所有原生的高德 Marker 事件
                       }}
-                      />
+                      >
+                        {
+                          (item.deviceCameras.filter(v => v.online===0).length >0 || item.deviceBoards.filter(v => v.online===0).length>0 || item.deviceGases.filter(v => v.score===0).length>0) &&
+                          <div style={{background: `url('http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/map-marker-icon.png')`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            width: '30px',
+                            height: '40px',
+                            color: '#000',
+                            textAlign: 'center',
+                            lineHeight: '40px'}}></div>
+                        }
+
+
+                      </Marker>
                     ))
                   }
                   <InfoWindow
