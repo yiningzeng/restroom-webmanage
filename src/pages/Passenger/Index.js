@@ -320,8 +320,8 @@ class Index extends PureComponent {
                               visible: true,
                               name: item.restRoomName,
                               position: [item.longitude, item.latitude],
-                              videoStatus: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "success" : "error",
-                              videoStatusTest: item.deviceCameras.length > 0 && item.deviceCameras[0].online === 1 ? "摄像头正常" : "摄像头离线",
+                              videoStatus: item.deviceCameras.length > 0 && item.deviceCameras.filter(v => v.online===0).length===0 === 1 ? "success" : "error",
+                              videoStatusTest: item.deviceCameras.length > 0 && item.deviceCameras.filter(v => v.online===0).length===0 === 1 ? "摄像头正常" : "摄像头离线",
                               boardStatus: item.deviceBoards.length > 0 && item.deviceBoards.filter(v => v.online===0).length>0 ? "error" : "success",
                               boardStatusText: item.deviceBoards.length > 0 && item.deviceBoards.filter(v => v.online===0).length>0 ? "公告屏离线" : "公告屏正常",
                               gasStatus: item.deviceGases.length > 0 && item.deviceGases.filter(v => v.score===0).length>0 ? "error":"success",
@@ -340,7 +340,7 @@ class Index extends PureComponent {
                         <List.Item.Meta
                           title={item.restRoomName}
                           description={<div class="mineclassone">
-                            {item.deviceCameras.length>0 && item.deviceCameras[0].online === 1 ?
+                            {item.deviceCameras.length>0 && item.deviceCameras.filter(v => v.online===0).length===0 ?
                               <span style={{ color: "#66CD00", marginRight: 8 }}><Icon type="check-square" />摄像头正常</span>:
                               <span style={{ color: "#FF0000", marginRight: 8 }}><Icon type="close-square" />摄像头离线</span>}
                             <br />

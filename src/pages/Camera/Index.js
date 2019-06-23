@@ -96,13 +96,15 @@ class CoverCardList extends PureComponent {
     const { dispatch } = this.props;
 
     if(record.deviceCameras.length>0){
-      this.setState({fuckingNowPlayCameraId:record.deviceCameras[0].cameraId,restroomName:record.restRoomName,fuckingPushLoading:true});
+      const playList = record.deviceCameras.filter(v => v.remark !== "客流");
+      message.success(JSON.stringify(playList));
+      this.setState({fuckingNowPlayCameraId:playList[0].cameraId,restroomName:record.restRoomName,fuckingPushLoading:true});
       //不能现在获取。。。因为数据没更新现在都是空的只有在pushStream之后才有数据
       //this.setState({fuckingLiveUrl:record.deviceCameras[0].liveUrl});
       dispatch({
         type: 'device/pushStream',
         payload: {
-          cameraId:record.deviceCameras[0].cameraId,
+          cameraId:playList.cameraId,
         },
         callback:(v)=>{
           if(v.code===0){
